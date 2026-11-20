@@ -103,6 +103,9 @@ def choose(
         scores[arm] = sample - fatigue[arm] + (boost or {}).get(arm, 0.0)
     # An excuse decides which kinds of nudge are allowed; learning picks among them.
     fitting = [a for a, v in (boost or {}).items() if v > 0 and a in scores] if excuse else []
+    just_declined = max(history, key=lambda o: o.at).arm if history else None
+    if len(fitting) > 1 and just_declined in fitting:
+        fitting.remove(just_declined)  # rotate: don't repeat the nudge they just turned down
     arm = max(fitting or scores, key=scores.get)
 
     best_rate_arm = max(rates, key=rates.get)

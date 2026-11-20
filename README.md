@@ -49,6 +49,7 @@ copy .env.example .env        # then paste your Telegram bot token
 | Demo dashboard | `streamlit run dashboard.py` |
 | Simulate 30 days | `python -m momentum.simulate --days 30 --runs 40` |
 | HTTP trigger for Guild cron | `uvicorn momentum.server:app --port 8000` |
+| Move history to SingleStore | set `DATABASE_URL=mysql+pymysql://...` then `python -m momentum.migrate` |
 
 Bot commands: `/start`, `/task Essay | Friday 5pm`, `/nudge`, `/why`, `/stats`, `/done`.
 

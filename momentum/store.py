@@ -11,15 +11,27 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from sqlalchemy import (
-    Boolean, Column, DateTime, Integer, MetaData, String, Table, Text,
+    BigInteger, Boolean, Column, DateTime, Integer, MetaData, String, Table, Text,
     create_engine, insert, select, update,
 )
 
 from . import config
 from .brain import Outcome
 
-engine = create_engine(config.DATABASE_URL, future=True)
+def make_engine(url: str):
+    """SQLite locally; SingleStore (MySQL protocol) over TLS when the URL is mysql://."""
+    if url.startswith("mysql"):
+        import certifi  # ships with httpx
+
+        return create_engine(url, future=True, pool_pre_ping=True, pool_recycle=280,
+                             connect_args={"ssl": {"ca": certifi.where()}})
+    return create_engine(url, future=True)
+
+
+engine = make_engine(config.DATABASE_URL)
 meta = MetaData()
+# SingleStore auto-increment values are large; SQLite needs INTEGER for its rowid alias.
+ID = BigInteger().with_variant(Integer, "sqlite")
 
 users = Table(
     "users", meta,
@@ -31,7 +43,7 @@ users = Table(
 
 tasks = Table(
     "tasks", meta,
-    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("id", ID, primary_key=True, autoincrement=True),
     Column("chat_id", String(64), index=True),
     Column("title", String(255)),
     Column("deadline", String(64)),
@@ -41,9 +53,9 @@ tasks = Table(
 
 nudges = Table(
     "nudges", meta,
-    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("id", ID, primary_key=True, autoincrement=True),
     Column("chat_id", String(64), index=True),
-    Column("task_id", Integer),
+    Column("task_id", ID),
     Column("arm", String(32)),
     Column("context", String(32)),
     Column("text", Text),
@@ -109,6 +121,11 @@ def log_nudge(chat_id, task_id, arm, context, text, reason) -> int:
             chat_id=chat_id, task_id=task_id, arm=arm, context=context, text=text,
             reason=reason, sent_at=datetime.now()))
         return r.inserted_primary_key[0]
+
+
+def delete_nudge(nudge_id: int) -> None:
+    with engine.begin() as c:
+        c.execute(nudges.delete().where(nudges.c.id == nudge_id))
 
 
 def set_message_id(nudge_id: int, message_id: str) -> None:

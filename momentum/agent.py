@@ -41,9 +41,13 @@ def send_nudge(chat_id: str) -> dict | None:
                                streak, last and last["excuse"], memories)
 
     nudge_id = store.log_nudge(chat_id, task["id"], d.arm, d.context, text, d.reason)
-    msg = telegram.send(chat_id, text, buttons=[[
-        ("✅ Started", f"started:{nudge_id}"), ("😴 Not now", f"snoozed:{nudge_id}"),
-    ]])
+    try:
+        msg = telegram.send(chat_id, text, buttons=[[
+            ("✅ Started", f"started:{nudge_id}"), ("😴 Not now", f"snoozed:{nudge_id}"),
+        ]])
+    except Exception:
+        store.delete_nudge(nudge_id)  # never delivered, so it must not count as a miss
+        raise
     store.set_message_id(nudge_id, str(msg["message_id"]))
     track(chat_id, "nudge_sent", {
         "arm": d.arm, "context": d.context, "reason": d.reason, "writer": source,
@@ -97,7 +101,11 @@ def tick() -> list[dict]:
                 continue
         if store.nudges_for_task(task["id"]) >= config.MAX_NUDGES_PER_BLOCK:
             continue
-        r = send_nudge(chat_id)
+        try:
+            r = send_nudge(chat_id)
+        except Exception as e:  # one unreachable chat must not block everyone else
+            log.warning("could not nudge %s: %s", chat_id, e)
+            continue
         if r:
             sent.append(r)
     return sent
