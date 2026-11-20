@@ -85,6 +85,7 @@ def choose(
     prior: dict | None = None,
     boost: dict | None = None,
     rng: random.Random | None = None,
+    excuse: str | None = None,
 ) -> Decision:
     """Pick the next nudge type.
 
@@ -100,7 +101,9 @@ def choose(
         sample = rng.betavariate(a, b)
         rates[arm] = a / (a + b)
         scores[arm] = sample - fatigue[arm] + (boost or {}).get(arm, 0.0)
-    arm = max(scores, key=scores.get)
+    # An excuse decides which kinds of nudge are allowed; learning picks among them.
+    fitting = [a for a, v in (boost or {}).items() if v > 0 and a in scores] if excuse else []
+    arm = max(fitting or scores, key=scores.get)
 
     best_rate_arm = max(rates, key=rates.get)
     n_tries = sum(1 for o in history if o.arm == arm and o.context == context)
@@ -118,7 +121,8 @@ def choose(
     else:
         reason = f"'{arm}' won this round's sampling ({rates[arm]:.0%} est.)"
     if boost and boost.get(arm, 0) > 0:
-        reason += " (boosted by your last reply)"
+        reason = (f"you said you were {excuse}, so '{arm}' fits better than pressure; {reason}"
+                  if excuse else reason + " (boosted by your last reply)")
 
     return Decision(arm, context, scores, rates, fatigue, reason)
 

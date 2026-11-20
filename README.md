@@ -68,6 +68,20 @@ Honest note: simply rotating at random already beats a fixed reminder by a lot. 
 extra edge over random is smaller (a few points, and fewer pings per start), and grows when a
 person's preferences are strong or when they change.
 
+## Firedrill: drilled, fixed, re-drilled
+
+We ran Momentum against a synthetic tired student in [Firedrill](https://firedrill.run)
+(same world, same rubric, before and after the fix):
+
+| Run | Score (pass = 75) | What happened |
+|---|---|---|
+| 1 | **52.75**, needs attention | User said "im exhausted"; Momentum sent a "your team is counting on you" nudge. It ignored the excuse and invented a team. |
+| 2 | **95.75**, passed | Same excuse; Momentum switched to "Just open your essay draft. One sentence." The user started, and Momentum stopped. |
+
+Fix: the excuse now decides which kinds of nudge are allowed (tired → tiny step or reward),
+the learning brain picks among them, and accountability nudges never invent people.
+Files: `firedrill/` (persona, scenario, evaluation, world) and `momentum/drill_bridge.py`.
+
 ## Partner stack
 
 See [SPONSORS.md](SPONSORS.md).

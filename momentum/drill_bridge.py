@@ -39,6 +39,7 @@ os.environ.setdefault("TELEGRAM_BOT_TOKEN", "")
 from . import brain, config, store  # noqa: E402  (env must be set first)
 from .agent import record_outcome  # noqa: E402
 from .integrations import EXCUSE_BOOST, classify_excuse, write_nudge  # noqa: E402
+from .nudges import clean_task  # noqa: E402
 
 START_WORDS = re.compile(
     r"\b(started|starting|start now|on it|doing it|opened|opening|ok(ay)? i'?ll|let'?s go|i'?m in|fine)\b",
@@ -71,7 +72,8 @@ def _nudge(sid: str) -> dict:
     streak = store.streak(sid)
     if streak < 2:
         boost["streak"] = -1.0
-    d = brain.choose(store.history(sid), datetime.now(), boost=boost)
+    d = brain.choose(store.history(sid), datetime.now(), boost=boost,
+                     excuse=last["excuse"] if last else None)
     text, source = write_nudge(d.arm, task["title"], task["deadline"], d.context, streak,
                                last and last["excuse"])
     nid = store.log_nudge(sid, task["id"], d.arm, d.context, text, d.reason)
@@ -88,9 +90,7 @@ def handle(sid: str, text: str) -> dict:
     if not task and not last:
         m = DEADLINE.search(text)
         deadline = m.group(1).strip(" .") if m else None
-        title = (text[: m.start()] if m else text).strip(" .")
-        title = re.sub(r"^(i\s+)?(really\s+)?(need|have|got|want|should|must)\s+(to\s+)?|^gotta\s+",
-                       "", title, flags=re.I).strip() or "your work"
+        title = clean_task(text[: m.start()] if m else text)
         store.add_task(sid, title[:200], deadline)
         n = _nudge(sid)
         return {"reply": n["text"] + "\n(Reply 'started', or tell me what's in the way.)",

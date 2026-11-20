@@ -4,6 +4,7 @@ The LLM writes a fresh message for the chosen type. These templates are used
 when no LLM is configured, or when the LLM call fails.
 """
 import random
+import re
 
 NUDGE_TYPES = {
     "gentle": {
@@ -57,13 +58,27 @@ NUDGE_TYPES = {
     "accountability": {
         "emoji": "🤝",
         "label": "Someone's counting",
-        "style": "reminds them someone else is relying on this work",
+        "style": "reminds them who benefits from this work, usually future them; never invent a team, friend or person they did not mention",
         "templates": [
-            "Someone's counting on {task}. Let's get a piece of it done.",
-            "Your team will be happy to see progress on {task} today.",
+            "Future you is counting on {task}. Let's hand them a head start.",
+            "Do a little of {task} now, as a favour to tomorrow's you.",
         ],
     },
 }
+
+_VERB = re.compile(
+    r"^(?:i\s+)?(?:really\s+)?(?:gotta|need|have|got|want|should|must)?\s*(?:to\s+)?"
+    r"(?:finish|complete|do|write|work\s+on|start(?:\s+on)?|study\s+for|prep(?:are)?\s+for|get\s+through)?\s*",
+    re.I,
+)
+
+
+def clean_task(text: str) -> str:
+    """'I need to finish my essay draft' -> 'your essay draft'."""
+    t = text.strip(" .!")
+    t = _VERB.sub("", t, count=1).strip()
+    t = re.sub(r"^my\s+", "your ", t, flags=re.I)
+    return t or text.strip() or "your work"
 
 ARMS = list(NUDGE_TYPES)
 
@@ -73,4 +88,6 @@ def fallback_text(arm: str, task: str, deadline: str | None, streak: int = 0) ->
     msg = random.choice(t["templates"]).format(
         task=task, deadline=deadline or "soon", streak=max(streak, 1)
     )
+    # start every sentence with a capital, even when it opens with the task name
+    msg = re.sub(r"(^|[.!?]\s+)([a-z])", lambda m: m.group(1) + m.group(2).upper(), msg)
     return f"{t['emoji']} {msg}"

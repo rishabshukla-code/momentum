@@ -11,7 +11,7 @@
   ],
   "conditions": [],
   "events": [],
-  "max_turns": 6,
+  "max_turns": 5,
   "stop_rules": [
     "Stop once you have said you are starting.",
     "Stop if the agent says it will stop nudging for now."

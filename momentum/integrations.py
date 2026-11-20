@@ -77,13 +77,15 @@ KEYWORDS = {
     "bored": ["boring", "bored", "don't want", "dont want", "meh"],
     "unclear": ["confused", "not sure", "stuck", "what do i", "how do i"],
 }
-# Which nudge type tends to help with each excuse (a small score boost, not a rule).
+# Which nudge types fit each excuse. Strong enough to beat random exploration
+# (a Firedrill drill showed weak boosts let "tired" get a pressure nudge),
+# while the brain still chooses between the fitting types.
 EXCUSE_BOOST = {
-    "tired": {"tiny_step": 0.15, "reward": 0.1},
-    "overwhelmed": {"tiny_step": 0.2},
-    "busy": {"consequence": 0.1},
-    "bored": {"reward": 0.15, "streak": 0.1},
-    "unclear": {"tiny_step": 0.15},
+    "tired": {"tiny_step": 0.6, "reward": 0.45},
+    "overwhelmed": {"tiny_step": 0.7, "gentle": 0.3},
+    "busy": {"tiny_step": 0.4, "consequence": 0.3},
+    "bored": {"reward": 0.5, "streak": 0.3},
+    "unclear": {"tiny_step": 0.6},
 }
 
 

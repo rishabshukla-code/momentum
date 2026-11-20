@@ -34,7 +34,8 @@ def send_nudge(chat_id: str) -> dict | None:
         boost["streak"] = -1.0  # a streak nudge needs an actual streak
 
     d = brain.choose(store.history(chat_id), now,
-                     prior=brain.onboarding_prior(user and user["onboarding"]), boost=boost)
+                     prior=brain.onboarding_prior(user and user["onboarding"]), boost=boost,
+                     excuse=last["excuse"] if last else None)
     memories = recall(chat_id, f"What nudges work for this person in the {d.context}?")
     text, source = write_nudge(d.arm, task["title"], task["deadline"], d.context,
                                streak, last and last["excuse"], memories)

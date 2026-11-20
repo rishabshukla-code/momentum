@@ -4,8 +4,18 @@
   "description": "Synthetic procrastinators vs Momentum's adaptive nudges.",
   "dependencies": [],
   "resources": [
-    { "origin": "native_library", "kind": "scenario", "id": "4e3974e2-c3e9-4cb5-9fd6-bacfac7ee1dc", "revision": 1, "digest": "0f2e83cdb25708667c7765bf2330981e39179bb5e59362af15e1dd3f4ab962b8" }
+    {
+      "origin": "native_library",
+      "kind": "scenario",
+      "id": "7199d7ba-8d5c-48d6-90ff-4dd0dcfcbbbb",
+      "revision": 2,
+      "digest": "b1cea8b13acaa2db76c30f4cda7fb8add7e322825288e403a871a76369577556"
+    }
   ],
   "configuration_names": [],
-  "execution": { "repetitions": 1, "max_parallel": 1, "reset": "per_drill" }
+  "execution": {
+    "repetitions": 1,
+    "max_parallel": 1,
+    "reset": "per_drill"
+  }
 }

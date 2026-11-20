@@ -32,6 +32,11 @@ Dashboard, **Simulated month** tab.
 - Heatmap: "And it learned *this* person: small steps work in the morning. Deadline nudges
   worked at night until day 15, then stopped, and Momentum moved on."
 
+### 3b. Firedrill before/after (20s)
+> "We drilled Momentum against a synthetic exhausted student in Firedrill. First run: 52.
+> It ignored 'I'm exhausted' and told them their *team* was counting on them. There was no team.
+> We fixed it, re-ran the same world: 95. Now 'exhausted' gets 'just open the doc, one sentence.'"
+
 ### 4. How it's built (25s)
 > "It acts on its own trigger, not a chat turn. It needs the least access possible: one
 > Telegram chat, no inbox. A small Arcee open model writes each nudge cheaply. Every
