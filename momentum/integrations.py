@@ -10,6 +10,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import re
+import time
 
 import httpx
 from amplitude import BaseEvent
@@ -66,6 +67,32 @@ def chat(prompt: str, timeout: float = 20) -> str:
     text = (r.json()["choices"][0]["message"].get("content") or "").strip()
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip()
     return text.strip().strip('"').splitlines()[0].strip() if text else ""
+
+
+# ------------------------------------------------------ AssemblyAI speech-to-text
+def transcribe(audio: bytes) -> str:
+    """Turn a short recorded answer into text with AssemblyAI. Returns '' on failure."""
+    if not config.ASSEMBLYAI_API_KEY or not audio:
+        return ""
+    h = {"authorization": config.ASSEMBLYAI_API_KEY}
+    try:
+        up = httpx.post("https://api.assemblyai.com/v2/upload", headers=h, content=audio, timeout=30)
+        up.raise_for_status()
+        job = httpx.post("https://api.assemblyai.com/v2/transcript", headers=h,
+                         json={"audio_url": up.json()["upload_url"]}, timeout=30)
+        job.raise_for_status()
+        tid = job.json()["id"]
+        for _ in range(40):  # short clips finish in a few seconds
+            r = httpx.get(f"https://api.assemblyai.com/v2/transcript/{tid}", headers=h, timeout=15).json()
+            if r.get("status") == "completed":
+                return (r.get("text") or "").strip()
+            if r.get("status") == "error":
+                log.warning("AssemblyAI error: %s", r.get("error"))
+                return ""
+            time.sleep(0.5)
+    except Exception as e:
+        log.warning("AssemblyAI failed: %s", e)
+    return ""
 
 
 # ------------------------------------------------------ Superlinked excuses

@@ -40,6 +40,17 @@ COGNEE_ENABLED = _get("COGNEE_ENABLED", "false").lower() == "true"
 # --- Amplitude analytics ---
 AMPLITUDE_API_KEY = _get("AMPLITUDE_API_KEY")
 
+# --- Phone-call delivery (Twilio) ---
+TWILIO_ACCOUNT_SID = _get("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = _get("TWILIO_AUTH_TOKEN")
+TWILIO_FROM_NUMBER = _get("TWILIO_FROM_NUMBER")  # your Twilio number, +1...
+CALL_TO_NUMBER = _get("CALL_TO_NUMBER")  # the phone Momentum calls, +1...
+PUBLIC_BASE_URL = _get("PUBLIC_BASE_URL").rstrip("/")  # public https URL of server.py
+CALL_VOICE = _get("CALL_VOICE", "Polly.Joanna")
+
+# --- AssemblyAI speech-to-text for Momentum Phone ---
+ASSEMBLYAI_API_KEY = _get("ASSEMBLYAI_API_KEY")
+
 # --- Trigger endpoint (for Guild cron / webhook) ---
 TRIGGER_TOKEN = _get("TRIGGER_TOKEN", "change-me")
 

@@ -26,7 +26,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import sys
 import tempfile
 
@@ -39,20 +38,7 @@ os.environ.setdefault("TELEGRAM_BOT_TOKEN", "")
 from . import brain, config, store  # noqa: E402  (env must be set first)
 from .agent import record_outcome  # noqa: E402
 from .integrations import EXCUSE_BOOST, classify_excuse, write_nudge  # noqa: E402
-from .nudges import clean_task  # noqa: E402
-
-START_WORDS = re.compile(
-    r"\b(started|starting|start now|on it|doing it|opened|opening|ok(ay)? i'?ll|let'?s go|i'?m in|fine)\b",
-    re.I,
-)
-NEGATION = re.compile(
-    r"\b(not|no|nah|nope|never|don'?t|won'?t|can'?t|isn'?t|ain'?t|refuse|stop)\b", re.I)
-DEADLINE = re.compile(r"\b(?:by|due|before)\s+(.+)$", re.I)
-
-
-def is_start(text: str) -> bool:
-    """'ok fine opening it' is a start; 'not opening it' is not (found by a Firedrill drill)."""
-    return bool(START_WORDS.search(text)) and not NEGATION.search(text)
+from .intent import is_start, parse_task  # noqa: E402
 
 
 def _log(*a):
@@ -95,10 +81,8 @@ def handle(sid: str, text: str) -> dict:
 
     # First turn: set the task and send the first nudge.
     if not task and not last:
-        m = DEADLINE.search(text)
-        deadline = m.group(1).strip(" .") if m else None
-        title = clean_task(text[: m.start()] if m else text)
-        store.add_task(sid, title[:200], deadline)
+        title, deadline = parse_task(text)
+        store.add_task(sid, title, deadline)
         n = _nudge(sid)
         return {"reply": n["text"] + "\n(Reply 'started', or tell me what's in the way.)",
                 "action": "nudge_sent", "audit": n}

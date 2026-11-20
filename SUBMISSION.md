@@ -23,7 +23,8 @@ Momentum is a personal agent that lives outside the chat window. You tell it wha
 - **It knows nudges wear off.** Old results fade and recently used styles get a fatigue penalty, so it rotates before a nudge goes stale. In a 30-day simulation, a fixed reminder drops from 62% to 26% effectiveness while Momentum holds about 75%.
 - **It listens to your excuse.** Say "too tired" and it switches to a tiny step or a reward instead of more pressure. Say no three times and it backs off kindly.
 - **It shows its work.** Every nudge stores why it was chosen ("you said you were tired, and 'tiny_step' suits that"), visible with /why and in the dashboard.
-- **Least access that works.** It needs one Telegram chat. No inbox, calendar or screen access.
+- **It can call you.** Momentum Phone simulates a real phone call: it rings, you accept or decline, unanswered calls go to voicemail, Momentum speaks the nudge, and you answer out loud. Real calls through Twilio are built too (blocked today only by Twilio's trial limits), and if a call fails the nudge falls back to Telegram.
+- **Least access that works.** It needs one chat or the call page. No inbox, calendar or screen access.
 
 We tested it against synthetic users in Firedrill and fixed what they found:
 - Tired student: 52.75 → 95.75 (it had ignored "exhausted" and invented a team that didn't exist)
@@ -34,6 +35,7 @@ We tested it against synthetic users in Firedrill and fixed what they found:
 - **SingleStore**: all agent state and telemetry (users, tasks, every nudge with its reason and outcome) on a Helios Starter cluster over TLS
 - **Amplitude**: `nudge_sent` and `nudge_outcome` events for every decision, via the official Python SDK
 - **Telegram Bot API**: nudge delivery with inline buttons
+- **Momentum Phone**: browser call simulation (WebAudio ringtone, speech synthesis), spoken answers transcribed with **AssemblyAI**; **Twilio** voice integration for real calls
 - **Python, SQLAlchemy, FastAPI** (`/trigger` endpoint so a scheduler can drive the agent), **Streamlit** (simulation and live decision dashboard)
 - **Arcee**: integration built for writing fresh nudges with a small open model; not active in the demo because hackathon credits weren't available, so Momentum uses its own templates
 - Built with **Claude Code**

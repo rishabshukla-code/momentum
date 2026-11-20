@@ -8,7 +8,7 @@ import logging
 import time
 from datetime import datetime
 
-from . import agent, brain, config, store, telegram
+from . import agent, brain, config, store, telegram, voice
 from .integrations import build_memory, classify_excuse
 from .nudges import NUDGE_TYPES
 
@@ -23,6 +23,8 @@ HELP = (
     "/nudge  - nudge me right now\n"
     "/why    - why I picked my last nudge\n"
     "/stats  - what I've learned about you\n"
+    "/phone  - get nudges as calls on Momentum Phone (simulated call)\n"
+    "/call   - call me with a nudge right now\n"
     "/done   - stop nudging for now"
 )
 
@@ -61,6 +63,35 @@ def handle_message(msg: dict) -> None:
     elif text.startswith("/stats"):
         telegram.send(chat_id, stats_text(chat_id))
         build_memory(chat_id)
+    elif text.startswith("/phone"):
+        if "off" in text.lower():
+            voice.set_call(chat_id, False)
+            telegram.send(chat_id, "Okay, back to messages here.")
+        elif not config.PUBLIC_BASE_URL:
+            telegram.send(chat_id, "Momentum Phone needs the server's public link (PUBLIC_BASE_URL).")
+        else:
+            voice.set_call(chat_id, "web")
+            telegram.send(chat_id, "📞 Momentum Phone is on. Open this on your phone and tap "
+                          f"'Turn on Momentum Phone':\n{config.PUBLIC_BASE_URL}/phone?k={config.TRIGGER_TOKEN}"
+                          "\nThen send /call, or just wait for me to call.")
+    elif text.startswith("/callme"):
+        on = "off" not in text.lower()
+        if on and not voice.ready():
+            telegram.send(chat_id, "Phone calls aren't set up yet (Twilio settings missing).")
+            return
+        voice.set_call(chat_id, on)
+        telegram.send(chat_id, "📞 Got it, I'll call you for nudges." if on
+                      else "Okay, back to messages here.")
+    elif text.startswith("/call"):
+        if not store.active_task(chat_id):
+            telegram.send(chat_id, "Set a task first with /task.")
+        elif voice.call_mode(chat_id) == "web":
+            agent.send_nudge(chat_id)  # rings Momentum Phone
+        elif voice.ready():
+            voice.set_call(chat_id, True)
+            agent.send_nudge(chat_id)
+        else:
+            telegram.send(chat_id, "Turn on Momentum Phone first with /phone.")
     elif text.startswith("/done"):
         store.finish_task(chat_id)
         telegram.send(chat_id, "Okay, I'll stay quiet. Proud of you either way. ☕")

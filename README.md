@@ -34,6 +34,20 @@ trigger (timer / Guild cron / webhook)
 * **Least access:** it only needs a Telegram chat. No inbox, no calendar.
 * **Shows its work:** every nudge stores *why* it was picked (`/why`, dashboard).
 
+## Momentum Phone (simulated call)
+
+Instead of a chat message, Momentum can **call you**. `/phone` in Telegram switches delivery to
+Momentum Phone, a browser page (`http://localhost:8000/phone`) that simulates a real phone call:
+
+- it **rings** (two-tone ring + vibration) with **Accept** / **Decline**
+- no answer for 20 seconds goes to **voicemail**
+- on Accept, Momentum **speaks** the nudge ("Hey Rishab, it's Momentum. Just open your pitch. One sentence. Have you started?")
+- you **answer by voice** (transcribed with AssemblyAI) or tap *I started* / *Not now*
+- the same intent rules decide started vs. not now + excuse, and the result lands in SingleStore, Amplitude and the chat
+
+`momentum/voice.py` also contains real phone calls through Twilio (speech in and out, signed webhooks);
+it works once the Twilio account is upgraded from trial, and falls back to Telegram if a call fails.
+
 ## Run it
 
 ```bash
@@ -46,6 +60,7 @@ copy .env.example .env        # then paste your Telegram bot token
 | What | Command |
 |---|---|
 | Telegram bot + agent loop | `python -m momentum.bot` |
+| Server: Momentum Phone page, call webhooks, trigger | `uvicorn momentum.server:app --port 8000` |
 | Demo dashboard | `streamlit run dashboard.py` |
 | Simulate 30 days | `python -m momentum.simulate --days 30 --runs 40` |
 | HTTP trigger for Guild cron | `uvicorn momentum.server:app --port 8000` |

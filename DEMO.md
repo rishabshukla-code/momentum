@@ -14,6 +14,14 @@
 > Every reminder app, and even Meta's Muse, sends the same reminder forever.
 > Muse can book your flight. It can't make you open your essay."
 
+### 2a. Momentum calls you (40s), the wow moment
+Open `http://localhost:8000/phone` next to the dashboard, tap *Turn on Momentum Phone*, send `/call`.
+> "This simulates a real phone call. Momentum decides when to call and what to say."
+- It rings. Accept. Momentum speaks the nudge and shows *why* it picked it.
+- Answer out loud: "ugh, not now, I'm exhausted". It hears the excuse, says it'll try something smaller.
+- `/call` again: a different, smaller nudge. Say "okay fine, I'll start". "Love that. Go go go!"
+- (Optional) let one ring out: it goes to voicemail.
+
 ### 2. Live loop on the phone (70s)
 1. Type `/task Hackathon pitch | today 4:30pm`, then `/nudge`.
 2. A nudge arrives. Tap **😴 Not now**. When it asks what's in the way, type **"honestly too tired"**.

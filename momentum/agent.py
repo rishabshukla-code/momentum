@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime
 
-from . import brain, config, store, telegram
+from . import brain, config, store, telegram, voice
 from .integrations import EXCUSE_BOOST, recall, remember, track, write_nudge
 
 log = logging.getLogger("momentum")
@@ -41,16 +41,38 @@ def send_nudge(chat_id: str) -> dict | None:
                                streak, last and last["excuse"], memories)
 
     nudge_id = store.log_nudge(chat_id, task["id"], d.arm, d.context, text, d.reason)
+    channel = "telegram"
+    if voice.call_mode(chat_id) == "web":  # Momentum Phone page picks it up and rings
+        store.set_message_id(nudge_id, "web")
+        try:
+            telegram.send(chat_id, f"📞 Momentum is calling you on Momentum Phone: {text}")
+        except Exception as e:
+            log.warning("could not post call notice to Telegram: %s", e)
+        track(chat_id, "nudge_sent", {"arm": d.arm, "context": d.context, "reason": d.reason,
+                                      "writer": source, "channel": "web_phone"})
+        log.info("nudge %s -> %s [%s] via Momentum Phone", nudge_id, chat_id, d.arm)
+        return {"nudge_id": nudge_id, "arm": d.arm, "reason": d.reason, "text": text}
+    if voice.call_enabled(chat_id) and voice.ready():
+        try:
+            voice.place_call(nudge_id)
+            channel = "call"
+        except Exception as e:  # fall back to Telegram so the nudge still arrives
+            log.warning("call failed, using Telegram: %s", e)
     try:
-        msg = telegram.send(chat_id, text, buttons=[[
-            ("✅ Started", f"started:{nudge_id}"), ("😴 Not now", f"snoozed:{nudge_id}"),
-        ]])
+        if channel == "call":
+            msg = telegram.send(chat_id, f"📞 Calling you now: {text}")
+        else:
+            msg = telegram.send(chat_id, text, buttons=[[
+                ("✅ Started", f"started:{nudge_id}"), ("😴 Not now", f"snoozed:{nudge_id}"),
+            ]])
     except Exception:
-        store.delete_nudge(nudge_id)  # never delivered, so it must not count as a miss
-        raise
+        if channel == "telegram":
+            store.delete_nudge(nudge_id)  # never delivered, so it must not count as a miss
+            raise
+        msg = {"message_id": ""}  # the call went out; the chat copy is optional
     store.set_message_id(nudge_id, str(msg["message_id"]))
     track(chat_id, "nudge_sent", {
-        "arm": d.arm, "context": d.context, "reason": d.reason, "writer": source,
+        "arm": d.arm, "context": d.context, "reason": d.reason, "writer": source, "channel": channel,
         "scores": {k: round(v, 3) for k, v in d.scores.items()},
         "fatigue": {k: round(v, 3) for k, v in d.fatigue.items()},
     })

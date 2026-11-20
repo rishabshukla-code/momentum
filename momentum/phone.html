@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Momentum Phone</title>
+<style>
+  :root { --bg:#0f1115; --fg:#f4f1ea; --muted:#9a968d; --green:#22c55e; --red:#ef4444; --warm:#f59e0b; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { height:100%; background:var(--bg); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .screen { display:none; height:100%; flex-direction:column; align-items:center;
+    justify-content:space-between; padding:72px 24px 56px; text-align:center; }
+  .screen.on { display:flex; }
+  .avatar { width:112px; height:112px; border-radius:50%; background:#2a2620; display:grid;
+    place-items:center; font-size:56px; margin:0 auto 20px; }
+  .ringing .avatar { animation:pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { box-shadow:0 0 0 0 rgba(245,158,11,.5); } 50% { box-shadow:0 0 0 22px rgba(245,158,11,0); } }
+  h1 { font-size:32px; font-weight:600; }
+  .sub { color:var(--muted); margin-top:8px; font-size:17px; }
+  .row { display:flex; gap:72px; justify-content:center; }
+  .btn { width:76px; height:76px; border-radius:50%; border:0; font-size:32px; color:#fff; cursor:pointer; }
+  .label { color:var(--muted); font-size:14px; margin-top:10px; }
+  .accept { background:var(--green); } .decline { background:var(--red); }
+  .big { background:var(--warm); color:#1a1408; border:0; border-radius:16px; padding:18px 28px;
+    font-size:18px; font-weight:600; cursor:pointer; }
+  .caption { max-width:420px; font-size:20px; line-height:1.45; min-height:120px; white-space:pre-line; }
+  .small { background:#23262d; color:var(--fg); border:0; border-radius:12px; padding:14px 18px;
+    font-size:16px; cursor:pointer; }
+  .why { color:var(--muted); font-size:13px; max-width:420px; margin-top:14px; }
+  .mic { width:14px; height:14px; border-radius:50%; background:var(--red); display:inline-block;
+    margin-right:8px; animation:blink 1s infinite; vertical-align:middle; }
+  @keyframes blink { 50% { opacity:.25; } }
+  .vm { background:#1b1e24; border-radius:16px; padding:18px; max-width:420px; text-align:left; }
+</style>
+</head>
+<body>
+
+<section id="s-start" class="screen on">
+  <div><div class="avatar">☕</div><h1>Momentum Phone</h1>
+    <p class="sub">A simulated phone call from your Momentum agent.</p></div>
+  <button class="big" id="enable">Turn on Momentum Phone</button>
+  <p class="sub">Keep this page open. Momentum will call when it's time.</p>
+</section>
+
+<section id="s-idle" class="screen">
+  <div><div class="avatar">☕</div><h1>Momentum</h1><p class="sub" id="idle-sub">Waiting for the right moment…</p></div>
+  <div></div>
+  <p class="sub">Ready. Your phone will ring here.</p>
+</section>
+
+<section id="s-ring" class="screen ringing">
+  <div><p class="sub">incoming call…</p><div class="avatar" style="margin-top:16px">☕</div>
+    <h1>Momentum</h1><p class="sub">mobile</p></div>
+  <div class="row">
+    <div><button class="btn decline" id="decline">✕</button><p class="label">Decline</p></div>
+    <div><button class="btn accept" id="accept">✆</button><p class="label">Accept</p></div>
+  </div>
+</section>
+
+<section id="s-call" class="screen">
+  <div><p class="sub" id="timer">00:00</p><div class="avatar" style="margin-top:16px">☕</div><h1>Momentum</h1></div>
+  <div><p class="caption" id="caption"></p><p class="why" id="why"></p></div>
+  <div id="answer-area"></div>
+  <div><button class="btn decline" id="hangup">✕</button><p class="label">End</p></div>
+</section>
+
+<section id="s-missed" class="screen">
+  <div><div class="avatar">☕</div><h1>Missed call</h1><p class="sub">Momentum</p></div>
+  <div class="vm"><p class="sub" style="margin:0 0 8px">🔊 Voicemail</p><p id="vm-text"></p></div>
+  <button class="small" id="vm-play">▶ Play voicemail</button>
+</section>
+
+<script>
+const K = new URLSearchParams(location.search).get("k") || "";
+const api = (p, opt) => fetch(p + (p.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(K), opt).then(r => r.json());
+const $ = id => document.getElementById(id);
+const show = id => { document.querySelectorAll(".screen").forEach(s => s.classList.remove("on")); $(id).classList.add("on"); };
+
+let ctx, ringTimer, ringStop, current = null, callStart = 0, clock, recorder, chunks = [];
+const RING_SECONDS = 20;
+
+// --- ringtone: classic two-tone ring, 2s on / 4s off, made with WebAudio (no files)
+function ringOnce() {
+  if (!ctx) return;
+  const g = ctx.createGain(); g.gain.value = 0.15; g.connect(ctx.destination);
+  [440, 480].forEach(f => { const o = ctx.createOscillator(); o.frequency.value = f; o.connect(g);
+    o.start(); o.stop(ctx.currentTime + 2); });
+  if (navigator.vibrate) navigator.vibrate([800, 300, 800]);
+}
+function startRinging() { ringOnce(); ringTimer = setInterval(ringOnce, 4000);
+  ringStop = setTimeout(missed, RING_SECONDS * 1000); }
+function stopRinging() { clearInterval(ringTimer); clearTimeout(ringStop); if (navigator.vibrate) navigator.vibrate(0); }
+
+function say(text) {
+  return new Promise(res => {
+    if (!("speechSynthesis" in window)) return res();
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text); u.rate = 1.0; u.pitch = 1.05;
+    const v = speechSynthesis.getVoices().find(v => /en(-|_)US/i.test(v.lang) && /female|samantha|zira|google us/i.test(v.name))
+           || speechSynthesis.getVoices().find(v => /^en/i.test(v.lang));
+    if (v) u.voice = v;
+    // safety net: some browsers never fire onend, so move on after a sensible time
+    const done = () => { clearTimeout(t); res(); };
+    const t = setTimeout(done, 1500 + text.split(/\s+/).length * 450);
+    u.onend = done; u.onerror = done; speechSynthesis.speak(u);
+  });
+}
+
+$("enable").onclick = async () => {
+  ctx = new (window.AudioContext || window.webkitAudioContext)(); await ctx.resume();
+  say(" "); // unlock speech on mobile
+  try { (await navigator.mediaDevices.getUserMedia({ audio: true })).getTracks().forEach(t => t.stop()); } catch (e) {}
+  show("s-idle"); poll();
+};
+
+async function poll() {
+  if (!current) {
+    try {
+      const r = await api("/phone/api/next");
+      if (r.call) { current = r.call; show("s-ring"); startRinging(); }
+    } catch (e) { $("idle-sub").textContent = "Reconnecting…"; }
+  }
+  setTimeout(poll, 3000);
+}
+
+$("decline").onclick = async () => {
+  stopRinging(); const r = await api("/phone/api/end", post({ id: current.id, how: "declined" }));
+  current = null; show("s-idle"); $("idle-sub").textContent = r.note || "Declined. I'll try again later.";
+};
+
+async function missed() {
+  stopRinging(); const r = await api("/phone/api/end", post({ id: current.id, how: "missed" }));
+  $("vm-text").textContent = r.voicemail; show("s-missed"); current = null;
+}
+$("vm-play").onclick = () => say($("vm-text").textContent);
+
+$("accept").onclick = async () => {
+  stopRinging(); show("s-call"); callStart = Date.now();
+  clock = setInterval(() => { const s = Math.floor((Date.now() - callStart) / 1000);
+    $("timer").textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }, 500);
+  const line = current.greeting;
+  $("caption").textContent = line; $("why").textContent = "Why this nudge: " + current.reason;
+  await say(line);
+  listen();
+};
+
+function post(obj) { return { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(obj) }; }
+
+async function listen() {
+  const area = $("answer-area");
+  const tapButtons = `<div class="row" style="gap:12px"><button class="small" id="t-yes">I started</button>
+    <button class="small" id="t-no">Not now</button></div>`;
+  let stream;
+  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { stream = null; }
+  if (!current.voice || !stream || !window.MediaRecorder) {  // no speech-to-text: tap to answer
+    area.innerHTML = tapButtons; wireTaps(); return;
+  }
+  chunks = []; recorder = new MediaRecorder(stream);
+  recorder.ondataavailable = e => chunks.push(e.data);
+  recorder.onstop = async () => {
+    stream.getTracks().forEach(t => t.stop());
+    area.innerHTML = '<p class="sub">Thinking…</p>';
+    const blob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
+    const r = await fetch("/phone/api/answer?id=" + current.id + "&k=" + encodeURIComponent(K),
+      { method: "POST", headers: { "Content-Type": blob.type }, body: blob }).then(r => r.json());
+    finish(r);
+  };
+  recorder.start();
+  area.innerHTML = `<p class="sub"><span class="mic"></span>Listening… speak now</p>
+    <div style="margin-top:14px"><button class="small" id="done">Done talking</button></div>
+    <div style="margin-top:10px">${tapButtons}</div>`;
+  $("done").onclick = () => recorder.state === "recording" && recorder.stop();
+  wireTaps(() => { if (recorder && recorder.state === "recording") { recorder.onstop = () => stream.getTracks().forEach(t => t.stop()); recorder.stop(); } });
+  setTimeout(() => recorder.state === "recording" && recorder.stop(), 7000);
+}
+
+function wireTaps(before) {
+  const send = async said => { before && before(); $("answer-area").innerHTML = '<p class="sub">Thinking…</p>';
+    finish(await api("/phone/api/answer?id=" + current.id, post({ text: said }))); };
+  $("t-yes").onclick = () => send("I started");
+  $("t-no").onclick = () => send("not now");
+}
+
+async function finish(r) {
+  $("caption").textContent = (r.heard ? "You: “" + r.heard + "”\n\n" : "") + r.say;
+  $("answer-area").innerHTML = "";
+  await say(r.say);
+  endCall("Call ended. " + (r.note || ""));
+}
+
+$("hangup").onclick = () => { speechSynthesis.cancel(); if (current) api("/phone/api/end", post({ id: current.id, how: "hung_up" })); endCall("Call ended."); };
+function endCall(msg) { clearInterval(clock); current = null; setTimeout(() => { show("s-idle"); $("idle-sub").textContent = msg; }, 1500); }
+</script>
+</body>
+</html>

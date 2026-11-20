@@ -1,5 +1,7 @@
 """Storage. SQLite locally; point DATABASE_URL at SingleStore for the live data loop.
 
+Always order by time, not id: SingleStore auto-increment ids are unique but not in time order.
+
 Tables:
   users   - one row per Telegram chat
   tasks   - what the user wants to work on
@@ -12,7 +14,7 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import (
     BigInteger, Boolean, Column, DateTime, Integer, MetaData, String, Table, Text,
-    create_engine, insert, select, update,
+    and_, create_engine, insert, or_, select, update,
 )
 
 from . import config
@@ -106,7 +108,7 @@ def active_task(chat_id: str):
     with engine.begin() as c:
         return c.execute(
             select(tasks).where(tasks.c.chat_id == chat_id, tasks.c.active.is_(True))
-            .order_by(tasks.c.id.desc())
+            .order_by(tasks.c.created_at.desc(), tasks.c.id.desc())
         ).mappings().first()
 
 
@@ -121,6 +123,11 @@ def log_nudge(chat_id, task_id, arm, context, text, reason) -> int:
             chat_id=chat_id, task_id=task_id, arm=arm, context=context, text=text,
             reason=reason, sent_at=datetime.now()))
         return r.inserted_primary_key[0]
+
+
+def get_nudge(nudge_id: int):
+    with engine.begin() as c:
+        return c.execute(select(nudges).where(nudges.c.id == nudge_id)).mappings().first()
 
 
 def delete_nudge(nudge_id: int) -> None:
@@ -152,7 +159,7 @@ def set_excuse(nudge_id: int, excuse: str) -> None:
 def last_nudge(chat_id: str):
     with engine.begin() as c:
         return c.execute(
-            select(nudges).where(nudges.c.chat_id == chat_id).order_by(nudges.c.id.desc())
+            select(nudges).where(nudges.c.chat_id == chat_id).order_by(nudges.c.sent_at.desc(), nudges.c.id.desc())
         ).mappings().first()
 
 
@@ -164,9 +171,14 @@ def nudges_for_task(task_id: int) -> int:
 def expire_waiting(window_min: int) -> list[dict]:
     """Mark nudges with no reply after the window as ignored (a miss)."""
     cutoff = datetime.now() - timedelta(minutes=window_min)
+    # a Momentum Phone call can ring for 20s and then talk, so give it at least 3 minutes
+    call_cutoff = datetime.now() - timedelta(minutes=max(window_min, 3))
+    is_call = nudges.c.message_id == "web"
     with engine.begin() as c:
         rows = list(c.execute(
-            select(nudges).where(nudges.c.outcome.is_(None), nudges.c.sent_at < cutoff)
+            select(nudges).where(nudges.c.outcome.is_(None), or_(
+                and_(or_(nudges.c.message_id.is_(None), ~is_call), nudges.c.sent_at < cutoff),
+                and_(is_call, nudges.c.sent_at < call_cutoff)))
         ).mappings())
         for r in rows:
             c.execute(update(nudges).where(nudges.c.id == r["id"]).values(
@@ -188,7 +200,7 @@ def history(chat_id: str | None = None) -> list[Outcome]:
 def recent_nudges(limit: int = 50) -> list[dict]:
     with engine.begin() as c:
         return [dict(r) for r in c.execute(
-            select(nudges).order_by(nudges.c.id.desc()).limit(limit)).mappings()]
+            select(nudges).order_by(nudges.c.sent_at.desc(), nudges.c.id.desc()).limit(limit)).mappings()]
 
 
 def streak(chat_id: str) -> int:
@@ -197,7 +209,7 @@ def streak(chat_id: str) -> int:
         rows = c.execute(
             select(nudges.c.outcome).where(nudges.c.chat_id == chat_id,
                                            nudges.c.outcome.is_not(None))
-            .order_by(nudges.c.id.desc()).limit(20)
+            .order_by(nudges.c.sent_at.desc(), nudges.c.id.desc()).limit(20)
         ).scalars()
         n = 0
         for o in rows:
