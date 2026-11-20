@@ -124,7 +124,7 @@ def choose(
     else:
         reason = f"'{arm}' won this round's sampling ({rates[arm]:.0%} est.)"
     if boost and boost.get(arm, 0) > 0:
-        reason = (f"you said you were {excuse}, so '{arm}' fits better than pressure; {reason}"
+        reason = (f"you said you were {excuse}, and '{arm}' suits that; {reason}"
                   if excuse else reason + " (boosted by your last reply)")
 
     return Decision(arm, context, scores, rates, fatigue, reason)

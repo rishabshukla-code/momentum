@@ -1,0 +1,21 @@
+{
+  "schema": "firedrill.native-world.v1",
+  "name": "Momentum: stubborn user",
+  "description": "A user who never starts.",
+  "dependencies": [],
+  "resources": [
+    {
+      "origin": "native_library",
+      "kind": "scenario",
+      "id": "18a3203b-859e-4e87-be11-ae1e7c87e4e3",
+      "revision": 1,
+      "digest": "86a80e9c728edd42f30de55ed4645c4eadcb120ab9149811a70315e680500c43"
+    }
+  ],
+  "configuration_names": [],
+  "execution": {
+    "repetitions": 1,
+    "max_parallel": 1,
+    "reset": "per_drill"
+  }
+}

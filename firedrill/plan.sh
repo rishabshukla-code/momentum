@@ -1,7 +1,8 @@
 #!/bin/bash
 # Effect-free plan review; prints the plan id, gaps and credit estimate.
 cd "$(dirname "$0")"
-firedrill plan --world 65bc7f92-de62-42a9-92c2-0eb5fe64fb1d --session-only --json > /tmp/plan.json
+# Usage: plan.sh [world-id]   (default: the "Excuse, then start" world)
+firedrill plan --world "${1:-65bc7f92-de62-42a9-92c2-0eb5fe64fb1d}" --session-only --json > /tmp/plan.json
 python3 - <<'EOF'
 import json
 for line in open("/tmp/plan.json"):

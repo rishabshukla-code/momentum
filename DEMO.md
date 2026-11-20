@@ -35,7 +35,8 @@ Dashboard, **Simulated month** tab.
 ### 3b. Firedrill before/after (20s)
 > "We drilled Momentum against a synthetic exhausted student in Firedrill. First run: 52.
 > It ignored 'I'm exhausted' and told them their *team* was counting on them. There was no team.
-> We fixed it, re-ran the same world: 95. Now 'exhausted' gets 'just open the doc, one sentence.'"
+> We fixed it, re-ran the same world: 95. Now 'exhausted' gets 'just open the doc, one sentence.'
+> Then a stubborn user: 'not opening it.' Momentum heard 'opening' and celebrated. 57. Fixed: 92."
 
 ### 4. How it's built (25s)
 > "It acts on its own trigger, not a chat turn. It needs the least access possible: one

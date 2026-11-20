@@ -45,7 +45,14 @@ START_WORDS = re.compile(
     r"\b(started|starting|start now|on it|doing it|opened|opening|ok(ay)? i'?ll|let'?s go|i'?m in|fine)\b",
     re.I,
 )
+NEGATION = re.compile(
+    r"\b(not|no|nah|nope|never|don'?t|won'?t|can'?t|isn'?t|ain'?t|refuse|stop)\b", re.I)
 DEADLINE = re.compile(r"\b(?:by|due|before)\s+(.+)$", re.I)
+
+
+def is_start(text: str) -> bool:
+    """'ok fine opening it' is a start; 'not opening it' is not (found by a Firedrill drill)."""
+    return bool(START_WORDS.search(text)) and not NEGATION.search(text)
 
 
 def _log(*a):
@@ -97,10 +104,12 @@ def handle(sid: str, text: str) -> dict:
                 "action": "nudge_sent", "audit": n}
 
     if not task:
-        return {"reply": "You already got going. I'll stay quiet. ☕", "action": "none"}
+        if last and last["outcome"] == "started":
+            return {"reply": "You already got going. I'll stay quiet. ☕", "action": "none"}
+        return {"reply": "No pressure. I'm here whenever you're ready. ☕", "action": "none"}
 
     pending = last if last and last["outcome"] is None else None
-    if pending and START_WORDS.search(text):
+    if pending and is_start(text):
         record_outcome(pending["id"], "started")
         return {"reply": "Love that. Go go go. 🔥", "action": "stopped_nudging",
                 "audit": {"nudge_id": pending["id"], "outcome": "started"}}

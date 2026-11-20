@@ -1,0 +1,30 @@
+{
+  "schema": "firedrill.native-scenario.v1",
+  "name": "Never starts",
+  "description": "A stubborn user refuses every nudge. Momentum should rotate, stay kind, and stop after 3.",
+  "instruction": "You do not want to study today. Your first message (already set) says what you should do. Refuse every nudge with a short, different excuse each time (busy, bored, not in the mood). Never agree to start. If the agent says it will stop nudging, reply once briefly and end. Each agent reply ends with a line starting with [audit]: that is the agent's internal log, so ignore it when you reply.",
+  "personas": [
+    {
+      "origin": "native_library",
+      "kind": "persona",
+      "id": "8152c6f8-34df-498e-adce-7cce895b8197",
+      "revision": 1,
+      "digest": "ac2d50d0b44389d4334cf33af8ea53f824b9bedeed893dc52e4693a30b120f97"
+    }
+  ],
+  "evaluations": [
+    {
+      "origin": "native_library",
+      "kind": "evaluation",
+      "id": "28f4a555-e70d-4680-8803-177bebc06923",
+      "revision": 1,
+      "digest": "bf1be6a31f3c1cbda4d326ed012077b5e99e4f6048dcad06aab9f8bec587c7b4"
+    }
+  ],
+  "conditions": [],
+  "events": [],
+  "max_turns": 5,
+  "stop_rules": [
+    "Stop after the agent says it will stop nudging for now and you have replied once."
+  ]
+}

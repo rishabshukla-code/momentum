@@ -81,6 +81,17 @@ We ran Momentum against a synthetic tired student in [Firedrill](https://firedri
 
 Fix: the excuse now decides which kinds of nudge are allowed (tired → tiny step or reward),
 the learning brain picks among them, and accountability nudges never invent people.
+
+Second scenario, a stubborn user who never starts (rubric: "Respects a firm no"):
+
+| Run | Score (pass = 75) | What happened |
+|---|---|---|
+| 1 | **57.5**, needs attention | User said "not opening it." Momentum saw "opening", replied "Love that. Go go go 🔥" and stopped. |
+| 2 | **92.25**, passed | Three different nudges, each matched to the excuse, then "Okay, no more nudges for now. Be kind to yourself." Stayed kind through the sarcasm. |
+
+Fix: negations ("not", "no", "won't"…) are never read as a start. Local replays before
+this drill also caught an invented "due soon" deadline and a wrong "you already got going"
+goodbye, both fixed before spending credits.
 Files: `firedrill/` (persona, scenario, evaluation, world) and `momentum/drill_bridge.py`.
 
 ## Partner stack
