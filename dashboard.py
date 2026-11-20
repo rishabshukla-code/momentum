@@ -18,15 +18,15 @@ ROOT = Path(__file__).parent
 st.set_page_config(page_title="Momentum", page_icon="☕", layout="wide")
 
 STRAT_LABEL = {"fixed": "Same reminder every time", "random": "Random nudge",
-               "momentum": "Momentum (learns)"}
+               "momentum": "Momentum (learns)", "best_possible": "Best possible (knows the answers)"}
 STRAT_COLOR = {"Same reminder every time": "#c2410c", "Random nudge": "#a8a29e",
-               "Momentum (learns)": "#15803d"}
+               "Momentum (learns)": "#15803d", "Best possible (knows the answers)": "#60a5fa"}
 ARM_LABEL = {a: f"{v['emoji']} {v['label']}" for a, v in NUDGE_TYPES.items()}
 
 st.title("☕ Momentum")
 st.caption("The nudge that learns what moves you.")
 
-tab_sim, tab_live = st.tabs(["Simulated month", "Live from Telegram"])
+tab_sim, tab_live = st.tabs(["Simulation", "Live"])
 
 # ------------------------------------------------------------------ simulation
 with tab_sim:
@@ -34,32 +34,34 @@ with tab_sim:
     c1, c2 = st.columns([3, 1])
     with c2:
         if st.button("Re-run simulation"):
-            with st.spinner("Simulating 30 days x 40 runs..."):
-                path.write_text(json.dumps(simulate(30, 40, 7)))
-    if not path.exists():
-        path.write_text(json.dumps(simulate(30, 40, 7)))
+            with st.spinner("Simulating 60 days x 40 runs for every persona..."):
+                path.write_text(json.dumps(simulate(60, 40, 7)))
+    if not path.exists() or "best_possible" not in path.read_text():
+        path.write_text(json.dumps(simulate(60, 40, 7)))
     sim = json.loads(path.read_text())
     with c1:
         persona = st.selectbox("Synthetic user", list(sim["personas"]),
                                format_func=lambda p: p.replace("_", " ").title())
     res = sim["personas"][persona]
-    st.write(f"*{res['description']}*")
+    st.write(f"*{res['description']}*  ·  {sim['days']} days, averaged over {sim['runs']} runs")
 
     s = res["strategies"]
-    k1, k2, k3 = st.columns(3)
-    k1.metric("Got started (Momentum)", f"{s['momentum']['overall']:.0%}",
-              f"{(s['momentum']['overall'] - s['fixed']['overall']) * 100:+.0f} pts vs same reminder")
-    k2.metric("Pings per start", f"{s['momentum']['nudges_per_start']:.1f}",
-              f"{s['momentum']['nudges_per_start'] - s['fixed']['nudges_per_start']:+.1f} vs same reminder",
+    wk = lambda x, last: sum(x[-7:] if last else x[:7]) / 7
+    m, f = s["momentum"]["daily_start_rate"], s["fixed"]["daily_start_rate"]
+    k1, k2, k3, k4 = st.columns(4)
+    k1.metric("Momentum, last week", f"{wk(m, True):.0%}", f"up from {wk(m, False):.0%} in week 1")
+    k2.metric("Same reminder, last week", f"{wk(f, True):.0%}",
+              f"down from {wk(f, False):.0%} in week 1", delta_color="inverse")
+    k3.metric("Pings per start", f"{s['momentum']['nudges_per_start']:.1f}",
+              f"{s['momentum']['nudges_per_start'] - s['random']['nudges_per_start']:+.1f} vs random",
               delta_color="inverse")
-    k3.metric("Same reminder, last 5 days",
-              f"{sum(s['fixed']['daily_start_rate'][-5:]) / 5:.0%}",
-              f"down from {sum(s['fixed']['daily_start_rate'][:5]) / 5:.0%} in week 1",
-              delta_color="off")
+    if "best_possible" in s:
+        k4.metric("Of the best possible", f"{s['momentum']['overall'] / s['best_possible']['overall']:.0%}",
+                  "a strategy that secretly knows the answers", delta_color="off")
 
     rows = []
     for strat, v in s.items():
-        series = pd.Series(v["daily_start_rate"]).rolling(3, min_periods=1).mean()
+        series = pd.Series(v["daily_start_rate"]).rolling(7, min_periods=1).mean()
         rows += [{"Day": d + 1, "Started": r, "Strategy": STRAT_LABEL[strat]}
                  for d, r in enumerate(series)]
     df = pd.DataFrame(rows)

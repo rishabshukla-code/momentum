@@ -20,20 +20,14 @@ from sqlalchemy import delete, insert
 
 from . import brain, store
 from .nudges import ARMS, NUDGE_TYPES
+from .simulate import PERSONAS
 
 DEMO_ID = "demo-maya"
 DEMO_NAME = "Maya (demo, simulated)"
 DAYS = 28
 
-# Maya's hidden truth: chance she starts after each nudge type (unknown to Momentum).
-MAYA = {
-    "morning": {"tiny_step": .70, "five_minute": .65, "music": .55, "first_line": .45,
-                "body_double": .40, "gentle": .10, "consequence": .10, "accountability": .05,
-                "streak": .15, "reward": .20, "change_place": .25, "why_it_matters": .10, "proud": .10},
-    "evening": {"consequence": .60, "reward": .55, "body_double": .50, "five_minute": .40,
-                "tiny_step": .30, "gentle": .05, "accountability": .10, "streak": .15,
-                "music": .20, "first_line": .20, "change_place": .15, "why_it_matters": .10, "proud": .05},
-}
+# Maya's hidden truth (unknown to Momentum), shared with the simulator.
+MAYA = PERSONAS["maya"]["base"]
 EXCUSES = {"morning": ["tired", "busy"], "evening": ["busy", "bored", "tired"]}
 
 

@@ -68,21 +68,24 @@ copy .env.example .env        # then paste your Telegram bot token
 
 Bot commands: `/start`, `/task Essay | Friday 5pm`, `/nudge`, `/why`, `/stats`, `/done`.
 
-## Simulation results (30 days, 40 runs each)
+## Simulation results (60 days, 4 synthetic people, 40 runs each)
 
-| Synthetic user | Strategy | Work blocks started | Pings per start |
-|---|---|---|---|
-| Night-owl student | Same reminder every time | 36% | 7.6 |
-| | Random nudge | 66% | 3.4 |
-| | **Momentum** | **68%** | **3.2** |
-| People pleaser | Same reminder every time | 49% | 5.1 |
-| | Random nudge | 67% | 3.3 |
-| | **Momentum** | **70%** | **3.1** |
+Each synthetic person has hidden preferences over all 13 nudge types (a few work, most barely do)
+and gets used to any nudge that's repeated. Two work blocks a day, up to 3 nudges per block.
 
-The same reminder falls from 62% in the first 5 days to 26% by the last 5. Momentum holds about 70% (with 13 nudge types to explore).
-Honest note: simply rotating at random already beats a fixed reminder by a lot. Momentum's
-extra edge over random is smaller (a few points, and fewer pings per start), and grows when a
-person's preferences are strong or when they change.
+| Synthetic person | Same reminder every time (week 1 → week 9) | Random nudge | **Momentum (week 1 → week 9)** | Best possible* |
+|---|---|---|---|---|
+| Night-owl student (deadlines stop working on day 30) | 55% → 31% | 51% | **56% → 71%** | 88% |
+| People pleaser | 67% → 37% | 52% | **56% → 76%** | 88% |
+| Maya (demo profile) | 61% → 34% | 60% | **65% → 84%** | 92% |
+| Overwhelmed student | 64% → 35% | 52% | **55% → 73%** | 86% |
+
+\*Best possible cheats: it knows each person's hidden preferences. Momentum reaches about **82%** of it,
+needs about **1.6 fewer pings per start than random**, and **improves over time** while a fixed reminder
+wears off. We also tried tuning the brain's settings on the simulator; gains didn't hold on fresh random
+seeds, so the original settings stay (no overfitting).
+
+Run it: `python -m momentum.simulate` (or the *Re-run simulation* button on the dashboard).
 
 ## Firedrill: drilled, fixed, re-drilled
 

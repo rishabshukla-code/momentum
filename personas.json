@@ -1,49 +1,149 @@
 {
  "night_owl_student": {
-  "description": "Ignores soft reminders. Small steps work in the morning, deadlines at night.",
+  "description": "Small steps work in the morning, deadlines at night. Halfway through, deadlines stop working (exams are over).",
   "base": {
    "morning": {
-    "gentle": 0.2,
-    "consequence": 0.35,
+    "gentle": 0.12,
+    "consequence": 0.12,
     "tiny_step": 0.65,
-    "streak": 0.4,
-    "reward": 0.3,
-    "accountability": 0.35
+    "streak": 0.12,
+    "reward": 0.12,
+    "accountability": 0.12,
+    "five_minute": 0.55,
+    "body_double": 0.12,
+    "first_line": 0.4,
+    "music": 0.3,
+    "change_place": 0.12,
+    "why_it_matters": 0.12,
+    "proud": 0.12
    },
    "evening": {
-    "gentle": 0.2,
+    "gentle": 0.12,
     "consequence": 0.7,
-    "tiny_step": 0.35,
-    "streak": 0.4,
+    "tiny_step": 0.3,
+    "streak": 0.12,
     "reward": 0.5,
-    "accountability": 0.4
+    "accountability": 0.12,
+    "five_minute": 0.12,
+    "body_double": 0.12,
+    "first_line": 0.12,
+    "music": 0.45,
+    "change_place": 0.12,
+    "why_it_matters": 0.12,
+    "proud": 0.12
    }
   },
   "drift": {
-   "day": 15,
+   "day": 30,
    "context": "evening",
    "arm": "consequence",
-   "to": 0.3
+   "to": 0.15
   }
  },
  "people_pleaser": {
-  "description": "Moves when someone else is counting on them. Rewards help when tired.",
+  "description": "Moves when someone is in it with them. Rewards help in the evening.",
   "base": {
    "morning": {
     "gentle": 0.3,
-    "consequence": 0.3,
-    "tiny_step": 0.4,
-    "streak": 0.35,
+    "consequence": 0.12,
+    "tiny_step": 0.12,
+    "streak": 0.12,
     "reward": 0.35,
-    "accountability": 0.65
+    "accountability": 0.65,
+    "five_minute": 0.12,
+    "body_double": 0.6,
+    "first_line": 0.12,
+    "music": 0.12,
+    "change_place": 0.12,
+    "why_it_matters": 0.12,
+    "proud": 0.12
    },
    "evening": {
-    "gentle": 0.25,
-    "consequence": 0.35,
-    "tiny_step": 0.4,
-    "streak": 0.3,
+    "gentle": 0.12,
+    "consequence": 0.12,
+    "tiny_step": 0.12,
+    "streak": 0.12,
     "reward": 0.6,
-    "accountability": 0.55
+    "accountability": 0.5,
+    "five_minute": 0.12,
+    "body_double": 0.55,
+    "first_line": 0.12,
+    "music": 0.12,
+    "change_place": 0.12,
+    "why_it_matters": 0.12,
+    "proud": 0.3
+   }
+  },
+  "drift": null
+ },
+ "maya": {
+  "description": "Maya (the demo profile): tiny steps and working alongside her in the morning, deadlines in the evening. Streaks and praise do nothing.",
+  "base": {
+   "morning": {
+    "gentle": 0.1,
+    "consequence": 0.1,
+    "tiny_step": 0.7,
+    "streak": 0.15,
+    "reward": 0.2,
+    "accountability": 0.05,
+    "five_minute": 0.65,
+    "body_double": 0.4,
+    "first_line": 0.45,
+    "music": 0.55,
+    "change_place": 0.25,
+    "why_it_matters": 0.1,
+    "proud": 0.1
+   },
+   "evening": {
+    "gentle": 0.05,
+    "consequence": 0.6,
+    "tiny_step": 0.3,
+    "streak": 0.15,
+    "reward": 0.55,
+    "accountability": 0.1,
+    "five_minute": 0.4,
+    "body_double": 0.5,
+    "first_line": 0.2,
+    "music": 0.2,
+    "change_place": 0.15,
+    "why_it_matters": 0.1,
+    "proud": 0.05
+   }
+  },
+  "drift": null
+ },
+ "overwhelmed_student": {
+  "description": "Pressure backfires. Tiny, concrete first moves and company work.",
+  "base": {
+   "morning": {
+    "gentle": 0.4,
+    "consequence": 0.12,
+    "tiny_step": 0.6,
+    "streak": 0.12,
+    "reward": 0.12,
+    "accountability": 0.12,
+    "five_minute": 0.6,
+    "body_double": 0.12,
+    "first_line": 0.55,
+    "music": 0.12,
+    "change_place": 0.12,
+    "why_it_matters": 0.12,
+    "proud": 0.12
+   },
+   "evening": {
+    "gentle": 0.12,
+    "consequence": 0.05,
+    "tiny_step": 0.5,
+    "streak": 0.12,
+    "reward": 0.12,
+    "accountability": 0.08,
+    "five_minute": 0.4,
+    "body_double": 0.5,
+    "first_line": 0.12,
+    "music": 0.12,
+    "change_place": 0.4,
+    "why_it_matters": 0.12,
+    "proud": 0.12
    }
   },
   "drift": null

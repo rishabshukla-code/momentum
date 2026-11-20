@@ -33,10 +33,10 @@ Open `http://localhost:8000/phone` next to the dashboard, tap *Turn on Momentum 
 6. Switch to the dashboard's **Live** tab: every decision, the reason, and the result.
 
 ### 3. The month in 30 seconds (50s)
-Dashboard, **Simulated month** tab.
+Dashboard, **Simulation** tab (60 days, 4 synthetic people).
 > "This only matters over weeks, so we simulated 30 days against synthetic users."
-- Point at the orange line: "The same reminder starts at about 60% and wears off to 26%."
-- Green line: "Momentum holds around 75%, and needs fewer pings to get you started."
+- Orange line: "The same reminder starts strong and wears off, about 60% down to 34%."
+- Green line: "Momentum gets better as it learns, about 58% up to 76%, and reaches about 82% of a strategy that cheats by knowing the answers."
 - Heatmap: "And it learned *this* person: small steps work in the morning. Deadline nudges
   worked at night until day 15, then stopped, and Momentum moved on."
 

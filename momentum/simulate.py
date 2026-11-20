@@ -26,26 +26,50 @@ from .nudges import ARMS
 
 ROOT = Path(__file__).resolve().parent.parent
 
+WEAK = 0.12  # most nudge types barely work on a given person; a few clearly do
+
+
+def _profile(morning: dict, evening: dict) -> dict:
+    """Fill every nudge type: the named ones get their value, the rest are weak."""
+    return {"morning": {a: morning.get(a, WEAK) for a in ARMS},
+            "evening": {a: evening.get(a, WEAK) for a in ARMS}}
+
+
 PERSONAS = {
     "night_owl_student": {
-        "description": "Ignores soft reminders. Small steps work in the morning, deadlines at night.",
-        "base": {
-            "morning": {"gentle": 0.20, "consequence": 0.35, "tiny_step": 0.65, "streak": 0.40,
-                        "reward": 0.30, "accountability": 0.35},
-            "evening": {"gentle": 0.20, "consequence": 0.70, "tiny_step": 0.35, "streak": 0.40,
-                        "reward": 0.50, "accountability": 0.40},
-        },
-        # Halfway through, the deadline nudge loses its bite (e.g. after exams).
-        "drift": {"day": 15, "context": "evening", "arm": "consequence", "to": 0.30},
+        "description": "Small steps work in the morning, deadlines at night. "
+                       "Halfway through, deadlines stop working (exams are over).",
+        "base": _profile(
+            {"tiny_step": .65, "five_minute": .55, "first_line": .40, "music": .30},
+            {"consequence": .70, "reward": .50, "music": .45, "tiny_step": .30}),
+        "drift": {"day": 30, "context": "evening", "arm": "consequence", "to": .15},
     },
     "people_pleaser": {
-        "description": "Moves when someone else is counting on them. Rewards help when tired.",
-        "base": {
-            "morning": {"gentle": 0.30, "consequence": 0.30, "tiny_step": 0.40, "streak": 0.35,
-                        "reward": 0.35, "accountability": 0.65},
-            "evening": {"gentle": 0.25, "consequence": 0.35, "tiny_step": 0.40, "streak": 0.30,
-                        "reward": 0.60, "accountability": 0.55},
-        },
+        "description": "Moves when someone is in it with them. Rewards help in the evening.",
+        "base": _profile(
+            {"accountability": .65, "body_double": .60, "reward": .35, "gentle": .30},
+            {"body_double": .55, "reward": .60, "accountability": .50, "proud": .30}),
+        "drift": None,
+    },
+    "maya": {
+        "description": "Maya (the demo profile): tiny steps and working alongside her in the morning, "
+                       "deadlines in the evening. Streaks and praise do nothing.",
+        "base": _profile(
+            {"tiny_step": .70, "five_minute": .65, "music": .55, "first_line": .45,
+             "body_double": .40, "reward": .20, "change_place": .25,
+             "gentle": .10, "consequence": .10, "accountability": .05, "streak": .15,
+             "why_it_matters": .10, "proud": .10},
+            {"consequence": .60, "reward": .55, "body_double": .50, "five_minute": .40,
+             "tiny_step": .30, "music": .20, "first_line": .20, "change_place": .15,
+             "gentle": .05, "accountability": .10, "streak": .15, "why_it_matters": .10, "proud": .05}),
+        "drift": None,
+    },
+    "overwhelmed_student": {
+        "description": "Pressure backfires. Tiny, concrete first moves and company work.",
+        "base": _profile(
+            {"tiny_step": .60, "five_minute": .60, "first_line": .55, "gentle": .40},
+            {"body_double": .50, "tiny_step": .50, "change_place": .40, "five_minute": .40,
+             "consequence": .05, "accountability": .08}),
         "drift": None,
     },
 }
@@ -67,21 +91,25 @@ class SyntheticUser:
         for a in self.habit:
             self.habit[a] *= HABIT_DECAY
 
-    def respond(self, arm: str, ctx: str, day: int) -> bool:
-        base = self.p["base"][ctx].get(arm, 0.25)
+    def chance(self, arm: str, ctx: str, day: int) -> float:
+        """The hidden probability this nudge works right now (only the 'best possible' strategy sees it)."""
+        base = self.p["base"][ctx].get(arm, WEAK)
         d = self.p.get("drift")
         if d and day >= d["day"] and d["context"] == ctx and d["arm"] == arm:
             base = d["to"]
-        chance = base * (1 - min(self.habit[arm], HABIT_MAX))
+        return base * (1 - min(self.habit[arm], HABIT_MAX))
+
+    def respond(self, arm: str, ctx: str, day: int) -> bool:
+        p = self.chance(arm, ctx, day)
         self.habit[arm] += HABIT_STEP
-        return self.rng.random() < chance
+        return self.rng.random() < p
 
 
 def run_once(persona: dict, strategy: str, days: int, seed: int):
     rng = random.Random(seed)
     user = SyntheticUser(persona, rng)
     start = datetime(2026, 11, 2)
-    fixed_arm = max(ARMS, key=lambda a: sum(persona["base"][c].get(a, 0.25) for c in persona["base"]))
+    fixed_arm = max(ARMS, key=lambda a: sum(persona["base"][c].get(a, WEAK) for c in persona["base"]))
     history: list[brain.Outcome] = []
     daily, picks = [], []
     sent = starts = first_try = 0
@@ -96,6 +124,8 @@ def run_once(persona: dict, strategy: str, days: int, seed: int):
                     arm = fixed_arm
                 elif strategy == "random":
                     arm = rng.choice(ARMS)
+                elif strategy == "best_possible":  # cheats: knows the hidden preferences
+                    arm = max(ARMS, key=lambda a: user.chance(a, ctx, day))
                 else:
                     arm = brain.choose(history, now, rng=rng).arm
                 day_picks[arm] += 1
@@ -115,11 +145,14 @@ def run_once(persona: dict, strategy: str, days: int, seed: int):
     return daily, picks, brain.win_rate_table(history, end), fixed_arm, extra
 
 
-def simulate(days=30, runs=30, seed=7):
+STRATEGIES = ("fixed", "random", "momentum", "best_possible")
+
+
+def simulate(days=60, runs=30, seed=7):
     out = {"days": days, "runs": runs, "personas": {}}
     for name, persona in PERSONAS.items():
         res = {"description": persona["description"], "strategies": {}}
-        for strat in ("fixed", "random", "momentum"):
+        for strat in STRATEGIES:
             all_daily, pick_tot, last_table = [], [{a: 0 for a in ARMS} for _ in range(days)], None
             fnr = nps = 0.0
             for r in range(runs):
@@ -151,7 +184,7 @@ def simulate(days=30, runs=30, seed=7):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--days", type=int, default=30)
+    ap.add_argument("--days", type=int, default=60)
     ap.add_argument("--runs", type=int, default=30)
     ap.add_argument("--seed", type=int, default=7)
     a = ap.parse_args()
