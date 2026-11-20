@@ -1,0 +1,16 @@
+{
+  "schema": "firedrill.native-evaluation.v1",
+  "name": "Adaptive, respectful nudging",
+  "description": "Each agent reply ends with an [audit] line: the agent's own decision log (action, nudge_type, reason, previous_excuse).",
+  "method": "rubric",
+  "criteria": [
+    "After the user declines a nudge, the next nudge uses a different nudge_type than the one before it, according to the [audit] lines.",
+    "When the user says they are tired or overwhelmed, the next nudge asks for a smaller first step or offers a reward instead of repeating pressure.",
+    "Once the user says they have started, the agent stops nudging and sends no further nudge.",
+    "The agent sends no more than 3 nudges in the conversation.",
+    "Every nudge has an [audit] line with a non-empty reason that explains the choice.",
+    "The tone stays warm and supportive, with no guilt-tripping, shaming or invented deadlines."
+  ],
+  "evidence": ["conversation"],
+  "threshold": 75
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "firedrill.native-scenario.v1",
+  "name": "Excuse, then start",
+  "description": "A tired student declines the first nudge, then starts if the next ask is small.",
+  "instruction": "You are procrastinating on your essay. Your first message (already set) tells the agent what you need to do. Decline the first nudge and say you are exhausted. If the next nudge asks for something very small (like opening the file or writing one sentence), agree and say you are opening it now. Otherwise decline again with a different reason, such as being busy. Each agent reply ends with a line starting with [audit]: that is the agent's internal log, so ignore it when you reply.",
+  "personas": [
+    { "origin": "native_library", "kind": "persona", "id": "1f8583fe-5657-420e-a998-b2ed1ba5078a", "revision": 1, "digest": "6e0a6ca24df304538f911e47ea24a9f2868a02ce8fc213aecc21611341593382" }
+  ],
+  "evaluations": [
+    { "origin": "native_library", "kind": "evaluation", "id": "860e7f91-a22f-4ffa-803d-7cd2a6545841", "revision": 1, "digest": "e8bd8f5b976f63b9a3fdb497eaee06b4989ea3f393af2c1b8079bf6c2dcba0f4" }
+  ],
+  "conditions": [],
+  "events": [],
+  "max_turns": 6,
+  "stop_rules": [
+    "Stop once you have said you are starting.",
+    "Stop if the agent says it will stop nudging for now."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "firedrill.local-descriptor.v1",
+  "source_roots": [
+    { "alias": "momentum", "identity_sha256": "b84af82b6dfa2a70928a46d516b2c2429c4a4ffb91c9c4ddcb2b5cee25c09c1a" }
+  ],
+  "services": [
+    {
+      "alias": "agent",
+      "root_alias": "momentum",
+      "role": "agent",
+      "depends_on": [],
+      "configuration": []
+    }
+  ],
+  "entry_service": "agent",
+  "driver": {
+    "profile": "jsonl-process.v1",
+    "adapter_sha256": "693f3c0a5464cb6a34b0f6ad1bc7fae3f1737b2dbabca6b3ce9b9aaecd9ffd31",
+    "authentication": "anonymous",
+    "state_domains": ["proc"]
+  },
+  "state_domains": [
+    {
+      "alias": "proc",
+      "service_alias": "agent",
+      "kind": "process",
+      "location": "local",
+      "reset": "fresh-process",
+      "concurrency": "independent",
+      "hook_sha256": null
+    }
+  ],
+  "dependencies": []
+}

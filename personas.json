@@ -1,0 +1,51 @@
+{
+ "night_owl_student": {
+  "description": "Ignores soft reminders. Small steps work in the morning, deadlines at night.",
+  "base": {
+   "morning": {
+    "gentle": 0.2,
+    "consequence": 0.35,
+    "tiny_step": 0.65,
+    "streak": 0.4,
+    "reward": 0.3,
+    "accountability": 0.35
+   },
+   "evening": {
+    "gentle": 0.2,
+    "consequence": 0.7,
+    "tiny_step": 0.35,
+    "streak": 0.4,
+    "reward": 0.5,
+    "accountability": 0.4
+   }
+  },
+  "drift": {
+   "day": 15,
+   "context": "evening",
+   "arm": "consequence",
+   "to": 0.3
+  }
+ },
+ "people_pleaser": {
+  "description": "Moves when someone else is counting on them. Rewards help when tired.",
+  "base": {
+   "morning": {
+    "gentle": 0.3,
+    "consequence": 0.3,
+    "tiny_step": 0.4,
+    "streak": 0.35,
+    "reward": 0.35,
+    "accountability": 0.65
+   },
+   "evening": {
+    "gentle": 0.25,
+    "consequence": 0.35,
+    "tiny_step": 0.4,
+    "streak": 0.3,
+    "reward": 0.6,
+    "accountability": 0.55
+   }
+  },
+  "drift": null
+ }
+}

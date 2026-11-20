@@ -1,0 +1,12 @@
+httpx>=0.27
+python-dotenv>=1.0
+sqlalchemy>=2.0
+pymysql>=1.1          # SingleStore speaks the MySQL protocol
+fastapi>=0.110
+uvicorn>=0.29
+streamlit>=1.35
+pandas>=2.0
+altair>=5.0
+amplitude-analytics>=1.3.0
+# Optional: Cognee memory (set COGNEE_ENABLED=true). Heavy install, add only if you use it.
+# cognee

@@ -1,0 +1,1896 @@
+{
+ "days": 30,
+ "runs": 40,
+ "personas": {
+  "night_owl_student": {
+   "description": "Ignores soft reminders. Small steps work in the morning, deadlines at night.",
+   "strategies": {
+    "fixed": {
+     "daily_start_rate": [
+      0.7375,
+      0.7375,
+      0.525,
+      0.5625,
+      0.55,
+      0.4375,
+      0.3875,
+      0.3875,
+      0.35,
+      0.325,
+      0.25,
+      0.4125,
+      0.4375,
+      0.3875,
+      0.375,
+      0.3,
+      0.2625,
+      0.2625,
+      0.2125,
+      0.3375,
+      0.2125,
+      0.2,
+      0.1625,
+      0.2375,
+      0.275,
+      0.225,
+      0.2625,
+      0.35,
+      0.2375,
+      0.25
+     ],
+     "overall": 0.35500000000000004,
+     "first_nudge_rate": 0.14833333333333337,
+     "nudges_per_start": 7.629094305928938,
+     "picks_per_day": [
+      {
+       "gentle": 0.0,
+       "consequence": 3.7,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 3.95,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 4.65,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 4.475,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 4.8,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.25,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.15,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.225,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.25,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.175,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.55,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.125,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.125,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.1,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.25,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.25,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.55,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.525,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.45,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.15,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.375,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.725,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.575,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.5,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.425,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.525,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.325,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.4,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.575,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 5.475,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 0.0
+      }
+     ],
+     "learned": {
+      "morning": {
+       "gentle": 0.5000000000000002,
+       "consequence": 0.13727521860505476,
+       "tiny_step": 0.5000000000000002,
+       "streak": 0.5000000000000002,
+       "reward": 0.5000000000000002,
+       "accountability": 0.5000000000000002
+      },
+      "afternoon": {
+       "gentle": 0.5000000000000002,
+       "consequence": 0.16491341492303332,
+       "tiny_step": 0.5000000000000002,
+       "streak": 0.5000000000000002,
+       "reward": 0.5000000000000002,
+       "accountability": 0.5000000000000002
+      },
+      "evening": {
+       "gentle": 0.5000000000000002,
+       "consequence": 0.12874768219145052,
+       "tiny_step": 0.5000000000000002,
+       "streak": 0.5000000000000002,
+       "reward": 0.5000000000000002,
+       "accountability": 0.5000000000000002
+      },
+      "late_night": {
+       "gentle": 0.5000000000000002,
+       "consequence": 0.16491341492303332,
+       "tiny_step": 0.5000000000000002,
+       "streak": 0.5000000000000002,
+       "reward": 0.5000000000000002,
+       "accountability": 0.5000000000000002
+      }
+     }
+    },
+    "random": {
+     "daily_start_rate": [
+      0.8125,
+      0.6875,
+      0.75,
+      0.7125,
+      0.7375,
+      0.6375,
+      0.7375,
+      0.7125,
+      0.8,
+      0.725,
+      0.7625,
+      0.7125,
+      0.6875,
+      0.7375,
+      0.65,
+      0.6375,
+      0.725,
+      0.6375,
+      0.65,
+      0.7,
+      0.7625,
+      0.7125,
+      0.7375,
+      0.675,
+      0.65,
+      0.6625,
+      0.6125,
+      0.55,
+      0.7625,
+      0.625
+     ],
+     "overall": 0.69875,
+     "first_nudge_rate": 0.3408333333333334,
+     "nudges_per_start": 3.036872886592686,
+     "picks_per_day": [
+      {
+       "gentle": 0.55,
+       "consequence": 0.7,
+       "tiny_step": 0.775,
+       "streak": 0.525,
+       "reward": 0.675,
+       "accountability": 0.675
+      },
+      {
+       "gentle": 0.825,
+       "consequence": 0.75,
+       "tiny_step": 0.625,
+       "streak": 0.425,
+       "reward": 0.6,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.675,
+       "tiny_step": 0.525,
+       "streak": 0.775,
+       "reward": 0.7,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.875,
+       "consequence": 0.825,
+       "tiny_step": 0.625,
+       "streak": 0.475,
+       "reward": 0.55,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.575,
+       "consequence": 0.8,
+       "tiny_step": 0.825,
+       "streak": 0.675,
+       "reward": 0.75,
+       "accountability": 0.475
+      },
+      {
+       "gentle": 0.675,
+       "consequence": 0.725,
+       "tiny_step": 0.6,
+       "streak": 0.775,
+       "reward": 0.65,
+       "accountability": 0.7
+      },
+      {
+       "gentle": 0.8,
+       "consequence": 0.65,
+       "tiny_step": 0.6,
+       "streak": 0.925,
+       "reward": 0.8,
+       "accountability": 0.625
+      },
+      {
+       "gentle": 0.775,
+       "consequence": 0.725,
+       "tiny_step": 0.5,
+       "streak": 0.775,
+       "reward": 0.65,
+       "accountability": 0.575
+      },
+      {
+       "gentle": 0.7,
+       "consequence": 0.55,
+       "tiny_step": 0.675,
+       "streak": 0.625,
+       "reward": 0.675,
+       "accountability": 0.875
+      },
+      {
+       "gentle": 0.775,
+       "consequence": 0.65,
+       "tiny_step": 0.55,
+       "streak": 0.775,
+       "reward": 0.65,
+       "accountability": 0.825
+      },
+      {
+       "gentle": 0.725,
+       "consequence": 0.675,
+       "tiny_step": 0.5,
+       "streak": 0.65,
+       "reward": 0.525,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 1.025,
+       "consequence": 0.475,
+       "tiny_step": 0.65,
+       "streak": 0.775,
+       "reward": 0.725,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.875,
+       "consequence": 0.775,
+       "tiny_step": 0.775,
+       "streak": 0.6,
+       "reward": 0.575,
+       "accountability": 0.675
+      },
+      {
+       "gentle": 0.925,
+       "consequence": 0.525,
+       "tiny_step": 0.65,
+       "streak": 0.425,
+       "reward": 0.75,
+       "accountability": 0.65
+      },
+      {
+       "gentle": 0.8,
+       "consequence": 0.775,
+       "tiny_step": 0.55,
+       "streak": 0.825,
+       "reward": 0.9,
+       "accountability": 0.55
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.75,
+       "tiny_step": 0.8,
+       "streak": 0.75,
+       "reward": 0.675,
+       "accountability": 0.6
+      },
+      {
+       "gentle": 0.975,
+       "consequence": 0.65,
+       "tiny_step": 0.725,
+       "streak": 0.775,
+       "reward": 0.725,
+       "accountability": 0.4
+      },
+      {
+       "gentle": 0.725,
+       "consequence": 0.7,
+       "tiny_step": 0.825,
+       "streak": 0.75,
+       "reward": 0.725,
+       "accountability": 0.475
+      },
+      {
+       "gentle": 0.75,
+       "consequence": 0.825,
+       "tiny_step": 0.475,
+       "streak": 0.8,
+       "reward": 0.825,
+       "accountability": 0.625
+      },
+      {
+       "gentle": 0.825,
+       "consequence": 0.65,
+       "tiny_step": 0.825,
+       "streak": 0.6,
+       "reward": 0.525,
+       "accountability": 0.625
+      },
+      {
+       "gentle": 0.725,
+       "consequence": 0.725,
+       "tiny_step": 0.4,
+       "streak": 0.725,
+       "reward": 0.9,
+       "accountability": 0.55
+      },
+      {
+       "gentle": 0.725,
+       "consequence": 0.775,
+       "tiny_step": 0.7,
+       "streak": 0.675,
+       "reward": 0.675,
+       "accountability": 0.65
+      },
+      {
+       "gentle": 0.6,
+       "consequence": 0.65,
+       "tiny_step": 0.7,
+       "streak": 0.825,
+       "reward": 0.55,
+       "accountability": 0.925
+      },
+      {
+       "gentle": 0.55,
+       "consequence": 0.8,
+       "tiny_step": 0.725,
+       "streak": 0.625,
+       "reward": 0.725,
+       "accountability": 0.725
+      },
+      {
+       "gentle": 1.025,
+       "consequence": 0.75,
+       "tiny_step": 0.775,
+       "streak": 0.575,
+       "reward": 0.675,
+       "accountability": 0.625
+      },
+      {
+       "gentle": 0.725,
+       "consequence": 0.675,
+       "tiny_step": 0.725,
+       "streak": 0.65,
+       "reward": 0.875,
+       "accountability": 0.725
+      },
+      {
+       "gentle": 0.925,
+       "consequence": 0.775,
+       "tiny_step": 0.775,
+       "streak": 0.575,
+       "reward": 0.75,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 1.0,
+       "consequence": 0.9,
+       "tiny_step": 0.725,
+       "streak": 0.7,
+       "reward": 0.65,
+       "accountability": 0.65
+      },
+      {
+       "gentle": 0.575,
+       "consequence": 0.75,
+       "tiny_step": 0.625,
+       "streak": 0.875,
+       "reward": 0.55,
+       "accountability": 0.75
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.775,
+       "tiny_step": 0.625,
+       "streak": 1.175,
+       "reward": 0.625,
+       "accountability": 0.7
+      }
+     ],
+     "learned": {
+      "morning": {
+       "gentle": 0.3261970685343639,
+       "consequence": 0.35680469341685267,
+       "tiny_step": 0.49824363473202105,
+       "streak": 0.4147525398764014,
+       "reward": 0.40408633913434155,
+       "accountability": 0.37852334117663305
+      },
+      "afternoon": {
+       "gentle": 0.3744585127126821,
+       "consequence": 0.39666655227827147,
+       "tiny_step": 0.4744140060184258,
+       "streak": 0.43548701050110744,
+       "reward": 0.4441667527810422,
+       "accountability": 0.4292745484796254
+      },
+      "evening": {
+       "gentle": 0.3115155488138881,
+       "consequence": 0.34710864078031645,
+       "tiny_step": 0.42867123463521467,
+       "streak": 0.40057752330934077,
+       "reward": 0.43240233468941547,
+       "accountability": 0.41245956435551295
+      },
+      "late_night": {
+       "gentle": 0.3744585127126821,
+       "consequence": 0.39666655227827147,
+       "tiny_step": 0.4744140060184258,
+       "streak": 0.43548701050110744,
+       "reward": 0.4441667527810422,
+       "accountability": 0.4292745484796254
+      }
+     }
+    },
+    "momentum": {
+     "daily_start_rate": [
+      0.825,
+      0.7375,
+      0.7375,
+      0.7375,
+      0.775,
+      0.7625,
+      0.8,
+      0.7625,
+      0.775,
+      0.6375,
+      0.7625,
+      0.8875,
+      0.7625,
+      0.85,
+      0.7875,
+      0.675,
+      0.7,
+      0.725,
+      0.75,
+      0.7125,
+      0.7125,
+      0.65,
+      0.6375,
+      0.7625,
+      0.7,
+      0.7625,
+      0.7,
+      0.6875,
+      0.8,
+      0.7
+     ],
+     "overall": 0.7424999999999999,
+     "first_nudge_rate": 0.38874999999999993,
+     "nudges_per_start": 2.721712350657706,
+     "picks_per_day": [
+      {
+       "gentle": 0.55,
+       "consequence": 0.85,
+       "tiny_step": 0.5,
+       "streak": 0.625,
+       "reward": 0.525,
+       "accountability": 0.525
+      },
+      {
+       "gentle": 0.675,
+       "consequence": 0.65,
+       "tiny_step": 0.75,
+       "streak": 0.875,
+       "reward": 0.65,
+       "accountability": 0.55
+      },
+      {
+       "gentle": 0.375,
+       "consequence": 0.675,
+       "tiny_step": 0.775,
+       "streak": 0.6,
+       "reward": 0.7,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.675,
+       "consequence": 0.625,
+       "tiny_step": 0.725,
+       "streak": 0.7,
+       "reward": 0.65,
+       "accountability": 0.625
+      },
+      {
+       "gentle": 0.55,
+       "consequence": 0.6,
+       "tiny_step": 0.75,
+       "streak": 0.65,
+       "reward": 0.675,
+       "accountability": 0.55
+      },
+      {
+       "gentle": 0.475,
+       "consequence": 0.75,
+       "tiny_step": 0.625,
+       "streak": 0.725,
+       "reward": 0.6,
+       "accountability": 0.7
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.825,
+       "tiny_step": 0.575,
+       "streak": 0.7,
+       "reward": 0.6,
+       "accountability": 0.6
+      },
+      {
+       "gentle": 0.6,
+       "consequence": 0.65,
+       "tiny_step": 0.75,
+       "streak": 0.725,
+       "reward": 0.725,
+       "accountability": 0.75
+      },
+      {
+       "gentle": 0.6,
+       "consequence": 0.825,
+       "tiny_step": 0.8,
+       "streak": 0.55,
+       "reward": 0.525,
+       "accountability": 0.55
+      },
+      {
+       "gentle": 0.625,
+       "consequence": 0.625,
+       "tiny_step": 0.8,
+       "streak": 0.75,
+       "reward": 0.6,
+       "accountability": 0.775
+      },
+      {
+       "gentle": 0.375,
+       "consequence": 0.925,
+       "tiny_step": 0.75,
+       "streak": 0.675,
+       "reward": 0.775,
+       "accountability": 0.525
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.7,
+       "tiny_step": 0.575,
+       "streak": 0.45,
+       "reward": 0.65,
+       "accountability": 0.55
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.525,
+       "tiny_step": 0.85,
+       "streak": 0.75,
+       "reward": 0.675,
+       "accountability": 0.425
+      },
+      {
+       "gentle": 0.425,
+       "consequence": 0.65,
+       "tiny_step": 0.675,
+       "streak": 0.575,
+       "reward": 0.725,
+       "accountability": 0.575
+      },
+      {
+       "gentle": 0.5,
+       "consequence": 0.6,
+       "tiny_step": 0.725,
+       "streak": 0.675,
+       "reward": 0.7,
+       "accountability": 0.55
+      },
+      {
+       "gentle": 0.575,
+       "consequence": 0.925,
+       "tiny_step": 0.8,
+       "streak": 0.725,
+       "reward": 0.775,
+       "accountability": 0.6
+      },
+      {
+       "gentle": 0.475,
+       "consequence": 0.75,
+       "tiny_step": 0.95,
+       "streak": 0.75,
+       "reward": 0.75,
+       "accountability": 0.475
+      },
+      {
+       "gentle": 0.575,
+       "consequence": 0.575,
+       "tiny_step": 0.75,
+       "streak": 0.825,
+       "reward": 0.65,
+       "accountability": 0.75
+      },
+      {
+       "gentle": 0.625,
+       "consequence": 0.7,
+       "tiny_step": 0.725,
+       "streak": 0.75,
+       "reward": 0.55,
+       "accountability": 0.675
+      },
+      {
+       "gentle": 0.725,
+       "consequence": 0.725,
+       "tiny_step": 0.875,
+       "streak": 0.6,
+       "reward": 0.7,
+       "accountability": 0.525
+      },
+      {
+       "gentle": 0.425,
+       "consequence": 0.675,
+       "tiny_step": 0.825,
+       "streak": 0.8,
+       "reward": 0.675,
+       "accountability": 0.775
+      },
+      {
+       "gentle": 0.55,
+       "consequence": 0.65,
+       "tiny_step": 0.85,
+       "streak": 0.8,
+       "reward": 0.65,
+       "accountability": 0.475
+      },
+      {
+       "gentle": 0.575,
+       "consequence": 0.675,
+       "tiny_step": 0.925,
+       "streak": 0.625,
+       "reward": 0.85,
+       "accountability": 0.7
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.675,
+       "tiny_step": 0.725,
+       "streak": 0.675,
+       "reward": 0.7,
+       "accountability": 0.6
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.85,
+       "tiny_step": 0.75,
+       "streak": 0.725,
+       "reward": 0.775,
+       "accountability": 0.675
+      },
+      {
+       "gentle": 0.625,
+       "consequence": 0.625,
+       "tiny_step": 0.8,
+       "streak": 0.625,
+       "reward": 0.575,
+       "accountability": 0.7
+      },
+      {
+       "gentle": 0.55,
+       "consequence": 0.775,
+       "tiny_step": 0.775,
+       "streak": 0.775,
+       "reward": 0.85,
+       "accountability": 0.625
+      },
+      {
+       "gentle": 0.5,
+       "consequence": 0.5,
+       "tiny_step": 0.9,
+       "streak": 0.875,
+       "reward": 0.725,
+       "accountability": 0.75
+      },
+      {
+       "gentle": 0.5,
+       "consequence": 0.7,
+       "tiny_step": 0.65,
+       "streak": 0.675,
+       "reward": 0.75,
+       "accountability": 0.675
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.725,
+       "tiny_step": 0.825,
+       "streak": 0.7,
+       "reward": 0.675,
+       "accountability": 0.4
+      }
+     ],
+     "learned": {
+      "morning": {
+       "gentle": 0.35291338859770166,
+       "consequence": 0.4167188834632499,
+       "tiny_step": 0.5098026597361698,
+       "streak": 0.4378521822271384,
+       "reward": 0.3865949672656395,
+       "accountability": 0.3949263710277663
+      },
+      "afternoon": {
+       "gentle": 0.40261176182468517,
+       "consequence": 0.43872184328312447,
+       "tiny_step": 0.47992985714373826,
+       "streak": 0.46105619812728327,
+       "reward": 0.43551247033428636,
+       "accountability": 0.4295039013020703
+      },
+      "evening": {
+       "gentle": 0.34350129075057184,
+       "consequence": 0.3969461486038601,
+       "tiny_step": 0.42290520456561453,
+       "streak": 0.44130606722813587,
+       "reward": 0.4175545657463611,
+       "accountability": 0.3849104352962898
+      },
+      "late_night": {
+       "gentle": 0.40261176182468517,
+       "consequence": 0.43872184328312447,
+       "tiny_step": 0.47992985714373826,
+       "streak": 0.46105619812728327,
+       "reward": 0.43551247033428636,
+       "accountability": 0.4295039013020703
+      }
+     }
+    }
+   },
+   "fixed_arm": "consequence"
+  },
+  "people_pleaser": {
+   "description": "Moves when someone else is counting on them. Rewards help when tired.",
+   "strategies": {
+    "fixed": {
+     "daily_start_rate": [
+      0.8625,
+      0.8375,
+      0.6875,
+      0.6875,
+      0.6625,
+      0.55,
+      0.5625,
+      0.5,
+      0.425,
+      0.3625,
+      0.4875,
+      0.4125,
+      0.425,
+      0.475,
+      0.4125,
+      0.4375,
+      0.4875,
+      0.45,
+      0.3625,
+      0.4875,
+      0.4625,
+      0.4,
+      0.35,
+      0.3875,
+      0.35,
+      0.375,
+      0.4,
+      0.45,
+      0.3875,
+      0.475
+     ],
+     "overall": 0.48708333333333337,
+     "first_nudge_rate": 0.22416666666666665,
+     "nudges_per_start": 5.090954608724971,
+     "picks_per_day": [
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 3.3
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 3.525
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.025
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.125
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.275
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.725
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.7
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.85
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.9
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.875
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.95
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.175
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.0
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.025
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.05
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.925
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.825
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.075
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.325
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.75
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.85
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.15
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.125
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.15
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.125
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.1
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.1
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 4.975
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.175
+      },
+      {
+       "gentle": 0.0,
+       "consequence": 0.0,
+       "tiny_step": 0.0,
+       "streak": 0.0,
+       "reward": 0.0,
+       "accountability": 5.025
+      }
+     ],
+     "learned": {
+      "morning": {
+       "gentle": 0.5000000000000002,
+       "consequence": 0.5000000000000002,
+       "tiny_step": 0.5000000000000002,
+       "streak": 0.5000000000000002,
+       "reward": 0.5000000000000002,
+       "accountability": 0.2099648192382436
+      },
+      "afternoon": {
+       "gentle": 0.5000000000000002,
+       "consequence": 0.5000000000000002,
+       "tiny_step": 0.5000000000000002,
+       "streak": 0.5000000000000002,
+       "reward": 0.5000000000000002,
+       "accountability": 0.22611731565396428
+      },
+      "evening": {
+       "gentle": 0.5000000000000002,
+       "consequence": 0.5000000000000002,
+       "tiny_step": 0.5000000000000002,
+       "streak": 0.5000000000000002,
+       "reward": 0.5000000000000002,
+       "accountability": 0.18741035195686104
+      },
+      "late_night": {
+       "gentle": 0.5000000000000002,
+       "consequence": 0.5000000000000002,
+       "tiny_step": 0.5000000000000002,
+       "streak": 0.5000000000000002,
+       "reward": 0.5000000000000002,
+       "accountability": 0.22611731565396428
+      }
+     }
+    },
+    "random": {
+     "daily_start_rate": [
+      0.8125,
+      0.675,
+      0.8,
+      0.7125,
+      0.6875,
+      0.6375,
+      0.675,
+      0.775,
+      0.7875,
+      0.825,
+      0.725,
+      0.675,
+      0.775,
+      0.85,
+      0.6375,
+      0.7,
+      0.6625,
+      0.7,
+      0.8125,
+      0.8125,
+      0.7375,
+      0.7375,
+      0.775,
+      0.725,
+      0.725,
+      0.75,
+      0.625,
+      0.65,
+      0.7625,
+      0.6875
+     ],
+     "overall": 0.7304166666666667,
+     "first_nudge_rate": 0.35708333333333336,
+     "nudges_per_start": 2.833622549073208,
+     "picks_per_day": [
+      {
+       "gentle": 0.575,
+       "consequence": 0.7,
+       "tiny_step": 0.65,
+       "streak": 0.475,
+       "reward": 0.625,
+       "accountability": 0.75
+      },
+      {
+       "gentle": 0.75,
+       "consequence": 0.75,
+       "tiny_step": 0.775,
+       "streak": 0.5,
+       "reward": 0.65,
+       "accountability": 0.675
+      },
+      {
+       "gentle": 0.675,
+       "consequence": 0.675,
+       "tiny_step": 0.45,
+       "streak": 0.725,
+       "reward": 0.625,
+       "accountability": 0.775
+      },
+      {
+       "gentle": 0.825,
+       "consequence": 0.825,
+       "tiny_step": 0.5,
+       "streak": 0.525,
+       "reward": 0.6,
+       "accountability": 0.775
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.75,
+       "tiny_step": 0.85,
+       "streak": 0.525,
+       "reward": 0.625,
+       "accountability": 0.675
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.7,
+       "tiny_step": 0.675,
+       "streak": 0.85,
+       "reward": 0.9,
+       "accountability": 0.475
+      },
+      {
+       "gentle": 1.0,
+       "consequence": 0.75,
+       "tiny_step": 0.55,
+       "streak": 0.8,
+       "reward": 0.725,
+       "accountability": 0.7
+      },
+      {
+       "gentle": 0.725,
+       "consequence": 0.675,
+       "tiny_step": 0.625,
+       "streak": 0.95,
+       "reward": 0.65,
+       "accountability": 0.725
+      },
+      {
+       "gentle": 0.55,
+       "consequence": 0.675,
+       "tiny_step": 0.7,
+       "streak": 0.8,
+       "reward": 0.675,
+       "accountability": 0.65
+      },
+      {
+       "gentle": 0.75,
+       "consequence": 0.525,
+       "tiny_step": 0.575,
+       "streak": 0.425,
+       "reward": 0.675,
+       "accountability": 0.925
+      },
+      {
+       "gentle": 0.875,
+       "consequence": 0.55,
+       "tiny_step": 0.6,
+       "streak": 0.575,
+       "reward": 0.575,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.85,
+       "consequence": 0.575,
+       "tiny_step": 0.65,
+       "streak": 0.775,
+       "reward": 0.55,
+       "accountability": 0.725
+      },
+      {
+       "gentle": 0.7,
+       "consequence": 0.8,
+       "tiny_step": 0.525,
+       "streak": 0.65,
+       "reward": 0.575,
+       "accountability": 0.775
+      },
+      {
+       "gentle": 0.8,
+       "consequence": 0.475,
+       "tiny_step": 0.55,
+       "streak": 0.65,
+       "reward": 0.7,
+       "accountability": 0.425
+      },
+      {
+       "gentle": 0.875,
+       "consequence": 0.725,
+       "tiny_step": 0.75,
+       "streak": 0.5,
+       "reward": 0.825,
+       "accountability": 0.575
+      },
+      {
+       "gentle": 0.925,
+       "consequence": 0.625,
+       "tiny_step": 0.625,
+       "streak": 0.975,
+       "reward": 0.575,
+       "accountability": 0.5
+      },
+      {
+       "gentle": 0.85,
+       "consequence": 0.75,
+       "tiny_step": 0.725,
+       "streak": 0.65,
+       "reward": 0.875,
+       "accountability": 0.525
+      },
+      {
+       "gentle": 0.7,
+       "consequence": 0.775,
+       "tiny_step": 0.65,
+       "streak": 0.75,
+       "reward": 0.75,
+       "accountability": 0.45
+      },
+      {
+       "gentle": 0.725,
+       "consequence": 0.525,
+       "tiny_step": 0.55,
+       "streak": 0.675,
+       "reward": 0.65,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.75,
+       "consequence": 0.825,
+       "tiny_step": 0.85,
+       "streak": 0.55,
+       "reward": 0.575,
+       "accountability": 0.4
+      },
+      {
+       "gentle": 0.8,
+       "consequence": 0.725,
+       "tiny_step": 0.55,
+       "streak": 0.725,
+       "reward": 0.8,
+       "accountability": 0.45
+      },
+      {
+       "gentle": 0.625,
+       "consequence": 0.775,
+       "tiny_step": 0.4,
+       "streak": 0.925,
+       "reward": 0.65,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.65,
+       "tiny_step": 0.65,
+       "streak": 0.525,
+       "reward": 0.7,
+       "accountability": 0.675
+      },
+      {
+       "gentle": 0.725,
+       "consequence": 0.725,
+       "tiny_step": 0.675,
+       "streak": 0.55,
+       "reward": 0.55,
+       "accountability": 1.0
+      },
+      {
+       "gentle": 0.775,
+       "consequence": 0.7,
+       "tiny_step": 0.8,
+       "streak": 0.75,
+       "reward": 0.575,
+       "accountability": 0.625
+      },
+      {
+       "gentle": 0.8,
+       "consequence": 0.725,
+       "tiny_step": 0.7,
+       "streak": 0.55,
+       "reward": 0.85,
+       "accountability": 0.55
+      },
+      {
+       "gentle": 0.8,
+       "consequence": 0.675,
+       "tiny_step": 0.775,
+       "streak": 0.7,
+       "reward": 0.925,
+       "accountability": 0.625
+      },
+      {
+       "gentle": 0.825,
+       "consequence": 0.8,
+       "tiny_step": 0.625,
+       "streak": 0.75,
+       "reward": 0.625,
+       "accountability": 0.6
+      },
+      {
+       "gentle": 0.675,
+       "consequence": 0.6,
+       "tiny_step": 0.8,
+       "streak": 0.8,
+       "reward": 0.5,
+       "accountability": 0.625
+      },
+      {
+       "gentle": 0.7,
+       "consequence": 0.775,
+       "tiny_step": 0.575,
+       "streak": 0.85,
+       "reward": 0.575,
+       "accountability": 0.75
+      }
+     ],
+     "learned": {
+      "morning": {
+       "gentle": 0.37925339134296626,
+       "consequence": 0.35771214748439145,
+       "tiny_step": 0.430518939927617,
+       "streak": 0.3698356559575483,
+       "reward": 0.42977120314663386,
+       "accountability": 0.5441387095134033
+      },
+      "afternoon": {
+       "gentle": 0.4059159632703981,
+       "consequence": 0.4063345276672276,
+       "tiny_step": 0.4496892029941839,
+       "streak": 0.4094662064736351,
+       "reward": 0.4675462169977556,
+       "accountability": 0.512717282775568
+      },
+      "evening": {
+       "gentle": 0.3522636897716804,
+       "consequence": 0.3671509425801432,
+       "tiny_step": 0.42036535239760703,
+       "streak": 0.3675297873410388,
+       "reward": 0.4770264944458965,
+       "accountability": 0.4953996132411872
+      },
+      "late_night": {
+       "gentle": 0.4059159632703981,
+       "consequence": 0.4063345276672276,
+       "tiny_step": 0.4496892029941839,
+       "streak": 0.4094662064736351,
+       "reward": 0.4675462169977556,
+       "accountability": 0.512717282775568
+      }
+     }
+    },
+    "momentum": {
+     "daily_start_rate": [
+      0.8875,
+      0.7375,
+      0.75,
+      0.8375,
+      0.7,
+      0.85,
+      0.8,
+      0.6,
+      0.775,
+      0.775,
+      0.75,
+      0.675,
+      0.825,
+      0.8125,
+      0.7,
+      0.7,
+      0.775,
+      0.7625,
+      0.7625,
+      0.75,
+      0.7625,
+      0.7625,
+      0.7375,
+      0.775,
+      0.775,
+      0.75,
+      0.7625,
+      0.75,
+      0.8125,
+      0.8125
+     ],
+     "overall": 0.7641666666666667,
+     "first_nudge_rate": 0.3762500000000001,
+     "nudges_per_start": 2.637526782907058,
+     "picks_per_day": [
+      {
+       "gentle": 0.575,
+       "consequence": 0.825,
+       "tiny_step": 0.45,
+       "streak": 0.65,
+       "reward": 0.525,
+       "accountability": 0.525
+      },
+      {
+       "gentle": 0.825,
+       "consequence": 0.475,
+       "tiny_step": 0.625,
+       "streak": 0.8,
+       "reward": 0.65,
+       "accountability": 0.7
+      },
+      {
+       "gentle": 0.425,
+       "consequence": 0.725,
+       "tiny_step": 0.775,
+       "streak": 0.55,
+       "reward": 0.825,
+       "accountability": 0.7
+      },
+      {
+       "gentle": 0.6,
+       "consequence": 0.55,
+       "tiny_step": 0.625,
+       "streak": 0.525,
+       "reward": 0.55,
+       "accountability": 0.95
+      },
+      {
+       "gentle": 0.575,
+       "consequence": 0.475,
+       "tiny_step": 0.675,
+       "streak": 0.675,
+       "reward": 0.9,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.75,
+       "tiny_step": 0.625,
+       "streak": 0.65,
+       "reward": 0.675,
+       "accountability": 0.75
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.55,
+       "tiny_step": 0.675,
+       "streak": 0.55,
+       "reward": 0.725,
+       "accountability": 0.875
+      },
+      {
+       "gentle": 0.575,
+       "consequence": 0.65,
+       "tiny_step": 0.775,
+       "streak": 0.7,
+       "reward": 0.85,
+       "accountability": 0.9
+      },
+      {
+       "gentle": 0.75,
+       "consequence": 0.7,
+       "tiny_step": 0.6,
+       "streak": 0.7,
+       "reward": 0.75,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.5,
+       "consequence": 0.5,
+       "tiny_step": 0.45,
+       "streak": 0.575,
+       "reward": 0.9,
+       "accountability": 0.825
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.675,
+       "tiny_step": 0.7,
+       "streak": 0.775,
+       "reward": 0.55,
+       "accountability": 0.75
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.75,
+       "tiny_step": 0.575,
+       "streak": 0.6,
+       "reward": 0.8,
+       "accountability": 0.875
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.55,
+       "tiny_step": 0.675,
+       "streak": 0.65,
+       "reward": 0.7,
+       "accountability": 0.725
+      },
+      {
+       "gentle": 0.575,
+       "consequence": 0.65,
+       "tiny_step": 0.5,
+       "streak": 0.65,
+       "reward": 0.775,
+       "accountability": 0.975
+      },
+      {
+       "gentle": 0.575,
+       "consequence": 0.575,
+       "tiny_step": 0.7,
+       "streak": 0.65,
+       "reward": 0.825,
+       "accountability": 0.825
+      },
+      {
+       "gentle": 0.6,
+       "consequence": 0.625,
+       "tiny_step": 0.675,
+       "streak": 0.6,
+       "reward": 0.675,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.55,
+       "consequence": 0.675,
+       "tiny_step": 0.775,
+       "streak": 0.5,
+       "reward": 0.675,
+       "accountability": 0.975
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.45,
+       "tiny_step": 0.65,
+       "streak": 0.575,
+       "reward": 0.775,
+       "accountability": 0.85
+      },
+      {
+       "gentle": 0.55,
+       "consequence": 0.525,
+       "tiny_step": 0.675,
+       "streak": 0.8,
+       "reward": 0.7,
+       "accountability": 0.9
+      },
+      {
+       "gentle": 0.7,
+       "consequence": 0.775,
+       "tiny_step": 0.625,
+       "streak": 0.45,
+       "reward": 0.55,
+       "accountability": 0.75
+      },
+      {
+       "gentle": 0.6,
+       "consequence": 0.575,
+       "tiny_step": 0.65,
+       "streak": 0.425,
+       "reward": 0.8,
+       "accountability": 0.875
+      },
+      {
+       "gentle": 0.425,
+       "consequence": 0.7,
+       "tiny_step": 0.525,
+       "streak": 0.675,
+       "reward": 0.725,
+       "accountability": 0.95
+      },
+      {
+       "gentle": 0.65,
+       "consequence": 0.6,
+       "tiny_step": 0.725,
+       "streak": 0.6,
+       "reward": 0.725,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.375,
+       "consequence": 0.425,
+       "tiny_step": 0.6,
+       "streak": 0.55,
+       "reward": 0.625,
+       "accountability": 1.05
+      },
+      {
+       "gentle": 0.8,
+       "consequence": 0.675,
+       "tiny_step": 0.575,
+       "streak": 0.6,
+       "reward": 0.825,
+       "accountability": 0.775
+      },
+      {
+       "gentle": 0.625,
+       "consequence": 0.575,
+       "tiny_step": 0.575,
+       "streak": 0.5,
+       "reward": 0.7,
+       "accountability": 0.875
+      },
+      {
+       "gentle": 0.5,
+       "consequence": 0.45,
+       "tiny_step": 0.775,
+       "streak": 0.7,
+       "reward": 0.775,
+       "accountability": 0.9
+      },
+      {
+       "gentle": 0.7,
+       "consequence": 0.575,
+       "tiny_step": 0.675,
+       "streak": 0.725,
+       "reward": 0.7,
+       "accountability": 0.8
+      },
+      {
+       "gentle": 0.525,
+       "consequence": 0.6,
+       "tiny_step": 0.725,
+       "streak": 0.525,
+       "reward": 0.85,
+       "accountability": 0.7
+      },
+      {
+       "gentle": 0.4,
+       "consequence": 0.575,
+       "tiny_step": 0.7,
+       "streak": 0.5,
+       "reward": 0.575,
+       "accountability": 0.8
+      }
+     ],
+     "learned": {
+      "morning": {
+       "gentle": 0.38238453891378443,
+       "consequence": 0.39230768132435856,
+       "tiny_step": 0.4424955670075759,
+       "streak": 0.40913149333713816,
+       "reward": 0.44036302040961084,
+       "accountability": 0.5374467599849118
+      },
+      "afternoon": {
+       "gentle": 0.42140747881381824,
+       "consequence": 0.43532211085538625,
+       "tiny_step": 0.4572353142955555,
+       "streak": 0.4310092011744512,
+       "reward": 0.4821014428579361,
+       "accountability": 0.5133101524344227
+      },
+      "evening": {
+       "gentle": 0.37315698780112566,
+       "consequence": 0.40754725634093825,
+       "tiny_step": 0.4266305050548076,
+       "streak": 0.3764429445642231,
+       "reward": 0.4982684711041563,
+       "accountability": 0.49935152535381927
+      },
+      "late_night": {
+       "gentle": 0.42140747881381824,
+       "consequence": 0.43532211085538625,
+       "tiny_step": 0.4572353142955555,
+       "streak": 0.4310092011744512,
+       "reward": 0.4821014428579361,
+       "accountability": 0.5133101524344227
+      }
+     }
+    }
+   },
+   "fixed_arm": "accountability"
+  }
+ }
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "firedrill.native-persona.v1",
+  "name": "Tired night owl student",
+  "description": "A student who procrastinates, is exhausted, and only starts if the ask is tiny.",
+  "goals": [
+    "Avoid starting the essay for as long as possible",
+    "Eventually start, but only if the next step feels very small"
+  ],
+  "constraints": [
+    "Declines the first nudge because they are exhausted",
+    "Will not commit to a long work session",
+    "Agrees to start only when asked for something tiny, like opening the file or writing one sentence"
+  ],
+  "communication": "Short, casual, slightly grumpy texts in lowercase. No punctuation at the end.",
+  "initial_message": "I need to finish my essay draft by Friday 5pm",
+  "memory_facts": [
+    "The essay is a 1500 word history essay",
+    "They slept 5 hours last night"
+  ]
+}

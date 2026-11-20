@@ -1,0 +1,7 @@
+.env
+.venv/
+__pycache__/
+*.db
+.cognee_system/
+firedrill/local-plan.json
+firedrill/plan_error.json
