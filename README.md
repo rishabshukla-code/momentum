@@ -73,13 +73,13 @@ Bot commands: `/start`, `/task Essay | Friday 5pm`, `/nudge`, `/why`, `/stats`, 
 | Synthetic user | Strategy | Work blocks started | Pings per start |
 |---|---|---|---|
 | Night-owl student | Same reminder every time | 36% | 7.6 |
-| | Random nudge | 70% | 3.0 |
-| | **Momentum** | **74%** | **2.7** |
+| | Random nudge | 66% | 3.4 |
+| | **Momentum** | **68%** | **3.2** |
 | People pleaser | Same reminder every time | 49% | 5.1 |
-| | Random nudge | 73% | 2.8 |
-| | **Momentum** | **76%** | **2.6** |
+| | Random nudge | 67% | 3.3 |
+| | **Momentum** | **70%** | **3.1** |
 
-The same reminder falls from 62% in the first 5 days to 26% by the last 5. Momentum holds about 73%.
+The same reminder falls from 62% in the first 5 days to 26% by the last 5. Momentum holds about 70% (with 13 nudge types to explore).
 Honest note: simply rotating at random already beats a fixed reminder by a lot. Momentum's
 extra edge over random is smaller (a few points, and fewer pings per start), and grows when a
 person's preferences are strong or when they change.

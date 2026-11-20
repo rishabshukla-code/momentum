@@ -108,12 +108,19 @@ with tab_sim:
 # ------------------------------------------------------------------ live
 with tab_live:
     store.init_db()
-    st.button("Refresh")
-    recent = store.recent_nudges(30)
+    people = {u["chat_id"]: u["name"] or u["chat_id"] for u in store.all_users()}
+    c1, c2 = st.columns([3, 1])
+    who = c1.selectbox("Person", list(people), format_func=lambda c: people[c]) if people else None
+    c2.button("Refresh")
+    recent = [r for r in store.recent_nudges(300) if r["chat_id"] == who][:40]
+    if who == "demo-maya":
+        from momentum.demo_profile import report
+        with st.expander("Momentum report: what worked, what didn't", expanded=True):
+            st.code(report(), language=None)
     if not recent:
         st.info("No live nudges yet. Start the bot (python -m momentum.bot) and send /task.")
     else:
-        hist = store.history()
+        hist = store.history(who)
         now = datetime.now()
         ctx = brain.context_for(now)
         table = brain.win_rate_table(hist, now)[ctx] if hist else {}

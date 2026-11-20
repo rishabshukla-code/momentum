@@ -40,6 +40,15 @@ Dashboard, **Simulated month** tab.
 - Heatmap: "And it learned *this* person: small steps work in the morning. Deadline nudges
   worked at night until day 15, then stopped, and Momentum moved on."
 
+### 3a. Meet Maya (30s): what it learned about one person
+Dashboard → Live → Person: **Maya (demo, simulated)**. Say clearly it's a simulated profile.
+> "This is Maya, a simulated user with four weeks of history. Momentum tried 13 kinds of nudges.
+> Mornings: a tiny step, working alongside her, or a reward gets her going.
+> Evenings: only a deadline works. Streaks, 'proud of you', gentle check-ins never worked on her.
+> So Momentum retired them. It now only uses the nudges that actually move Maya,
+> and it still rotates between those so they don't wear off."
+Optional: `python -m momentum.demo_profile --call` rings Momentum Phone with Maya's next nudge.
+
 ### 3b. Firedrill before/after (20s)
 > "We drilled Momentum against a synthetic exhausted student in Firedrill. First run: 52.
 > It ignored 'I'm exhausted' and told them their *team* was counting on them. There was no team.

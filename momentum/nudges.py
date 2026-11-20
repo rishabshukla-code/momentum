@@ -65,6 +65,69 @@ NUDGE_TYPES = {
             "Do a little of {task} now, as a favour to tomorrow's you.",
         ],
     },
+    "five_minute": {
+        "emoji": "⏱️",
+        "label": "5-minute timer",
+        "style": "proposes a 5-minute timer with permission to stop afterwards",
+        "templates": [
+            "Set a 5-minute timer for {task}. When it rings, you're allowed to stop.",
+            "Five minutes on {task}. That's the whole deal.",
+        ],
+    },
+    "body_double": {
+        "emoji": "👥",
+        "label": "Work with me",
+        "style": "offers to keep them company while they work, like a study buddy",
+        "templates": [
+            "Let's do {task} together. I'll stay right here for the next 10 minutes.",
+            "I'll keep you company while you start {task}. Go, I'm here.",
+        ],
+    },
+    "first_line": {
+        "emoji": "✍️",
+        "label": "First line",
+        "style": "asks a curious question about the very first thing they would write or do",
+        "templates": [
+            "What's the very first line of {task}? Just say it out loud.",
+            "If {task} had a first sentence, what would it be?",
+        ],
+    },
+    "music": {
+        "emoji": "🎧",
+        "label": "Focus song",
+        "style": "suggests putting on a favourite focus song as the starting signal",
+        "templates": [
+            "Put on your focus song and open {task}. Start before the chorus.",
+            "Headphones on, one song, {task} open. That's it.",
+        ],
+    },
+    "change_place": {
+        "emoji": "🪑",
+        "label": "Change of scene",
+        "style": "suggests moving somewhere new to make starting easier",
+        "templates": [
+            "Move to a different spot, then open {task}. New place, fresh start.",
+            "Grab some water, sit somewhere else, and open {task}.",
+        ],
+    },
+    "why_it_matters": {
+        "emoji": "🌱",
+        "label": "Why it matters",
+        "style": "gently reminds them that this work moves them toward something they care about, without inventing details",
+        "templates": [
+            "{task} is one step toward something you care about. Take the step.",
+            "Every bit of {task} is progress you'll be glad you made.",
+        ],
+    },
+    "proud": {
+        "emoji": "💛",
+        "label": "Proud of you",
+        "style": "warm encouragement that they are capable, without pressure",
+        "templates": [
+            "You're better at {task} than you think. Give it ten minutes.",
+            "I believe you can make a good start on {task} today.",
+        ],
+    },
 }
 
 _VERB = re.compile(

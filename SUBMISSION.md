@@ -19,8 +19,9 @@ Reminder apps send the same nudge forever, and after a few days you stop seeing 
 
 Momentum is a personal agent that lives outside the chat window. You tell it what you need to work on; it nudges you on Telegram on its own schedule, with ✅ Started / 😴 Not now buttons. Every reply teaches it something:
 
-- **It learns what works on you.** A multi-armed bandit (Thompson sampling) tracks six nudge styles (gentle, deadline, tiny step, streak, reward, future-you) separately for morning, afternoon, evening and late night.
-- **It knows nudges wear off.** Old results fade and recently used styles get a fatigue penalty, so it rotates before a nudge goes stale. In a 30-day simulation, a fixed reminder drops from 62% to 26% effectiveness while Momentum holds about 75%.
+- **It learns what works on you.** A multi-armed bandit (Thompson sampling) tracks 13 nudge styles (gentle, deadline, tiny step, 5-minute timer, work-with-me, first line, focus song, reward, and more) separately for morning, afternoon, evening and late night.
+- **It knows nudges wear off.** Old results fade and recently used styles get a fatigue penalty, so it rotates before a nudge goes stale. In a 30-day simulation, a fixed reminder drops from 62% to 26% effectiveness while Momentum holds about 70%.
+- **It keeps only what works on you.** After about 30 answers it retires nudge types that never got you started at that time of day and only uses the ones that did. In our simulated demo profile "Maya" (4 weeks), mornings belong to a tiny step, working alongside her or a reward; evenings only to a deadline; streaks and "proud of you" were retired.
 - **It listens to your excuse.** Say "too tired" and it switches to a tiny step or a reward instead of more pressure. Say no three times and it backs off kindly.
 - **It shows its work.** Every nudge stores why it was chosen ("you said you were tired, and 'tiny_step' suits that"), visible with /why and in the dashboard.
 - **It can call you.** Momentum Phone simulates a real phone call: it rings, you accept or decline, unanswered calls go to voicemail, Momentum speaks the nudge, and you answer out loud. Real calls through Twilio are built too (blocked today only by Twilio's trial limits), and if a call fails the nudge falls back to Telegram.

@@ -101,12 +101,17 @@ def choose(
         sample = rng.betavariate(a, b)
         rates[arm] = a / (a + b)
         scores[arm] = sample - fatigue[arm] + (boost or {}).get(arm, 0.0)
+    # Once we know someone, only use nudge types that have actually worked on them.
+    proven = proven_arms(history, rates, context)
+    pool = proven or list(scores)
     # An excuse decides which kinds of nudge are allowed; learning picks among them.
     fitting = [a for a, v in (boost or {}).items() if v > 0 and a in scores] if excuse else []
+    fitting = [a for a in fitting if a in pool] or ([] if proven else fitting)
     just_declined = max(history, key=lambda o: o.at).arm if history else None
-    if len(fitting) > 1 and just_declined in fitting:
-        fitting.remove(just_declined)  # rotate: don't repeat the nudge they just turned down
-    arm = max(fitting or scores, key=scores.get)
+    choices = fitting or pool
+    if len(choices) > 1 and just_declined in choices:
+        choices = [a for a in choices if a != just_declined]  # rotate: don't repeat a declined nudge
+    arm = max(choices, key=scores.get)
 
     best_rate_arm = max(rates, key=rates.get)
     n_tries = sum(1 for o in history if o.arm == arm and o.context == context)
@@ -123,11 +128,26 @@ def choose(
         reason = f"exploring '{arm}': only {n_tries} tries in {context} so far"
     else:
         reason = f"'{arm}' won this round's sampling ({rates[arm]:.0%} est.)"
+    if proven:
+        reason = (f"'{arm}' has worked on you before ({rates[arm]:.0%} in the {context}); "
+                  f"only using the {len(proven)} nudge types that work on you")
     if boost and boost.get(arm, 0) > 0:
         reason = (f"you said you were {excuse}, and '{arm}' suits that; {reason}"
                   if excuse else reason + " (boosted by your last reply)")
 
     return Decision(arm, context, scores, rates, fatigue, reason)
+
+
+PROVEN_MIN_HISTORY = 30  # answers needed before we stop trying unproven nudges
+PROVEN_MIN_RATE = 0.30
+
+
+def proven_arms(history: list[Outcome], rates: dict, context: str | None = None) -> list[str]:
+    """Nudge types that got this person started (at this time of day) and still work often enough."""
+    if len(history) < PROVEN_MIN_HISTORY:
+        return []
+    won = {o.arm for o in history if o.success and (context is None or o.context == context)}
+    return [a for a in rates if a in won and rates[a] >= PROVEN_MIN_RATE]
 
 
 def win_rate_table(history: list[Outcome], now: datetime) -> dict:

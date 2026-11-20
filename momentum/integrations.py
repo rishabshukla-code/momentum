@@ -163,11 +163,11 @@ KEYWORDS = {
 # (a Firedrill drill showed weak boosts let "tired" get a pressure nudge),
 # while the brain still chooses between the fitting types.
 EXCUSE_BOOST = {
-    "tired": {"tiny_step": 0.6, "reward": 0.45},
-    "overwhelmed": {"tiny_step": 0.7, "gentle": 0.3},
-    "busy": {"tiny_step": 0.4, "consequence": 0.3},
-    "bored": {"reward": 0.5, "streak": 0.3},
-    "unclear": {"tiny_step": 0.6},
+    "tired": {"tiny_step": 0.6, "reward": 0.45, "five_minute": 0.5, "music": 0.4},
+    "overwhelmed": {"tiny_step": 0.7, "gentle": 0.3, "five_minute": 0.5, "first_line": 0.5},
+    "busy": {"tiny_step": 0.4, "consequence": 0.3, "five_minute": 0.5},
+    "bored": {"reward": 0.5, "streak": 0.3, "music": 0.5, "change_place": 0.4},
+    "unclear": {"tiny_step": 0.6, "first_line": 0.6},
 }
 
 

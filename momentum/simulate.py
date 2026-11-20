@@ -68,7 +68,7 @@ class SyntheticUser:
             self.habit[a] *= HABIT_DECAY
 
     def respond(self, arm: str, ctx: str, day: int) -> bool:
-        base = self.p["base"][ctx][arm]
+        base = self.p["base"][ctx].get(arm, 0.25)
         d = self.p.get("drift")
         if d and day >= d["day"] and d["context"] == ctx and d["arm"] == arm:
             base = d["to"]
@@ -81,7 +81,7 @@ def run_once(persona: dict, strategy: str, days: int, seed: int):
     rng = random.Random(seed)
     user = SyntheticUser(persona, rng)
     start = datetime(2026, 11, 2)
-    fixed_arm = max(ARMS, key=lambda a: sum(persona["base"][c][a] for c in persona["base"]))
+    fixed_arm = max(ARMS, key=lambda a: sum(persona["base"][c].get(a, 0.25) for c in persona["base"]))
     history: list[brain.Outcome] = []
     daily, picks = [], []
     sent = starts = first_try = 0
