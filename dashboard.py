@@ -121,10 +121,14 @@ with tab_live:
         m1, m2, m3 = st.columns(3)
         m1.metric("Nudges sent", len(recent))
         m2.metric("Got you started", f"{wins}/{len(hist)}" if hist else "-")
-        if table:
-            best = max(table, key=table.get)
-            m3.metric(f"Best nudge this {ctx.replace('_', ' ')}", ARM_LABEL[best],
-                      f"{table[best]:.0%} est.", delta_color="off")
+        # only rank nudge types that have actually worked at least once (untried ones start at 50%)
+        proven = {a: r for a, r in table.items() if any(o.arm == a and o.success for o in hist)}
+        if proven:
+            best = max(proven, key=proven.get)
+            m3.metric("Best nudge so far", ARM_LABEL[best],
+                      f"{sum(o.arm == best and o.success for o in hist)} start(s)", delta_color="off")
+        else:
+            m3.metric("Best nudge so far", "Still learning")
         st.subheader("Every decision, and why")
         icon = {"started": "✅ started", "snoozed": "😴 not now", "ignored": "🔕 ignored",
                 None: "⏳ waiting"}
