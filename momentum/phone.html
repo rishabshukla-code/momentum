@@ -92,7 +92,31 @@ function startRinging() { ringOnce(); ringTimer = setInterval(ringOnce, 4000);
   ringStop = setTimeout(missed, RING_SECONDS * 1000); }
 function stopRinging() { clearInterval(ringTimer); clearTimeout(ringStop); if (navigator.vibrate) navigator.vibrate(0); }
 
-function say(text) {
+// Natural voice: AssemblyAI TTS from the server, played through the unlocked AudioContext.
+const ttsCache = {};
+function fetchVoice(text) {
+  if (!ttsCache[text]) {
+    ttsCache[text] = fetch("/phone/api/tts?k=" + encodeURIComponent(K), post({ text }))
+      .then(r => r.status === 200 ? r.arrayBuffer() : null)
+      .then(buf => buf ? ctx.decodeAudioData(buf) : null)
+      .catch(() => null);
+  }
+  return ttsCache[text];
+}
+let playing = null;
+async function say(text) {
+  const audio = ctx ? await fetchVoice(text) : null;
+  if (audio) {
+    return new Promise(res => {
+      const src = ctx.createBufferSource(); src.buffer = audio; src.connect(ctx.destination);
+      src.onended = () => { playing = null; res(); }; playing = src; src.start();
+    });
+  }
+  return browserSay(text);  // fallback: the browser's built-in voice
+}
+function stopSpeaking() { try { playing && playing.stop(); } catch (e) {} speechSynthesis.cancel(); }
+
+function browserSay(text) {
   return new Promise(res => {
     if (!("speechSynthesis" in window)) return res();
     speechSynthesis.cancel();
@@ -109,7 +133,7 @@ function say(text) {
 
 $("enable").onclick = async () => {
   ctx = new (window.AudioContext || window.webkitAudioContext)(); await ctx.resume();
-  say(" "); // unlock speech on mobile
+  browserSay(" "); // unlock the fallback voice on mobile
   try { (await navigator.mediaDevices.getUserMedia({ audio: true })).getTracks().forEach(t => t.stop()); } catch (e) {}
   show("s-idle"); poll();
 };
@@ -118,7 +142,7 @@ async function poll() {
   if (!current) {
     try {
       const r = await api("/phone/api/next");
-      if (r.call) { current = r.call; show("s-ring"); startRinging(); }
+      if (r.call) { current = r.call; fetchVoice(current.greeting); show("s-ring"); startRinging(); }
     } catch (e) { $("idle-sub").textContent = "Reconnecting…"; }
   }
   setTimeout(poll, 3000);
@@ -189,7 +213,7 @@ async function finish(r) {
   endCall("Call ended. " + (r.note || ""));
 }
 
-$("hangup").onclick = () => { speechSynthesis.cancel(); if (current) api("/phone/api/end", post({ id: current.id, how: "hung_up" })); endCall("Call ended."); };
+$("hangup").onclick = () => { stopSpeaking(); if (current) api("/phone/api/end", post({ id: current.id, how: "hung_up" })); endCall("Call ended."); };
 function endCall(msg) { clearInterval(clock); current = null; setTimeout(() => { show("s-idle"); $("idle-sub").textContent = msg; }, 1500); }
 </script>
 </body>

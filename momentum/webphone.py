@@ -71,6 +71,19 @@ def next_call(request: Request, k: str = ""):
     return {"call": None}
 
 
+@router.post("/api/tts")
+async def tts(request: Request, k: str = ""):
+    """Natural voice for the call page (AssemblyAI TTS). 204 if unavailable -> browser voice."""
+    _check(k, request)
+    from fastapi.responses import Response as Raw
+    from fastapi.concurrency import run_in_threadpool
+    from .integrations import speak
+
+    text = str((await request.json()).get("text", ""))[:600]
+    wav = await run_in_threadpool(speak, text)
+    return Raw(wav, media_type="audio/wav") if wav else Raw(status_code=204)
+
+
 @router.post("/api/answer")
 async def answer(request: Request, id: str, k: str = ""):
     _check(k, request)

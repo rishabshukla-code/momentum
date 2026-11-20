@@ -8,9 +8,14 @@
 from __future__ import annotations
 
 import asyncio
+import base64
+import io
+import json
 import logging
+import os
 import re
 import time
+import wave
 
 import httpx
 from amplitude import BaseEvent
@@ -93,6 +98,56 @@ def transcribe(audio: bytes) -> str:
     except Exception as e:
         log.warning("AssemblyAI failed: %s", e)
     return ""
+
+
+TTS_VOICE = os.getenv("ASSEMBLYAI_TTS_VOICE", "aai-kyla")
+_tts_cache: dict[str, bytes] = {}
+
+
+def speak(text: str) -> bytes:
+    """Natural voice for Momentum Phone: AssemblyAI streaming TTS -> WAV bytes ('' on failure).
+
+    Same protocol as the assemblyai-livekit-tts plugin: open the socket (Begin), send
+    Generate + Terminate, collect base64 PCM Audio frames until Termination.
+    """
+    if not config.ASSEMBLYAI_API_KEY or not text:
+        return b""
+    if text in _tts_cache:
+        return _tts_cache[text]
+    from urllib.parse import urlencode
+
+    from websockets.sync.client import connect
+
+    rate = 24000
+    url = "wss://tts.us.assemblyai.com/v1/ws/?" + urlencode({
+        "voice_id": TTS_VOICE, "language": "english", "model": "assemblyai-tts-1",
+        "sample_rate": rate, "encoding": "pcm_s16le", "word_boundaries": "false"})
+    pcm = bytearray()
+    try:
+        with connect(url, additional_headers={"Authorization": config.ASSEMBLYAI_API_KEY},
+                     open_timeout=10, close_timeout=2) as ws:
+            first = json.loads(ws.recv(timeout=10))
+            if first.get("type") == "Error":
+                raise RuntimeError(first)
+            ws.send(json.dumps({"type": "Generate", "text": text}))
+            ws.send(json.dumps({"type": "Terminate"}))
+            while True:
+                msg = json.loads(ws.recv(timeout=20))
+                if msg.get("type") == "Audio":
+                    pcm += base64.b64decode(msg["audio"])
+                elif msg.get("type") in ("Termination", "Error"):
+                    break
+    except Exception as e:
+        log.warning("AssemblyAI TTS failed: %s", e)
+        return b""
+    buf = io.BytesIO()
+    with wave.open(buf, "wb") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(rate)
+        w.writeframes(bytes(pcm))
+    _tts_cache[text] = buf.getvalue()
+    return _tts_cache[text]
 
 
 # ------------------------------------------------------ Superlinked excuses
