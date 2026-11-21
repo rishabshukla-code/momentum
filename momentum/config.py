@@ -66,5 +66,14 @@ DEMO_MODE = _get("DEMO_MODE", "false").lower() == "true"
 NUDGE_GAP_MIN = 1 if DEMO_MODE else int(_get("NUDGE_GAP_MIN", "15"))
 RESPONSE_WINDOW_MIN = 1 if DEMO_MODE else int(_get("RESPONSE_WINDOW_MIN", "15"))
 MAX_NUDGES_PER_BLOCK = int(_get("MAX_NUDGES_PER_BLOCK", "3"))
+
+# Demo clock: how many real seconds count as one "minute" for call-backs and nudge gaps.
+# 60 = real time. 2 = a "5 minute" call-back happens after 10 seconds (demo only).
+SECONDS_PER_MINUTE = max(float(_get("SECONDS_PER_MINUTE", "60")), 0.5)
+FAST_CLOCK = SECONDS_PER_MINUTE < 60
+
+
+def minutes_to_seconds(minutes: float) -> float:
+    return minutes * SECONDS_PER_MINUTE
 QUIET_START_HOUR = int(_get("QUIET_START_HOUR", "23"))
 QUIET_END_HOUR = int(_get("QUIET_END_HOUR", "8"))

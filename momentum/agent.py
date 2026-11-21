@@ -112,6 +112,8 @@ def tick() -> list[dict]:
         return sent
     for user in store.all_users():
         chat_id = user["chat_id"]
+        if chat_id.startswith("demo-"):
+            continue  # simulated profiles have no real chat to nudge
         task = store.active_task(chat_id)
         if not task:
             continue
@@ -121,10 +123,15 @@ def tick() -> list[dict]:
                 continue  # still waiting for a reply
             if last["outcome"] == "deferred":  # they asked for N minutes: call back right on time
                 mins = int((last["excuse"] or "later:5").split(":")[-1] or 5)
-                if (now - (last["responded_at"] or last["sent_at"])).total_seconds() < mins * 60:
+                wait = config.minutes_to_seconds(mins)
+                if (now - (last["responded_at"] or last["sent_at"])).total_seconds() < wait:
                     continue
-            elif (now - last["sent_at"]).total_seconds() < config.NUDGE_GAP_MIN * 60:
-                continue
+            else:
+                gap = config.minutes_to_seconds(config.NUDGE_GAP_MIN)
+                if config.FAST_CLOCK:
+                    gap = max(gap, 15)  # demo clock: never ring back-to-back
+                if (now - last["sent_at"]).total_seconds() < gap:
+                    continue
         if store.nudges_for_task(task["id"]) >= config.MAX_NUDGES_PER_BLOCK:
             continue
         try:

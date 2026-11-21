@@ -158,7 +158,7 @@ def main() -> None:
     offset, last_tick = None, 0.0
     while True:
         try:
-            for u in telegram.get_updates(offset, timeout=10 if config.DEMO_MODE else 20):
+            for u in telegram.get_updates(offset, timeout=1 if config.FAST_CLOCK else (10 if config.DEMO_MODE else 20)):
                 offset = u["update_id"] + 1
                 try:
                     if "message" in u:
@@ -167,7 +167,7 @@ def main() -> None:
                         handle_callback(u["callback_query"])
                 except Exception:
                     log.exception("failed to handle update")
-            if time.time() - last_tick > 30:
+            if time.time() - last_tick > (2 if config.FAST_CLOCK else 30):
                 agent.tick()
                 last_tick = time.time()
         except KeyboardInterrupt:
