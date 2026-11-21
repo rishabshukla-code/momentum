@@ -6,11 +6,12 @@ Run:  uvicorn momentum.server:app --port 8000
 """
 from fastapi import FastAPI, Header, HTTPException
 
-from . import agent, config, store, voice, webphone
+from . import agent, config, planner, store, voice, webphone
 
 app = FastAPI(title="Momentum")
 app.include_router(voice.router)
 app.include_router(webphone.router)
+app.include_router(planner.router)
 store.init_db()
 
 

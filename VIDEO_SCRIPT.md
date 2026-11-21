@@ -46,17 +46,18 @@ Speak slowly. If something glitches, keep going and narrate it. Judges care abou
 ## Scene 4: What it learns about one person (1:50 – 2:20)
 **Screen:** Live tab → Person: **Maya (demo, simulated)** → report at the top
 
-> "This is Maya, a *simulated* user with four weeks of history. Momentum tried 13 kinds of nudges.
-> Mornings: a tiny step, working alongside her, or a reward gets her going. Evenings: a deadline.
-> Streaks, 'proud of you' and gentle check-ins never worked on her, so Momentum retired them.
-> It now only uses what actually moves Maya, and still rotates between those so they don't wear off."
+> "This is Maya, a *simulated* user with four weeks of history. Momentum tried 18 kinds of nudges, gentle and firm.
+> Mornings: a 5-minute timer is her winner, 8 times out of 10. Evenings: a tiny step, a reward, working alongside her,
+> or the firm 'cost of delay'. Tough love, gentle check-ins and 'proud of you' never worked on her.
+> After giving each one a fair try, Momentum retired the ones that don't work. It now only uses what moves Maya,
+> and still rotates between those so they don't wear off."
 
 ## Scene 5: Does it work over time? (2:20 – 2:50)
 **Screen:** Simulation tab → Night Owl Student → point at the lines and the 4 cards
 
 > "We simulated 60 days with four synthetic people.
-> Orange: the same reminder wears off. Green: Momentum gets *better* every week, about 58% up to 76%.
-> Blue is a strategy that cheats by knowing the answers. Momentum reaches about 82% of it.
+> Orange: the same reminder wears off. Green: Momentum gets *better* every week, about 56% up to 71%.
+> Blue is a strategy that cheats by knowing the answers. Momentum reaches about 75% of it.
 > Here the night owl's deadlines stop working on day 30. Watch Momentum dip, then adapt."
 
 ## Scene 6: We stress-tested it (2:50 – 3:15)

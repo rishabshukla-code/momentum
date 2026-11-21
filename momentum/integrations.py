@@ -38,7 +38,8 @@ CLAUDE_SYSTEM = (
     "Context you are given is for choosing your tone, not for repeating back: never mention the "
     "time of day, and never restate or guess about their earlier excuse or how they feel "
     "(if they were tired, keep the ask small and gentle instead of saying so). Mention the "
-    "deadline only if one is given, and never suggest it can be ignored. Only use facts you are "
+    "deadline only if one is given, and never suggest it can be ignored. Firm styles may be blunt "
+    "about consequences but are always on their side: never insult, shame, mock or threaten. Only use facts you are "
     "given: never invent people, teams or details. No hashtags, quotes, lists or sign-offs. "
     "Reply with the nudge only."
 )
@@ -238,8 +239,9 @@ KEYWORDS = {
 EXCUSE_BOOST = {
     "tired": {"tiny_step": 0.6, "reward": 0.45, "five_minute": 0.5, "music": 0.4},
     "overwhelmed": {"tiny_step": 0.7, "gentle": 0.3, "five_minute": 0.5, "first_line": 0.5},
-    "busy": {"tiny_step": 0.4, "consequence": 0.3, "five_minute": 0.5},
-    "bored": {"reward": 0.5, "streak": 0.3, "music": 0.5, "change_place": 0.4},
+    # firm nudges only for "busy" / "bored"; never after "tired" or "overwhelmed" (pressure backfires)
+    "busy": {"tiny_step": 0.4, "consequence": 0.3, "five_minute": 0.5, "cost_of_delay": 0.35},
+    "bored": {"reward": 0.5, "streak": 0.3, "music": 0.5, "change_place": 0.4, "tough_love": 0.35},
     "unclear": {"tiny_step": 0.6, "first_line": 0.6},
 }
 

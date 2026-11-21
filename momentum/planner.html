@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Momentum · Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0806; --card: #17110b; --line: #2e2116; --fg: #fdf6ec; --muted: #a8977f;
+    --yellow: #fcd34d; --amber: #fbbf24; --orange: #f97316; --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; background: var(--bg); color: var(--fg); font-family: var(--font); }
+  body { background: radial-gradient(circle at 50% 0%, #1c120a 0%, var(--bg) 55%) fixed; }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 48px 20px 64px; }
+
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 36px; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 18px; }
+  .dot { width: 26px; height: 26px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, var(--yellow), var(--amber) 40%, var(--orange));
+    box-shadow: 0 0 18px rgba(249,115,22,.55); }
+  .link { color: var(--amber); text-decoration: none; font-size: 14px; border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; }
+  .link:hover { border-color: var(--amber); }
+
+  h1 { font-size: clamp(26px, 5vw, 34px); font-weight: 600; letter-spacing: -.01em; }
+  .lead { color: var(--muted); margin-top: 8px; font-size: 15px; line-height: 1.5; }
+
+  form { display: flex; gap: 10px; margin-top: 22px; }
+  input { flex: 1; min-width: 0; background: var(--card); border: 1px solid var(--line); color: var(--fg);
+    font: 16px var(--font); padding: 16px 18px; border-radius: 14px; outline: none; transition: border-color .15s, box-shadow .15s; }
+  input:focus { border-color: var(--amber); box-shadow: 0 0 0 4px rgba(251,191,36,.12); }
+  input::placeholder { color: #6f5f4b; }
+  button { font: 600 15px var(--font); cursor: pointer; border-radius: 14px; }
+  .add { border: 0; padding: 0 22px; color: #2a1405; background: linear-gradient(135deg, var(--amber), var(--orange));
+    box-shadow: 0 0 22px rgba(249,115,22,.35); }
+  .add:disabled { opacity: .6; cursor: wait; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chip { background: transparent; border: 1px solid var(--line); color: var(--muted); font: 13px var(--font);
+    padding: 7px 12px; border-radius: 999px; cursor: pointer; }
+  .chip:hover { color: var(--amber); border-color: var(--amber); }
+
+  .msg { margin-top: 14px; min-height: 20px; font-size: 14px; color: var(--amber); }
+  .msg.err { color: #fb7185; }
+
+  h2 { font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin: 40px 0 14px; }
+  .list { display: flex; flex-direction: column; gap: 12px; }
+  .card { display: grid; grid-template-columns: 46px 1fr auto; gap: 14px; align-items: center; background: var(--card);
+    border: 1px solid var(--line); border-radius: 16px; padding: 16px; animation: in .3s ease; }
+  .card.new { border-color: var(--amber); box-shadow: 0 0 0 1px rgba(251,191,36,.25); }
+  @keyframes in { from { opacity: 0; transform: translateY(6px); } }
+  .icon { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: #22180f; }
+  .title { font-weight: 600; font-size: 16px; }
+  .tag { display: inline-block; font-size: 11px; color: var(--amber); border: 1px solid #4a3420; border-radius: 999px; padding: 2px 8px; margin-left: 8px; vertical-align: 2px; font-weight: 500; }
+  .meta { color: var(--muted); font-size: 13px; margin-top: 5px; line-height: 1.45; }
+  .next { color: var(--fg); font-size: 13px; margin-top: 6px; }
+  .next b { color: var(--amber); font-weight: 500; }
+  .next.now b { color: var(--orange); }
+  .actions { display: flex; gap: 8px; }
+  .ring { border: 1px solid #4a3420; background: transparent; color: var(--amber); font-size: 13px; padding: 9px 12px; border-radius: 10px; white-space: nowrap; }
+  .ring:hover { border-color: var(--amber); }
+  .del { border: 0; background: transparent; color: #6f5f4b; font-size: 18px; padding: 6px 8px; border-radius: 8px; }
+  .del:hover { color: #fb7185; }
+  .empty { color: var(--muted); font-size: 14px; border: 1px dashed var(--line); border-radius: 16px; padding: 22px; text-align: center; }
+  @media (max-width: 520px) { .card { grid-template-columns: 40px 1fr; } .actions { grid-column: 1 / -1; justify-content: flex-end; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="dot"></span>Momentum</div>
+    <a class="link" id="phone-link" href="/phone" target="_blank">Open Momentum Phone →</a>
+  </header>
+
+  <h1>What's coming up?</h1>
+  <p class="lead">Type it the way you'd say it. Momentum picks the category and decides when to call you.</p>
+
+  <form id="form" autocomplete="off">
+    <input id="text" placeholder="Mom's birthday Nov 20" aria-label="What's coming up?">
+    <button class="add" id="add" type="submit">Add</button>
+  </form>
+  <div class="chips">
+    <button class="chip" type="button">Mom's birthday Nov 20</button>
+    <button class="chip" type="button">Stats midterm Dec 12</button>
+    <button class="chip" type="button">Take my vitamins every morning</button>
+    <button class="chip" type="button">Pay rent on the 1st</button>
+    <button class="chip" type="button">Dentist appointment Dec 3 at 3pm</button>
+    <button class="chip" type="button">Submit co-op application by Nov 28</button>
+  </div>
+  <p class="msg" id="msg"></p>
+
+  <h2>Scheduled calls</h2>
+  <div class="list" id="list"></div>
+</div>
+
+<script>
+const K = new URLSearchParams(location.search).get("k") || "";
+const q = p => p + (p.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(K);
+if (K) document.getElementById("phone-link").href = "/phone?k=" + encodeURIComponent(K);
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const examples = [...document.querySelectorAll(".chip")].map(c => c.textContent);
+let ex = 0;
+setInterval(() => { if (!$("text").value) $("text").placeholder = examples[ex = (ex + 1) % examples.length]; }, 3000);
+
+function say(text, err) { $("msg").textContent = text; $("msg").className = "msg" + (err ? " err" : ""); }
+
+function card(e, isNew) {
+  return `<div class="card${isNew ? " new" : ""}" data-id="${e.id}">
+    <div class="icon">${e.emoji}</div>
+    <div>
+      <div class="title">${esc(e.title)}<span class="tag">${esc(e.label)}</span></div>
+      <div class="meta">${esc(e.schedule)} · ${esc(e.calls)}</div>
+      <div class="next${e.due_now ? " now" : ""}">Next call: <b>${esc(e.next)}</b></div>
+    </div>
+    <div class="actions">
+      <button class="ring" data-ring="${e.id}">Ring me now</button>
+      <button class="del" data-del="${e.id}" aria-label="Delete">✕</button>
+    </div>
+  </div>`;
+}
+
+async function load(newId) {
+  const r = await fetch(q("/plan/api/events"));
+  if (!r.ok) { say((await r.json()).detail || "Could not load events", true); return; }
+  const { events } = await r.json();
+  $("list").innerHTML = events.length ? events.map(e => card(e, e.id === newId)).join("")
+    : `<div class="empty">Nothing scheduled yet. Try “Mom's birthday Nov 20”.</div>`;
+}
+
+$("form").onsubmit = async ev => {
+  ev.preventDefault();
+  const text = $("text").value.trim(); if (!text) return;
+  $("add").disabled = true; say("Filing it…");
+  try {
+    const r = await fetch(q("/plan/api/events"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.detail || "Could not save");
+    const e = j.event;
+    say(`${e.emoji} Saved as ${e.label}. ${e.due_now ? "It's due now: Momentum is calling you." : "Next call: " + e.next + "."}`);
+    $("text").value = ""; await load(e.id);
+  } catch (err) { say(err.message, true); }
+  $("add").disabled = false; $("text").focus();
+};
+
+document.querySelectorAll(".chip").forEach(c => c.onclick = () => { $("text").value = c.textContent; $("text").focus(); });
+
+$("list").onclick = async ev => {
+  const ring = ev.target.dataset.ring, del = ev.target.dataset.del;
+  if (ring) {
+    ev.target.textContent = "Ringing…";
+    const r = await fetch(q(`/plan/api/events/${ring}/ring`), { method: "POST" });
+    const j = await r.json();
+    say(r.ok ? "📞 Momentum is calling you about: " + j.task : (j.detail || "Could not ring"), !r.ok);
+    setTimeout(() => load(), 1500);
+  }
+  if (del) {
+    const r = await fetch(q(`/plan/api/events/${del}`), { method: "DELETE" });
+    say(r.ok ? "Removed." : "Could not remove", !r.ok); load();
+  }
+};
+
+load(); setInterval(load, 30000);
+</script>
+</body>
+</html>

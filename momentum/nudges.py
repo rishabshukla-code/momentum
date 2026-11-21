@@ -119,6 +119,57 @@ NUDGE_TYPES = {
             "Every bit of {task} is progress you'll be glad you made.",
         ],
     },
+    # ---- firmer nudges: honest about consequences, never shaming or insulting ----
+    "loss_aversion": {
+        "emoji": "⌛",
+        "label": "What you lose",
+        "tone": "firm",
+        "style": "points out, plainly, what waiting costs them (time, sleep, a free evening later); firm but not cruel",
+        "templates": [
+            "Every hour {task} waits is an hour you'll pay back later, probably tonight.",
+            "Waiting on {task} isn't free. It's borrowing time from tomorrow.",
+        ],
+    },
+    "future_regret": {
+        "emoji": "🔮",
+        "label": "Future regret",
+        "tone": "firm",
+        "style": "asks them to picture how they'll feel later if they keep putting it off; honest, not dramatic",
+        "templates": [
+            "Picture tomorrow: {task} still not started. Is that the version you want?",
+            "Future you is going to look back at right now. Give them something better than 'later'.",
+        ],
+    },
+    "reality_check": {
+        "emoji": "🧭",
+        "label": "Reality check",
+        "tone": "firm",
+        "style": "a calm, direct reality check that waiting won't make the task easier or go away",
+        "templates": [
+            "Honest check: {task} won't get easier by waiting. It just gets closer.",
+            "{task} isn't going away. The only question is whether you start now or rushed.",
+        ],
+    },
+    "tough_love": {
+        "emoji": "💪",
+        "label": "Tough love",
+        "tone": "firm",
+        "style": "short, firm coach voice: no excuses today, start now; direct but on their side, never insulting",
+        "templates": [
+            "No more warm-ups. Open {task} and do the first thing. Now.",
+            "You know what to do. Stop negotiating with it. {task}, five minutes, go.",
+        ],
+    },
+    "cost_of_delay": {
+        "emoji": "📉",
+        "label": "Cost of delay",
+        "tone": "firm",
+        "style": "explains that skipping today makes the next session longer and harder; matter-of-fact",
+        "templates": [
+            "Skip {task} today and tomorrow's session gets twice as long.",
+            "Ten minutes on {task} now saves you an hour of panic later.",
+        ],
+    },
     "proud": {
         "emoji": "💛",
         "label": "Proud of you",

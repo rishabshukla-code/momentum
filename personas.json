@@ -15,6 +15,11 @@
     "music": 0.3,
     "change_place": 0.12,
     "why_it_matters": 0.12,
+    "loss_aversion": 0.12,
+    "future_regret": 0.12,
+    "reality_check": 0.12,
+    "tough_love": 0.12,
+    "cost_of_delay": 0.12,
     "proud": 0.12
    },
    "evening": {
@@ -30,6 +35,11 @@
     "music": 0.45,
     "change_place": 0.12,
     "why_it_matters": 0.12,
+    "loss_aversion": 0.12,
+    "future_regret": 0.12,
+    "reality_check": 0.12,
+    "tough_love": 0.5,
+    "cost_of_delay": 0.4,
     "proud": 0.12
    }
   },
@@ -56,6 +66,11 @@
     "music": 0.12,
     "change_place": 0.12,
     "why_it_matters": 0.12,
+    "loss_aversion": 0.12,
+    "future_regret": 0.12,
+    "reality_check": 0.12,
+    "tough_love": 0.12,
+    "cost_of_delay": 0.12,
     "proud": 0.12
    },
    "evening": {
@@ -71,6 +86,11 @@
     "music": 0.12,
     "change_place": 0.12,
     "why_it_matters": 0.12,
+    "loss_aversion": 0.12,
+    "future_regret": 0.12,
+    "reality_check": 0.12,
+    "tough_love": 0.12,
+    "cost_of_delay": 0.12,
     "proud": 0.3
    }
   },
@@ -92,6 +112,11 @@
     "music": 0.55,
     "change_place": 0.25,
     "why_it_matters": 0.1,
+    "loss_aversion": 0.12,
+    "future_regret": 0.12,
+    "reality_check": 0.12,
+    "tough_love": 0.12,
+    "cost_of_delay": 0.12,
     "proud": 0.1
    },
    "evening": {
@@ -107,6 +132,11 @@
     "music": 0.2,
     "change_place": 0.15,
     "why_it_matters": 0.1,
+    "loss_aversion": 0.35,
+    "future_regret": 0.1,
+    "reality_check": 0.15,
+    "tough_love": 0.1,
+    "cost_of_delay": 0.45,
     "proud": 0.05
    }
   },
@@ -128,6 +158,11 @@
     "music": 0.12,
     "change_place": 0.12,
     "why_it_matters": 0.12,
+    "loss_aversion": 0.12,
+    "future_regret": 0.12,
+    "reality_check": 0.12,
+    "tough_love": 0.12,
+    "cost_of_delay": 0.12,
     "proud": 0.12
    },
    "evening": {
@@ -143,6 +178,11 @@
     "music": 0.12,
     "change_place": 0.4,
     "why_it_matters": 0.12,
+    "loss_aversion": 0.04,
+    "future_regret": 0.05,
+    "reality_check": 0.05,
+    "tough_love": 0.04,
+    "cost_of_delay": 0.04,
     "proud": 0.12
    }
   },

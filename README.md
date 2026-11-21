@@ -89,18 +89,18 @@ Bot commands: `/start`, `/task Essay | Friday 5pm`, `/nudge`, `/why`, `/stats`, 
 
 ## Simulation results (60 days, 4 synthetic people, 40 runs each)
 
-Each synthetic person has hidden preferences over all 13 nudge types (a few work, most barely do)
+Each synthetic person has hidden preferences over all 18 nudge types (a few work, most barely do)
 and gets used to any nudge that's repeated. Two work blocks a day, up to 3 nudges per block.
 
 | Synthetic person | Same reminder every time (week 1 → week 9) | Random nudge | **Momentum (week 1 → week 9)** | Best possible* |
 |---|---|---|---|---|
-| Night-owl student (deadlines stop working on day 30) | 55% → 31% | 51% | **56% → 71%** | 88% |
-| People pleaser | 67% → 37% | 52% | **56% → 76%** | 88% |
-| Maya (demo profile) | 61% → 34% | 60% | **65% → 84%** | 92% |
-| Overwhelmed student | 64% → 35% | 52% | **55% → 73%** | 86% |
+| Night-owl student (deadlines stop working on day 30) | 55% → 31% | 49% | **58% → 67%** | 88% |
+| People pleaser | 67% → 37% | 47% | **52% → 71%** | 88% |
+| Maya (demo profile) | 61% → 34% | 55% | **62% → 80%** | 92% |
+| Overwhelmed student | 64% → 35% | 46% | **51% → 64%** | 86% |
 
-\*Best possible cheats: it knows each person's hidden preferences. Momentum reaches about **82%** of it,
-needs about **1.6 fewer pings per start than random**, and **improves over time** while a fixed reminder
+\*Best possible cheats: it knows each person's hidden preferences. Momentum reaches about **75%** of it,
+needs about **1.7 fewer pings per start than random**, and **improves over time** while a fixed reminder
 wears off. We also tried tuning the brain's settings on the simulator; gains didn't hold on fresh random
 seeds, so the original settings stay (no overfitting).
 

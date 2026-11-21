@@ -41,7 +41,8 @@ PERSONAS = {
                        "Halfway through, deadlines stop working (exams are over).",
         "base": _profile(
             {"tiny_step": .65, "five_minute": .55, "first_line": .40, "music": .30},
-            {"consequence": .70, "reward": .50, "music": .45, "tiny_step": .30}),
+            {"consequence": .70, "reward": .50, "music": .45, "tiny_step": .30,
+             "tough_love": .50, "cost_of_delay": .40}),
         "drift": {"day": 30, "context": "evening", "arm": "consequence", "to": .15},
     },
     "people_pleaser": {
@@ -61,7 +62,8 @@ PERSONAS = {
              "why_it_matters": .10, "proud": .10},
             {"consequence": .60, "reward": .55, "body_double": .50, "five_minute": .40,
              "tiny_step": .30, "music": .20, "first_line": .20, "change_place": .15,
-             "gentle": .05, "accountability": .10, "streak": .15, "why_it_matters": .10, "proud": .05}),
+             "gentle": .05, "accountability": .10, "streak": .15, "why_it_matters": .10, "proud": .05,
+             "cost_of_delay": .45, "loss_aversion": .35, "tough_love": .10, "future_regret": .10, "reality_check": .15}),
         "drift": None,
     },
     "overwhelmed_student": {
@@ -69,7 +71,8 @@ PERSONAS = {
         "base": _profile(
             {"tiny_step": .60, "five_minute": .60, "first_line": .55, "gentle": .40},
             {"body_double": .50, "tiny_step": .50, "change_place": .40, "five_minute": .40,
-             "consequence": .05, "accountability": .08}),
+             "consequence": .05, "accountability": .08, "tough_love": .04, "loss_aversion": .04,
+             "future_regret": .05, "reality_check": .05, "cost_of_delay": .04}),
         "drift": None,
     },
 }

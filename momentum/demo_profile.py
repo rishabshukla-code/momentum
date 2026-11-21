@@ -91,22 +91,26 @@ def report() -> str:
                 stats.append((a, sum(o.success for o in tries), len(tries), table[ctx][a]))
         stats.sort(key=lambda s: -s[3])
         label = lambda a: f"{NUDGE_TYPES[a]['emoji']} {NUDGE_TYPES[a]['label']}"
+        worked = [s for s in stats if s[1] and s[3] >= brain.PROVEN_MIN_RATE]
+        failed = [s for s in stats if s not in worked and s[2] >= brain.FAIR_TRIES]
+        testing = [s for s in stats if s not in worked and s[2] < brain.FAIR_TRIES]
         lines.append(f"── {ctx.upper()} ──")
         lines.append("  ✅ Worked on her:")
-        for a, w, n, r in stats:
-            if w and r >= brain.PROVEN_MIN_RATE:
-                lines.append(f"     {label(a):22s} started {w} of {n} times  ({r:.0%})")
-        lines.append("  ❌ Did not work on her:")
-        for a, w, n, r in sorted(stats, key=lambda s: (s[1] / s[2], -s[2])):
-            if not (w and r >= brain.PROVEN_MIN_RATE):
-                lines.append(f"     {label(a):22s} started {w} of {n} times")
+        for a, w, n, r in worked:
+            lines.append(f"     {label(a):22s} started {w} of {n} times  ({r:.0%})")
+        lines.append("  ❌ Didn't work (after a fair try, retired):")
+        for a, w, n, r in sorted(failed, key=lambda s: (s[1] / s[2], -s[2])):
+            lines.append(f"     {label(a):22s} started {w} of {n} times")
+        if testing:
+            lines.append("  ⏳ Still testing: " + ", ".join(label(a) for a, *_ in testing))
         lines.append("")
     for ctx, hour in (("morning", 9), ("evening", 20)):
         when = now.replace(hour=hour, minute=0)
-        pr = brain.proven_arms(hist, {a: table[ctx][a] for a in ARMS}, ctx)
+        rates = {a: table[ctx][a] for a in ARMS}
+        keep = [a for a in brain.proven_arms(hist, rates, ctx)
+                if any(o.arm == a and o.context == ctx and o.success for o in hist)]
         d = brain.choose(hist, when)
-        lines.append(f"Momentum will now only use for {ctx}: "
-                     + ", ".join(NUDGE_TYPES[a]["label"] for a in pr))
+        lines.append(f"Momentum now uses for {ctx}: " + ", ".join(NUDGE_TYPES[a]["label"] for a in keep))
         lines.append(f"  next {ctx} nudge → {NUDGE_TYPES[d.arm]['label']}: {d.reason}")
     return "\n".join(lines)
 

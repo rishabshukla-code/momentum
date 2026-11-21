@@ -129,8 +129,12 @@ def choose(
     else:
         reason = f"'{arm}' won this round's sampling ({rates[arm]:.0%} est.)"
     if proven:
-        reason = (f"'{arm}' has worked on you before ({rates[arm]:.0%} in the {context}); "
-                  f"only using the {len(proven)} nudge types that work on you")
+        retired = len(scores) - len(proven)
+        if any(o.arm == arm and o.success and o.context == context for o in history):
+            reason = (f"'{arm}' has worked on you before ({rates[arm]:.0%} in the {context}); "
+                      f"{retired} nudge types that didn't work are retired")
+        else:
+            reason = f"giving '{arm}' a fair try before deciding; {retired} types that didn't work are retired"
     if boost and boost.get(arm, 0) > 0:
         reason = (f"you said you were {excuse}, and '{arm}' suits that; {reason}"
                   if excuse else reason + " (boosted by your last reply)")
@@ -138,16 +142,31 @@ def choose(
     return Decision(arm, context, scores, rates, fatigue, reason)
 
 
-PROVEN_MIN_HISTORY = 30  # answers needed before we stop trying unproven nudges
+PROVEN_MIN_HISTORY = 30  # answers needed before we start retiring nudge types
 PROVEN_MIN_RATE = 0.30
+FAIR_TRIES = 2  # a nudge type is only retired after this many tries at that time of day
+SECOND_CHANCE_DAYS = 60  # retirement expires: after two months a retired type can be tried again (14 days re-tested too often)
 
 
 def proven_arms(history: list[Outcome], rates: dict, context: str | None = None) -> list[str]:
-    """Nudge types that got this person started (at this time of day) and still work often enough."""
+    """The pool to choose from once we know someone: types that worked here, plus types that
+    haven't had a fair try yet. Types that had a fair try and never worked are retired."""
     if len(history) < PROVEN_MIN_HISTORY:
         return []
-    won = {o.arm for o in history if o.success and (context is None or o.context == context)}
-    return [a for a in rates if a in won and rates[a] >= PROVEN_MIN_RATE]
+    latest = max(o.at for o in history)
+    # only the last 14 days count, so a retired type gets a second chance later (people change)
+    here = [o for o in history if (context is None or o.context == context)
+            and (latest - o.at).days < SECOND_CHANCE_DAYS]
+    tries = {a: sum(o.arm == a for o in here) for a in rates}
+    won = {o.arm for o in here if o.success}
+    pool = [a for a in rates if tries[a] < FAIR_TRIES or (a in won and rates[a] >= PROVEN_MIN_RATE)]
+    return [] if len(pool) == len(rates) else pool
+
+
+def retired_arms(history: list[Outcome], rates: dict, context: str | None = None) -> list[str]:
+    """Types that had a fair try at this time of day and didn't work."""
+    pool = proven_arms(history, rates, context)
+    return [a for a in rates if pool and a not in pool]
 
 
 def win_rate_table(history: list[Outcome], now: datetime) -> dict:
