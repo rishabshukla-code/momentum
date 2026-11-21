@@ -124,7 +124,8 @@ async def twiml(request: Request, nudge_id: int):
 async def reply(request: Request, nudge_id: int):
     from .agent import record_outcome  # avoid a circular import
     from .integrations import classify_excuse
-    from .intent import is_start
+    from .intent import is_start, parse_defer
+    from .replies import minutes_text, pick
     from . import telegram
 
     form = {k: str(v) for k, v in (await request.form()).items()}
@@ -135,15 +136,19 @@ async def reply(request: Request, nudge_id: int):
     if not row:
         return _twiml(_say("Got it. Bye!") + "<Hangup/>")
 
-    if heard and is_start(heard):
+    later = parse_defer(heard) if heard else None
+    if later:
+        record_outcome(nudge_id, "deferred")
+        store.set_excuse(nudge_id, f"later:{later}")
+        answer, note = pick("deferred", mins=minutes_text(later)), f"⏳ later ({minutes_text(later)})"
+    elif heard and is_start(heard):
         record_outcome(nudge_id, "started")
-        answer, note = "Love that. Go go go! I'll leave you to it.", "✅ started"
+        answer, note = pick("started"), "✅ started"
     else:
         record_outcome(nudge_id, "snoozed")
         excuse, _ = classify_excuse(heard or "busy")
         store.set_excuse(nudge_id, excuse)
-        answer = f"No worries, sounds like you're {excuse}. I'll check back with something smaller."
-        note = f"😴 not now ({excuse})"
+        answer, note = pick("snoozed", excuse=excuse), f"😴 not now ({excuse})"
     try:  # show the result in the chat too, so it's visible next to the dashboard
         telegram.send(row["chat_id"], f"📞 You said: “{heard or '…'}” → {note}")
     except Exception as e:

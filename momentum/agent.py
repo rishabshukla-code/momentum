@@ -119,7 +119,11 @@ def tick() -> list[dict]:
         if last and last["task_id"] == task["id"]:
             if last["outcome"] is None:
                 continue  # still waiting for a reply
-            if (now - last["sent_at"]).total_seconds() < config.NUDGE_GAP_MIN * 60:
+            if last["outcome"] == "deferred":  # they asked for N minutes: call back right on time
+                mins = int((last["excuse"] or "later:5").split(":")[-1] or 5)
+                if (now - (last["responded_at"] or last["sent_at"])).total_seconds() < mins * 60:
+                    continue
+            elif (now - last["sent_at"]).total_seconds() < config.NUDGE_GAP_MIN * 60:
                 continue
         if store.nudges_for_task(task["id"]) >= config.MAX_NUDGES_PER_BLOCK:
             continue

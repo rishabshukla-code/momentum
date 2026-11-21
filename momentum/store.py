@@ -165,7 +165,9 @@ def last_nudge(chat_id: str):
 
 def nudges_for_task(task_id: int) -> int:
     with engine.begin() as c:
-        return len(list(c.execute(select(nudges.c.id).where(nudges.c.task_id == task_id))))
+        # a "later" (deferred) answer doesn't use up one of the nudges for this task
+        return len(list(c.execute(select(nudges.c.id).where(
+            nudges.c.task_id == task_id, or_(nudges.c.outcome.is_(None), nudges.c.outcome != "deferred")))))
 
 
 def expire_waiting(window_min: int) -> list[dict]:
@@ -187,7 +189,8 @@ def expire_waiting(window_min: int) -> list[dict]:
 
 
 def history(chat_id: str | None = None) -> list[Outcome]:
-    q = select(nudges).where(nudges.c.outcome.is_not(None))
+    # "deferred" (they asked to wait) is neither a win nor a miss for that nudge type
+    q = select(nudges).where(nudges.c.outcome.is_not(None), nudges.c.outcome != "deferred")
     if chat_id:
         q = q.where(nudges.c.chat_id == chat_id)
     with engine.begin() as c:
@@ -213,6 +216,8 @@ def streak(chat_id: str) -> int:
         ).scalars()
         n = 0
         for o in rows:
+            if o == "deferred":
+                continue
             if o != "started":
                 break
             n += 1

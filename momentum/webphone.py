@@ -59,12 +59,16 @@ def page(request: Request, k: str = ""):
 @router.get("/api/next")
 def next_call(request: Request, k: str = ""):
     _check(k, request)
-    for r in store.recent_nudges(10):
+    recent = store.recent_nudges(10)
+    for i, r in enumerate(recent):
         if r["message_id"] == "web" and r["outcome"] is None and r["id"] not in SERVED:
             SERVED.add(r["id"])
+            earlier = next((x for x in recent[i + 1:] if x["chat_id"] == r["chat_id"]), None)
+            hello = ("it's Momentum again, like I promised."
+                     if earlier and earlier["outcome"] == "deferred" else "it's Momentum.")
             return {"call": {
                 "id": str(r["id"]),
-                "greeting": f"Hey {_name(r['chat_id'])}, it's Momentum. {spoken(r['text'])} Have you started?",
+                "greeting": f"Hey {_name(r['chat_id'])}, {hello} {spoken(r['text'])} Have you started?",
                 "reason": r["reason"],
                 "voice": bool(config.ASSEMBLYAI_API_KEY),
             }}
@@ -89,7 +93,8 @@ async def answer(request: Request, id: str, k: str = ""):
     _check(k, request)
     from .agent import record_outcome
     from .integrations import classify_excuse, transcribe
-    from .intent import is_start
+    from .intent import is_start, parse_defer
+    from .replies import minutes_text, pick
 
     nudge_id = int(id)
     row = store.get_nudge(nudge_id)
@@ -101,14 +106,20 @@ async def answer(request: Request, id: str, k: str = ""):
     else:
         heard = transcribe(await request.body())
 
-    if heard and is_start(heard):
+    later = parse_defer(heard) if heard else None
+    if later:  # "I'll do it in a while": not a yes, not a no; call back when promised
+        record_outcome(nudge_id, "deferred")
+        store.set_excuse(nudge_id, f"later:{later}")
+        say = pick("deferred", mins=minutes_text(later))
+        note = f"⏳ later (calling back in {minutes_text(later)})"
+    elif heard and is_start(heard):
         record_outcome(nudge_id, "started")
-        say, note = "Love that. Go go go! I'll leave you to it.", "✅ started"
+        say, note = pick("started"), "✅ started"
     else:
         record_outcome(nudge_id, "snoozed")
         excuse, _ = classify_excuse(heard or "busy")
         store.set_excuse(nudge_id, excuse)
-        say = f"No worries, sounds like you're {excuse}. I'll check back with something smaller."
+        say = pick("snoozed", excuse=excuse)
         note = f"😴 not now ({excuse})"
     _mirror(row["chat_id"], f"📞 On the call you said: “{heard or '…'}” → {note}")
     return {"heard": heard, "say": say, "note": note}
