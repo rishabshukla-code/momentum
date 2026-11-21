@@ -74,6 +74,8 @@ def _posterior(history: list[Outcome], context: str, now: datetime, prior: dict 
 def _fatigue(history: list[Outcome], now: datetime) -> dict:
     pen = {arm: 0.0 for arm in ARMS}
     for o in history:
+        if o.arm not in pen:
+            continue  # a nudge type that has since been removed
         hours = max((now - o.at).total_seconds() / 3600, 0)
         pen[o.arm] += FATIGUE_STRENGTH * 0.5 ** (hours / FATIGUE_HALF_LIFE_H)
     return {a: min(p, 0.6) for a, p in pen.items()}

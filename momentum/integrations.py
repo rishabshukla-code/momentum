@@ -238,10 +238,10 @@ KEYWORDS = {
 # while the brain still chooses between the fitting types.
 EXCUSE_BOOST = {
     "tired": {"tiny_step": 0.6, "reward": 0.45, "five_minute": 0.5, "music": 0.4},
-    "overwhelmed": {"tiny_step": 0.7, "gentle": 0.3, "five_minute": 0.5, "first_line": 0.5},
+    "overwhelmed": {"tiny_step": 0.7, "five_minute": 0.5, "first_line": 0.5, "body_double": 0.4},
     # firm nudges only for "busy" / "bored"; never after "tired" or "overwhelmed" (pressure backfires)
     "busy": {"tiny_step": 0.4, "consequence": 0.3, "five_minute": 0.5, "cost_of_delay": 0.35},
-    "bored": {"reward": 0.5, "streak": 0.3, "music": 0.5, "change_place": 0.4, "tough_love": 0.35},
+    "bored": {"reward": 0.5, "music": 0.5, "tough_love": 0.35, "first_line": 0.3},
     "unclear": {"tiny_step": 0.6, "first_line": 0.6},
 }
 

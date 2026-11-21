@@ -36,17 +36,17 @@ Open `http://localhost:8000/phone` next to the dashboard, tap *Turn on Momentum 
 Dashboard, **Simulation** tab (60 days, 4 synthetic people).
 > "This only matters over weeks, so we simulated 30 days against synthetic users."
 - Orange line: "The same reminder starts strong and wears off, about 60% down to 34%."
-- Green line: "Momentum gets better as it learns, about 56% up to 71%, and reaches about 75% of a strategy that cheats by knowing the answers."
+- Green line: "Momentum gets better as it learns, about 58% up to 75%, and reaches about 80% of a strategy that cheats by knowing the answers."
 - Heatmap: "And it learned *this* person: small steps work in the morning. Deadline nudges
   worked at night until day 15, then stopped, and Momentum moved on."
 
 ### 3a. Meet Maya (30s): what it learned about one person
 Dashboard → Live → Person: **Maya (demo, simulated)**. Say clearly it's a simulated profile.
-> "This is Maya, a simulated user with four weeks of history. Momentum tried 18 kinds of nudges, gentle and firm.
-> Mornings: a 5-minute timer is her winner, 8 times out of 10. Evenings: a tiny step, a reward, working alongside her,
-> or the firm 'cost of delay'. Tough love, gentle check-ins and 'proud of you' never worked on her.
-> After giving each one a fair try, Momentum retired the ones that don't work. It now only uses what moves Maya,
-> and still rotates between those so they don't wear off."
+> "This is Maya, a simulated user with four weeks of history. Momentum tried 13 kinds of nudges, soft and firm.
+> Mornings, soft ones work: a 5-minute timer, a tiny step, her focus song.
+> Evenings, firm ones work: 'cost of delay' got her started 6 times out of 10, then the deadline and 'what you lose'.
+> After giving each one a fair try, Momentum retired the ones that don't work on her at that time of day.
+> It now only uses what moves Maya, and still rotates between those so they don't wear off."
 Optional: `python -m momentum.demo_profile --call` rings Momentum Phone with Maya's next nudge.
 
 ### 3b. Firedrill before/after (20s)

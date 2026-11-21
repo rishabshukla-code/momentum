@@ -64,8 +64,6 @@ def _nudge(sid: str) -> dict:
     last = store.last_nudge(sid)
     boost = dict(EXCUSE_BOOST.get(last["excuse"], {})) if last and last["excuse"] else {}
     streak = store.streak(sid)
-    if streak < 2:
-        boost["streak"] = -1.0
     d = brain.choose(store.history(sid), datetime.now(), boost=boost,
                      excuse=last["excuse"] if last else None)
     text, source = write_nudge(d.arm, task["title"], task["deadline"], d.context, streak,

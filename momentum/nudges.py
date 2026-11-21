@@ -7,16 +7,6 @@ import random
 import re
 
 NUDGE_TYPES = {
-    "gentle": {
-        "emoji": "☕",
-        "label": "Gentle",
-        "style": "soft and warm, like someone at home checking in",
-        "templates": [
-            "Chai's ready. Maybe start on {task}?",
-            "Hey, no pressure. Just a little time on {task}?",
-            "Thinking of you. {task} is waiting whenever you're ready.",
-        ],
-    },
     "consequence": {
         "emoji": "⏰",
         "label": "Deadline",
@@ -36,15 +26,6 @@ NUDGE_TYPES = {
             "Just open {task}. That's it. One sentence.",
             "Two minutes on {task}. You can stop after that.",
             "Only open the file for {task}. I'm not asking for more.",
-        ],
-    },
-    "streak": {
-        "emoji": "🔥",
-        "label": "Streak",
-        "style": "mentions their recent progress and invites them not to break it",
-        "templates": [
-            "You started on time {streak} times recently. Keep it going with {task}?",
-            "You've been showing up. Let's not break that. {task}?",
         ],
     },
     "reward": {
@@ -101,24 +82,6 @@ NUDGE_TYPES = {
             "Headphones on, one song, {task} open. That's it.",
         ],
     },
-    "change_place": {
-        "emoji": "🪑",
-        "label": "Change of scene",
-        "style": "suggests moving somewhere new to make starting easier",
-        "templates": [
-            "Move to a different spot, then open {task}. New place, fresh start.",
-            "Grab some water, sit somewhere else, and open {task}.",
-        ],
-    },
-    "why_it_matters": {
-        "emoji": "🌱",
-        "label": "Why it matters",
-        "style": "gently reminds them that this work moves them toward something they care about, without inventing details",
-        "templates": [
-            "{task} is one step toward something you care about. Take the step.",
-            "Every bit of {task} is progress you'll be glad you made.",
-        ],
-    },
     # ---- firmer nudges: honest about consequences, never shaming or insulting ----
     "loss_aversion": {
         "emoji": "⌛",
@@ -168,15 +131,6 @@ NUDGE_TYPES = {
         "templates": [
             "Skip {task} today and tomorrow's session gets twice as long.",
             "Ten minutes on {task} now saves you an hour of panic later.",
-        ],
-    },
-    "proud": {
-        "emoji": "💛",
-        "label": "Proud of you",
-        "style": "warm encouragement that they are capable, without pressure",
-        "templates": [
-            "You're better at {task} than you think. Give it ten minutes.",
-            "I believe you can make a good start on {task} today.",
         ],
     },
 }

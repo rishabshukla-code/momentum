@@ -30,8 +30,6 @@ def send_nudge(chat_id: str) -> dict | None:
     last = store.last_nudge(chat_id)
     boost = dict(EXCUSE_BOOST.get(last["excuse"], {})) if last and last["excuse"] else {}
     streak = store.streak(chat_id)
-    if streak < 2:
-        boost["streak"] = -1.0  # a streak nudge needs an actual streak
 
     d = brain.choose(store.history(chat_id), now,
                      prior=brain.onboarding_prior(user and user["onboarding"]), boost=boost,
