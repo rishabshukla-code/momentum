@@ -10,7 +10,6 @@ where it lives in the code, and exactly what to open to prove it live.
 | **Amplitude** | ✅ live | Analytics on every agent decision and outcome |
 | **AssemblyAI** | ✅ live | Voice in (speech-to-text) and voice out (natural TTS) on Momentum Phone |
 | **Claude API** | ✅ live | Writes every nudge in the chosen style |
-| Twilio | built, blocked by trial | Real phone calls; falls back to Telegram |
 | Arcee | built, no credits | Alternative nudge writer slot |
 | Cognee, Superlinked, Guild, Persona, Statsig | not used | — |
 

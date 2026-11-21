@@ -45,8 +45,27 @@ Momentum Phone, a browser page (`http://localhost:8000/phone`) that simulates a 
 - you **answer by voice** (transcribed with AssemblyAI) or tap *I started* / *Not now*
 - the same intent rules decide started vs. not now + excuse, and the result lands in SingleStore, Amplitude and the chat
 
-`momentum/voice.py` also contains real phone calls through Twilio (speech in and out, signed webhooks);
-it works once the Twilio account is upgraded from trial, and falls back to Telegram if a call fails.
+
+## Scheduled events: the category decides when to call
+
+`/add Mom's birthday Nov 20` → Claude reads the note into a JSON event (category, title, person, date,
+time, repeat; keyword rules + a date parser are the fallback) and saves it in `events.json`.
+Each category's schedule lives in `momentum/categories.json`:
+
+| Category | When Momentum calls |
+|---|---|
+| 🎂 Birthday | every year, 9:00 on the day |
+| 💍 Anniversary | every year, a week before and on the day |
+| 📚 Exam | 21, 14, 7, 3 and 1 days before, 19:00 |
+| 📝 Deadline | 3 days, 1 day before and on the day, 10:00 |
+| 📅 Appointment | the day before and on the day (at the given time) |
+| 💳 Bill | every month, 3 days before and on the day |
+| 💊 Medicine | every day, 9:00 |
+| 🏃 Habit | every day, 18:00 |
+| ✅ Task | the day before and on the day |
+
+When a reminder is due, the agent turns it into a task ("wish Mom a happy birthday") and calls.
+`/events` lists saved events with their next call; `/remove <id>` deletes one. See `events.example.json`.
 
 ## Run it
 

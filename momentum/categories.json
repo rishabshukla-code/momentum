@@ -1,0 +1,57 @@
+{
+  "_about": "When Momentum calls you for each kind of event. repeat: none | yearly | monthly | weekly | daily. lead_days: how many days before the event to call (0 = on the day). at: time(s) of day to call. task: what the call asks you to do ({title}, {person}).",
+  "birthday": {
+    "emoji": "🎂", "label": "Birthday",
+    "repeat": "yearly", "lead_days": [0], "at": ["09:00"],
+    "task": "wish {person} a happy birthday",
+    "keywords": ["birthday", "bday", "b-day"]
+  },
+  "anniversary": {
+    "emoji": "💍", "label": "Anniversary",
+    "repeat": "yearly", "lead_days": [7, 0], "at": ["09:00"],
+    "task": "plan something for {title}",
+    "keywords": ["anniversary"]
+  },
+  "exam": {
+    "emoji": "📚", "label": "Exam",
+    "repeat": "none", "lead_days": [21, 14, 7, 3, 1], "at": ["19:00"],
+    "task": "study for {title}",
+    "keywords": ["exam", "midterm", "final", "quiz", "test", "gre", "gmat", "sat"]
+  },
+  "deadline": {
+    "emoji": "📝", "label": "Deadline",
+    "repeat": "none", "lead_days": [3, 1, 0], "at": ["10:00"],
+    "task": "work on {title}",
+    "keywords": ["deadline", "due", "submit", "assignment", "essay", "report", "project", "application", "apply"]
+  },
+  "appointment": {
+    "emoji": "📅", "label": "Appointment",
+    "repeat": "none", "lead_days": [1, 0], "at": ["09:00"],
+    "task": "get ready for {title}",
+    "keywords": ["appointment", "doctor", "dentist", "interview", "meeting", "visa", "flight"]
+  },
+  "bill": {
+    "emoji": "💳", "label": "Bill",
+    "repeat": "monthly", "lead_days": [3, 0], "at": ["10:00"],
+    "task": "pay {title}",
+    "keywords": ["bill", "rent", "pay", "payment", "subscription", "credit card", "tuition"]
+  },
+  "medicine": {
+    "emoji": "💊", "label": "Medicine",
+    "repeat": "daily", "lead_days": [0], "at": ["09:00"],
+    "task": "take {title}",
+    "keywords": ["medicine", "meds", "pill", "pills", "tablet", "tablets", "vitamin", "vitamins", "insulin"]
+  },
+  "habit": {
+    "emoji": "🏃", "label": "Habit",
+    "repeat": "daily", "lead_days": [0], "at": ["18:00"],
+    "task": "{title}",
+    "keywords": ["gym", "run", "workout", "meditate", "read", "practice", "walk", "journal", "every day", "daily"]
+  },
+  "task": {
+    "emoji": "✅", "label": "Task",
+    "repeat": "none", "lead_days": [1, 0], "at": ["10:00"],
+    "task": "{title}",
+    "keywords": []
+  }
+}

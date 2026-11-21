@@ -71,7 +71,7 @@ Speak slowly. If something glitches, keep going and narrate it. Judges care abou
 **Screen:** back to Momentum Phone
 
 > "Claude writes every nudge. AssemblyAI handles voice in and out. SingleStore holds state, Amplitude tracks every decision, Firedrill tests it.
-> Real phone calls through Twilio are built too.
+> Save a birthday once and it calls you every year at 9 AM on the day; exams ramp up 21, 14, 7 days before.
 > **Momentum: the nudge that learns what moves you.**"
 
 **Stop recording.**

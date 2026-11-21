@@ -8,7 +8,7 @@ import logging
 import time
 from datetime import datetime
 
-from . import agent, brain, config, store, telegram, voice
+from . import agent, brain, config, events, store, telegram, voice
 from .integrations import build_memory, classify_excuse
 from .nudges import NUDGE_TYPES
 
@@ -23,6 +23,9 @@ HELP = (
     "/nudge  - nudge me right now\n"
     "/why    - why I picked my last nudge\n"
     "/stats  - what I've learned about you\n"
+    "/add Mom's birthday Nov 20  - save an event; I pick the category and when to call\n"
+    "/events - your saved events and when I'll call next\n"
+    "/remove <id> - delete a saved event\n"
     "/phone  - get nudges as calls on Momentum Phone (simulated call)\n"
     "/call   - call me with a nudge right now\n"
     "/done   - stop nudging for now"
@@ -63,6 +66,34 @@ def handle_message(msg: dict) -> None:
     elif text.startswith("/stats"):
         telegram.send(chat_id, stats_text(chat_id))
         build_memory(chat_id)
+    elif text.startswith("/add"):
+        body = text[len("/add"):].strip()
+        if not body:
+            telegram.send(chat_id, "Tell me the event, e.g. /add Mom's birthday Nov 20, or "
+                          "/add Stats midterm Dec 12, or /add Take vitamins every morning")
+            return
+        ev = events.add(chat_id, body)
+        nxt = events.next_call(ev)
+        when = f"{nxt:%a %b} {nxt.day} at {nxt:%H:%M}" if nxt else "nothing scheduled"
+        if nxt and nxt.year != datetime.now().year:
+            when += f" {nxt.year}"
+        due_now = [k for e, k, _ in events.due() if e["id"] == ev["id"]]
+        telegram.send(chat_id, f"Saved (id {ev['id']}):\n{events.describe(ev)}\nNext call: "
+                      + ("right now 📞" if due_now else when))
+    elif text.startswith("/events"):
+        mine = events.for_chat(chat_id)
+        if not mine:
+            telegram.send(chat_id, "No saved events yet. Try /add Mom's birthday Nov 20")
+        else:
+            lines = []
+            for ev in mine:
+                nxt = events.next_call(ev)
+                lines.append(f"[{ev['id']}] {events.describe(ev)}\n      next call: "
+                             + (f"{nxt:%a %b} {nxt.day} {nxt.year} {nxt:%H:%M}" if nxt else "none"))
+            telegram.send(chat_id, "\n\n".join(lines))
+    elif text.startswith("/remove"):
+        ev = events.remove(chat_id, text[len("/remove"):].strip())
+        telegram.send(chat_id, f"Removed: {ev['title']}" if ev else "No event with that id. See /events")
     elif text.startswith("/phone"):
         if "off" in text.lower():
             voice.set_call(chat_id, False)

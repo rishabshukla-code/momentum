@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime
 
-from . import brain, config, store, telegram, voice
+from . import brain, config, events, store, telegram, voice
 from .integrations import EXCUSE_BOOST, recall, remember, track, write_nudge
 
 log = logging.getLogger("momentum")
@@ -110,6 +110,18 @@ def tick() -> list[dict]:
     now = datetime.now()
     if _quiet(now):
         return sent
+    # Scheduled events (birthdays, exams, bills...): their category decides when to call.
+    for ev, key, days in events.due(now):
+        events.mark_fired(ev["id"], key)
+        title, when = events.task_for(ev, days)
+        store.add_task(ev["chat_id"], title, when)
+        log.info("event %s (%s) due -> task %r, %s", ev["title"], ev["category"], title, when)
+        try:
+            r = send_nudge(ev["chat_id"])
+            if r:
+                sent.append(r)
+        except Exception as e:
+            log.warning("could not nudge for event %s: %s", ev["title"], e)
     for user in store.all_users():
         chat_id = user["chat_id"]
         if chat_id.startswith("demo-"):
