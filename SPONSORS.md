@@ -1,38 +1,128 @@
-# Partner prizes and how Momentum uses each one
+# How Momentum uses each sponsor's product
 
-## Official links (from tokensand.com/personalagenthack)
+Show-and-tell guide for sponsor booths and judges: what each product does inside Momentum,
+where it lives in the code, and exactly what to open to prove it live.
 
-- Submit: https://tokensand.com/personalagenthack/submit (deadline 4:30 PM PT: repo, demo video link, what you built + tools, team names/emails)
-- tokens& app checks: https://tokensand.com/docs/api#observe-workflow
-- Arcee: https://docs.arcee.ai/
-- Guild: https://docs.guild.ai/ · Smith bot: https://app.guild.ai/chat
-- Superlinked SIE Serverless: https://superlinked.com/serverless · https://superlinked.com/docs · https://github.com/superlinked/cookbook
-- Cognee: https://docs.cognee.ai/ · https://platform.cognee.ai/sign-up · https://github.com/topoteretes/cognee
-- Firedrill: https://firedrill.run/hacker-docs · https://docs.firedrill.run/
-- SingleStore: https://docs.singlestore.com/cloud/getting-started-with-singlestore-helios/ · Python: https://docs.singlestore.com/cloud/developer-resources/connect-with-application-development-tools/connect-with-python/
-- Amplitude: https://amplitude.com/get-started · Statsig: https://console.statsig.com/sign_up
-- Airbyte context layer: https://docs.airbyte.com/platform/context-layer
-- Senso.ai (shopping context): https://docs.senso.ai/docs/overview
-- Persona: https://help.withpersona.com/
+| Sponsor | Status | Role in Momentum |
+|---|---|---|
+| **Firedrill** | ✅ live | Stress-tests the agent against synthetic users; two before/after drills |
+| **SingleStore** | ✅ live | The agent's memory: every task, nudge, reason and outcome |
+| **Amplitude** | ✅ live | Analytics on every agent decision and outcome |
+| **AssemblyAI** | ✅ live | Voice in (speech-to-text) and voice out (natural TTS) on Momentum Phone |
+| **Claude API** | ✅ live | Writes every nudge in the chosen style |
+| Twilio | built, blocked by trial | Real phone calls; falls back to Telegram |
+| Arcee | built, no credits | Alternative nudge writer slot |
+| Cognee, Superlinked, Guild, Persona, Statsig | not used | — |
 
+---
 
-Based on the partner talks this morning. Status: ✅ built in, 🔌 slot ready (add the key), 📝 to do at the booth.
+## 🔥 Firedrill: stress-testing the agent
 
-| Partner | Prize | What they asked for | How Momentum uses it | Status |
-|---|---|---|---|---|
-| **Guild.ai** | 100M / 50M / 25M tokens | Acts first (event trigger, not chat), least access that works, shows what it did without you, runs in a sandbox, human in the loop. Their own example: a Telegram message when something changes. | Event trigger via `POST /trigger` (point a Guild cron at it). Only needs one Telegram chat. Every decision logged with its reason. You always decide with the buttons. | ✅ endpoint · 📝 deploy on Guild + set cron |
-| **SingleStore** | $1000 / $750 / $500 gift card, $600 credits | Live data loop: state → reason → act → write back → approval → update state. Store session state and telemetry. | `nudges` table is the loop: state, the decision and reason, the outcome. Runs on a SingleStore Helios Starter cluster over TLS (BIGINT ids for its large auto-increment values); `python -m momentum.migrate` copies local history across. | ✅ live |
-| **Arcee** | $500 inference credits, "best use of the Pareto frontier" | Cheap, fast open models instead of frontier models. | A small open model writes every nudge. One short call per nudge: the cheap, frequent task they described. | 🔌 add base URL, key, model |
-| **Cognee** | $500 cash + $500 credits | Memory graph that improves from agent traces and feedback. | Every outcome is written as a fact ("tiny step nudge worked Tuesday morning"); recalled when writing the next nudge. | 🔌 `pip install cognee`, set `COGNEE_ENABLED=true` |
-| **Superlinked** | (ask at booth) | Wrap small task-specific models as tools instead of paying an LLM. | When you tap "Not now", your one-line excuse is classified (tired / overwhelmed / busy / bored / unclear) and boosts the nudge types that help with it. | 🔌 add endpoint; 📝 pick a classifier from their cookbook and fix the request shape in `classify_excuse()` |
-| **Amplitude** | (ask at booth) | Agent analytics, trace view, custom evals on every session. | `nudge_sent` (type, reason, scores, fatigue) and `nudge_outcome` (success, latency) events. 📝 Build a custom eval: "did the nudge lead to a start within 15 min". | 🔌 add API key |
-| **Firedrill** | (ask at booth) | Run thousands of simulations against synthetic users with personas, find failures before users do. | `personas.json` holds the synthetic users. 📝 Install the Firedrill CLI/skill and ask it to drill the bot against these personas. Local simulator is the fallback. | 📝 |
-| **Persona** | Keychron gift cards + swag | Agent verification, humanness/age claims. | Weak fit. Skip unless you add "someone's counting" with a real accountability buddy. | skip |
+**What it does for Momentum:** Synthetic users talk to Momentum through a JSON-lines bridge
+and Firedrill scores each conversation against our rubrics. It found real bugs we then fixed.
 
-## Booth questions (morning)
+| Scenario | First run | After fix | What it caught |
+|---|---|---|---|
+| Excuse, then start (tired student) | 52.75 | **95.75** | Ignored "exhausted" and invented a team that didn't exist |
+| Never starts (stubborn student) | 57.5 | **92.25** | Read "not opening it" as a start and celebrated |
 
-1. **Arcee:** exact base URL for the OpenAI-compatible endpoint, and which small model they'd pick for short message writing.
-2. **Superlinked:** a text classifier from the cookbook, and the request/response shape.
-3. **Firedrill:** can it drive a Telegram bot, or should we expose `/trigger` + a callback endpoint for its synthetic users?
-4. **Amplitude:** is there an agent-specific SDK for the trace view, or is the HTTP API enough?
-5. **Guild:** fastest way to run `python -m momentum.bot` in their sandbox with a cron hitting `/trigger`.
+**Show it live:**
+1. Open **app.firedrill.run** → workspace **Momentum** → **Simulations**: four campaigns, two per world.
+2. Open the 52.75 run → the conversation shows *"Your team will be happy…"*. Then open the 95.75 run → *"Just open your essay draft. One sentence."*
+3. Point at the **[audit] line** on every reply: Momentum reports its own decision (nudge type, reason, excuse) so the rubric can score *what it did*, not just what it said.
+
+**In the code:** `momentum/drill_bridge.py` (jsonl-process.v1 driver), `firedrill/` (personas, rubrics, scenarios, worlds, local plan scripts).
+
+**Say:** *"Firedrill let us drill, fix, and re-drill the same world. Two real bugs, two before/afters: 52 → 95 and 57 → 92. We also added a 'best possible' yardstick to our own simulator because of how Firedrill made us think about evals."*
+
+---
+
+## 🗄️ SingleStore: the agent's memory
+
+**What it does for Momentum:** All state lives in a SingleStore Helios Starter cluster over TLS:
+`users`, `tasks`, and `nudges` (every nudge with the type chosen, **why**, the outcome and the excuse).
+The brain reads this history to decide the next nudge; the dashboard and Maya's report read it too.
+Lesson learned: SingleStore auto-increment IDs are unique but not time-ordered, so Momentum orders by time.
+
+**Show it live:** SingleStore portal → **Editor → SQL Editor** → database `db_rishab_868f5`, run:
+
+```sql
+-- What works on Maya (the agent's learned profile, straight from the table)
+SELECT context, arm AS nudge_type, COUNT(*) AS tries,
+       SUM(outcome = 'started') AS got_started,
+       ROUND(100 * SUM(outcome = 'started') / COUNT(*)) AS success_pct
+FROM nudges WHERE chat_id = 'demo-maya'
+GROUP BY context, arm ORDER BY context, success_pct DESC;
+```
+
+```sql
+-- The agent's latest live decisions, with its reasons
+SELECT sent_at, arm, outcome, excuse, LEFT(reason, 80) AS why
+FROM nudges WHERE chat_id <> 'demo-maya'
+ORDER BY sent_at DESC LIMIT 10;
+```
+
+```sql
+-- What people say when they don't start
+SELECT excuse, COUNT(*) AS n FROM nudges
+WHERE excuse IS NOT NULL GROUP BY excuse ORDER BY n DESC;
+```
+
+**Then:** send `/call`, answer the call, re-run the second query: the new row appears instantly.
+
+**In the code:** `momentum/store.py` (tables, TLS, BIGINT ids, time ordering), `momentum/migrate.py` (copies local history across).
+
+**Say:** *"SingleStore is the agent's live memory: state, decision and telemetry in one place. The learned profile you see on the dashboard is just a GROUP BY on this table."*
+
+---
+
+## 📊 Amplitude: analytics on every decision
+
+**What it does for Momentum:** The official Python SDK sends two events per nudge, with user ID `tg_<chat>`:
+- `nudge_sent`: `arm` (nudge type), `context`, `reason`, `writer` (claude/template), `channel` (web_phone/telegram), bandit `scores` and `fatigue`
+- `nudge_outcome`: `outcome` (started / snoozed / deferred / ignored), `success`, `latency_s`
+
+**Show it live:**
+1. Amplitude → your project → **Users & Sessions / User Look-Up** → search `tg_` → the event stream of your live calls.
+2. **Create → Chart → Segmentation:** event `nudge_outcome`, measure *totals*, **group by `arm`**, filter `success = true`: which nudge types work.
+3. Send `/call`, answer, and watch the new events land within ~a minute.
+
+**In the code:** `momentum/analytics.py` (shared client), `track()` in `momentum/integrations.py`, called from `momentum/agent.py`.
+
+**Say:** *"Every decision the agent makes is an Amplitude event, including why it chose it and its internal scores, so we can analyse the agent like a product."*
+
+---
+
+## 🎙️ AssemblyAI: voice in and voice out
+
+**What it does for Momentum:** On Momentum Phone (a simulated phone call):
+- **Speech-to-text:** your spoken answer ("ugh, not now, I'm exhausted") is transcribed, then Momentum decides started / not now + excuse / later.
+- **Text-to-speech:** every line Momentum says is spoken in the natural `aai-kyla` voice via AssemblyAI streaming TTS, prefetched while the phone rings so there's no pause.
+
+**Show it live:** `http://localhost:8000/phone` → Turn on → `/call` → Accept → answer out loud. The transcript appears on screen ("You: '…'") and in Telegram.
+
+**In the code:** `transcribe()` and `speak()` in `momentum/integrations.py`, `momentum/webphone.py`, `momentum/phone.html`.
+
+**Say:** *"AssemblyAI is both ears and voice. It hears the excuse, and it speaks Claude's nudge like a person calling you."*
+
+---
+
+## 🤖 Claude API: writes every nudge
+
+**What it does for Momentum:** The brain picks the *kind* of nudge; Claude (Opus 5.5, low effort, official
+Anthropic SDK) writes the actual line in that style, in Momentum's warm voice, using only facts given
+(never invents deadlines or people), and uses the time of day and last excuse for tone only.
+Templates take over on any error; server-side refusal fallback is on.
+
+**Show it live:** each call's spoken line is fresh, e.g. *"Want company while you work on your hackathon pitch? I'll sit right here with you."* Dashboard Live tab shows the text next to the brain's reason.
+
+**In the code:** `write_with_claude()` in `momentum/integrations.py`.
+
+---
+
+## Links
+- Firedrill: https://app.firedrill.run · https://firedrill.run/hacker-docs
+- SingleStore: https://portal.singlestore.com
+- Amplitude: https://app.amplitude.com
+- AssemblyAI: https://www.assemblyai.com/dashboard
+- Repo: https://github.com/rishabshukla-code/momentum
