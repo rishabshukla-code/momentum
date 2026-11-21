@@ -72,11 +72,11 @@ def next_call(request: Request, k: str = ""):
         if r["message_id"] == "web" and r["outcome"] is None and r["id"] not in SERVED:
             SERVED.add(r["id"])
             earlier = next((x for x in recent[i + 1:] if x["chat_id"] == r["chat_id"]), None)
-            hello = ("it's Momentum again, just like I said."
+            hello = ("it's, uh, Momentum again... like I said I would."
                      if earlier and earlier["outcome"] == "deferred" else "it's Momentum.")
             return {"call": {
                 "id": str(r["id"]),
-                "greeting": f"Hi {_name(r['chat_id'])}, {hello} {spoken(r['text'])} Are you ready to start?",
+                "greeting": f"Hi {_name(r['chat_id'])}, {hello} {spoken(r['text'])} Want to give it a go?",
                 "reason": r["reason"],
                 "nudge": _nudge_label(r["arm"]),
                 "voice": bool(config.ASSEMBLYAI_API_KEY),
@@ -147,7 +147,7 @@ async def end(request: Request, k: str = ""):
     if how == "missed":
         record_outcome(nudge_id, "ignored")
         vm = (f"Hi {_name(row['chat_id'])}, it's Momentum. {spoken(row['text'])} "
-              "No rush. I'm here whenever you're ready.")
+              "Um, no rush though... I'm here whenever you're ready.")
         _mirror(row["chat_id"], "📞 Missed call from Momentum. Left a voicemail.")
         return {"voicemail": vm, "note": "missed"}
     if row["outcome"] is None:  # declined, or hung up before answering

@@ -1,31 +1,33 @@
-"""What Momentum says back after you answer. Calm and warm, varied, never the same line twice in a row."""
+"""What Momentum says back after you answer. Calm, warm and spoken the way a person talks
+(soft openings, one light filler or pause, per AssemblyAI's TTS prompting guide).
+Varied, and never the same line twice in a row."""
 from __future__ import annotations
 
 import random
 
 REPLIES = {
     "started": [
-        "That's lovely. I'll leave you to it.",
-        "Good. The hardest part is already done.",
-        "Perfect. Take it one step at a time.",
-        "I'm glad. Go gently, you've got this.",
-        "Nice. I'll stay quiet now and let you work.",
-        "That's the spirit. Enjoy the focus.",
-        "Wonderful. I'm proud of you for starting.",
+        "Oh, that's lovely... I'll leave you to it.",
+        "Okay, good. The, uh, hardest part is already done.",
+        "Mm, perfect. Just take it one step at a time.",
+        "Oh, I'm glad. Go gently, okay? You've got this.",
+        "Nice... I'll, um, stay quiet now and let you work.",
+        "Okay, that's the spirit. Enjoy the focus.",
+        "Aw, I'm proud of you for starting. Really.",
     ],
     "snoozed": [
-        "That's okay. Sounds like you're {excuse}. I'll come back with something smaller.",
-        "No pressure. Next time, I'll make the first step tiny.",
-        "I understand. I'll check in later, with something lighter.",
-        "That's alright. We'll try a different way next time.",
-        "Okay. Be easy on yourself. I'll be back a little later.",
+        "That's okay... sounds like you're {excuse}. I'll come back with something, um, smaller.",
+        "Mm, no pressure. Next time I'll make the first step really tiny.",
+        "I get it. I'll check in later, with something, uh, lighter.",
+        "That's alright... we'll try a different way next time, okay?",
+        "Okay. Be easy on yourself, yeah? I'll be back a little later.",
     ],
     "deferred": [
-        "Of course. I'll check back in {mins}.",
-        "That's fine. Let's talk again in {mins}.",
-        "Okay, {mins} then. I'll call you softly.",
-        "Sounds good. I'll be here in {mins}.",
-        "Sure. Take your {mins}, and I'll check in after.",
+        "Of course, um, I'll check back in {mins}.",
+        "Yeah, that's fine... let's talk again in {mins}.",
+        "Okay, {mins} then. I'll, uh, call you softly.",
+        "Sounds good. I'll be here in {mins}, okay?",
+        "Sure... take your {mins}, and I'll check in after.",
     ],
 }
 _last: dict[str, str] = {}
