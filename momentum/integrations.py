@@ -182,7 +182,7 @@ def transcribe(audio: bytes) -> str:
     return ""
 
 
-TTS_VOICE = os.getenv("ASSEMBLYAI_TTS_VOICE", "aai-yasmin")  # warm, expressive British voice; sounds most natural with fillers
+TTS_VOICE = os.getenv("ASSEMBLYAI_TTS_VOICE", "aai-audrey")  # calm, even, steady (Kyla is fast-paced)
 _tts_cache: dict[str, bytes] = {}
 
 

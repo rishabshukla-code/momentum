@@ -96,7 +96,7 @@ WHERE excuse IS NOT NULL GROUP BY excuse ORDER BY n DESC;
 
 **What it does for Momentum:** On Momentum Phone (a simulated phone call):
 - **Speech-to-text:** your spoken answer ("ugh, not now, I'm exhausted") is transcribed, then Momentum decides started / not now + excuse / later.
-- **Text-to-speech:** every line Momentum says is spoken in the warm, expressive `aai-yasmin` voice via AssemblyAI streaming TTS, prefetched while the phone rings so there's no pause.
+- **Text-to-speech:** every line Momentum says is spoken in the calm, steady `aai-audrey` voice (slowed slightly) via AssemblyAI streaming TTS, prefetched while the phone rings so there's no pause.
 
 **Show it live:** `http://localhost:8000/phone` → Turn on → `/call` → Accept → answer out loud. The transcript appears on screen ("You: '…'") and in Telegram.
 

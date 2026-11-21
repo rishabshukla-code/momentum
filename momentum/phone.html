@@ -170,34 +170,39 @@ function startRinging() { ringOnce(); ringTimer = setInterval(ringOnce, 4000); r
 function stopRinging() { clearInterval(ringTimer); clearTimeout(ringStop); if (navigator.vibrate) navigator.vibrate(0); }
 
 // ---------- natural voice: AssemblyAI TTS through the analyser ----------
+const SPEECH_RATE = 0.88;  // slower and calmer; the audio element keeps her natural pitch
 const ttsCache = {};
 function fetchVoice(text) {
   if (!ttsCache[text]) {
     ttsCache[text] = fetch("/phone/api/tts?k=" + encodeURIComponent(K), post({ text }))
-      .then(r => r.status === 200 ? r.arrayBuffer() : null)
-      .then(b => b ? ctx.decodeAudioData(b) : null)
+      .then(r => r.status === 200 ? r.blob() : null)
+      .then(b => b ? URL.createObjectURL(b) : null)
       .catch(() => null);
   }
   return ttsCache[text];
 }
-let playing = null;
+// one <audio> element, routed through the analyser so the orb still reacts to the voice
+const voiceEl = new Audio();
+voiceEl.preservesPitch = true; voiceEl.mozPreservesPitch = true; voiceEl.webkitPreservesPitch = true;
+let voiceRouted = false;
 async function say(text) {
-  const audio = ctx ? await fetchVoice(text) : null;
-  if (audio) {
+  const url = ctx ? await fetchVoice(text) : null;
+  if (url) {
+    if (!voiceRouted) { ctx.createMediaElementSource(voiceEl).connect(analyser); voiceRouted = true; }
     return new Promise(res => {
-      const src = ctx.createBufferSource(); src.buffer = audio; src.connect(analyser);
-      src.playbackRate.value = 0.95;  // a touch slower and lower: calmer, warmer
-      src.onended = () => { playing = null; res(); }; playing = src; src.start();
+      voiceEl.onended = voiceEl.onerror = () => res();
+      voiceEl.src = url; voiceEl.playbackRate = SPEECH_RATE;
+      voiceEl.play().catch(() => res());
     });
   }
   return browserSay(text);
 }
-function stopSpeaking() { try { playing && playing.stop(); } catch (e) {} speechSynthesis.cancel(); speakingFallback = false; }
+function stopSpeaking() { try { voiceEl.pause(); } catch (e) {} speechSynthesis.cancel(); speakingFallback = false; }
 function browserSay(text) {
   return new Promise(res => {
     if (!("speechSynthesis" in window)) return res();
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text); u.rate = 1.0; u.pitch = 1.05;
+    const u = new SpeechSynthesisUtterance(text); u.rate = 0.9; u.pitch = 1.0;
     const v = speechSynthesis.getVoices().find(v => /en(-|_)US/i.test(v.lang) && /female|samantha|zira|google us/i.test(v.name))
            || speechSynthesis.getVoices().find(v => /^en/i.test(v.lang));
     if (v) u.voice = v;
