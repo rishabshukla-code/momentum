@@ -119,8 +119,8 @@ NUDGE_TYPES = {
         "tone": "firm",
         "style": "short, firm coach voice: no excuses today, start now; direct but on their side, never insulting",
         "templates": [
-            "No more warm-ups. Open {task} and do the first thing. Now.",
-            "You know what to do. Stop negotiating with it. {task}, five minutes, go.",
+            "No more warm-ups. Open {task}, and do the very first thing.",
+            "You know what to do. Let's stop negotiating with it, and give {task} five minutes.",
         ],
     },
     "cost_of_delay": {

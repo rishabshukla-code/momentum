@@ -1,31 +1,31 @@
-"""What Momentum says back after you answer. Varied, and never the same line twice in a row."""
+"""What Momentum says back after you answer. Calm and warm, varied, never the same line twice in a row."""
 from __future__ import annotations
 
 import random
 
 REPLIES = {
     "started": [
-        "Love that. Go go go!",
-        "Yes! I'll leave you to it.",
-        "That's the hardest part done. Go get it.",
-        "Perfect. I'll stay quiet now, you've got this.",
-        "Look at you, starting. I'm proud of you.",
-        "Great move. Enjoy the momentum.",
-        "Brilliant. Off you go!",
+        "That's lovely. I'll leave you to it.",
+        "Good. The hardest part is already done.",
+        "Perfect. Take it one step at a time.",
+        "I'm glad. Go gently, you've got this.",
+        "Nice. I'll stay quiet now and let you work.",
+        "That's the spirit. Enjoy the focus.",
+        "Wonderful. I'm proud of you for starting.",
     ],
     "snoozed": [
-        "No worries, sounds like you're {excuse}. I'll come back with something smaller.",
-        "That's okay. Next time I'll make the first step tiny.",
-        "Got it, {excuse} happens. I'll check in later with something lighter.",
-        "Fair enough. I'll try a different way next time.",
-        "All good. I'll be back with an easier ask.",
+        "That's okay. Sounds like you're {excuse}. I'll come back with something smaller.",
+        "No pressure. Next time, I'll make the first step tiny.",
+        "I understand. I'll check in later, with something lighter.",
+        "That's alright. We'll try a different way next time.",
+        "Okay. Be easy on yourself. I'll be back a little later.",
     ],
     "deferred": [
-        "Sure, I'll check back in {mins}.",
-        "No problem. Talk to you in {mins}.",
-        "Deal. I'll call you again in {mins}.",
-        "Okay, {mins} it is. I'll be back.",
-        "Sounds good. See you in {mins}.",
+        "Of course. I'll check back in {mins}.",
+        "That's fine. Let's talk again in {mins}.",
+        "Okay, {mins} then. I'll call you softly.",
+        "Sounds good. I'll be here in {mins}.",
+        "Sure. Take your {mins}, and I'll check in after.",
     ],
 }
 _last: dict[str, str] = {}

@@ -186,6 +186,7 @@ async function say(text) {
   if (audio) {
     return new Promise(res => {
       const src = ctx.createBufferSource(); src.buffer = audio; src.connect(analyser);
+      src.playbackRate.value = 0.95;  // a touch slower and lower: calmer, warmer
       src.onended = () => { playing = null; res(); }; playing = src; src.start();
     });
   }
