@@ -30,6 +30,12 @@ LLM_BASE_URL = _get("LLM_BASE_URL")  # confirm the exact URL at the Arcee booth
 LLM_API_KEY = _get("LLM_API_KEY")
 LLM_MODEL = _get("LLM_MODEL")
 
+# --- Claude writes the nudge text (preferred over the Arcee settings above when set) ---
+ANTHROPIC_API_KEY = _get("ANTHROPIC_API_KEY")
+CLAUDE_MODEL = _get("CLAUDE_MODEL", "claude-opus-5-5")
+# "template" forces the built-in templates (used for Firedrill drills: free and repeatable)
+NUDGE_WRITER = _get("NUDGE_WRITER", "auto").lower()
+
 # --- Superlinked: small task-specific model used to classify excuses ---
 SUPERLINKED_URL = _get("SUPERLINKED_URL")
 SUPERLINKED_API_KEY = _get("SUPERLINKED_API_KEY")

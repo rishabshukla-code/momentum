@@ -38,7 +38,8 @@ We tested it against synthetic users in Firedrill and fixed what they found:
 - **Telegram Bot API**: nudge delivery with inline buttons
 - **Momentum Phone**: browser call simulation (WebAudio ringtone, speech synthesis), spoken answers transcribed with **AssemblyAI**; **Twilio** voice integration for real calls
 - **Python, SQLAlchemy, FastAPI** (`/trigger` endpoint so a scheduler can drive the agent), **Streamlit** (simulation and live decision dashboard)
-- **Arcee**: integration built for writing fresh nudges with a small open model; not active in the demo because hackathon credits weren't available, so Momentum uses its own templates
+- **Claude API** (Claude Opus 5.5, official Anthropic SDK): writes every nudge fresh in the chosen style and Momentum's warm voice, never inventing facts; falls back to built-in templates on any error
+- **Arcee**: the same writer slot works with Arcee's open models; not active because hackathon credits weren't available
 - Built with **Claude Code**
 
 ## Team

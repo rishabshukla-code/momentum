@@ -34,6 +34,7 @@ if os.path.exists(_db):
     os.remove(_db)
 os.environ["DATABASE_URL"] = f"sqlite:///{_db}"
 os.environ.setdefault("TELEGRAM_BOT_TOKEN", "")
+os.environ.setdefault("NUDGE_WRITER", "template")  # drills stay free and repeatable
 
 from . import brain, config, store  # noqa: E402  (env must be set first)
 from .agent import record_outcome  # noqa: E402

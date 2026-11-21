@@ -17,7 +17,7 @@ trigger (timer / Guild cron / webhook)
   brain.choose()  ── discounted Thompson sampling + fatigue penalty, per time of day
         │            (+ boost from your last excuse, classified by a small model)
         ▼
-  write_nudge()   ── Arcee open model writes a fresh message in a warm voice
+  write_nudge()   ── Claude (Opus 5.5) writes a fresh message in the chosen style and a warm voice
         │
         ▼
   Telegram push   ── [ ✅ Started ]  [ 😴 Not now ]   (no reply in 15 min = miss)
@@ -123,7 +123,7 @@ See [SPONSORS.md](SPONSORS.md).
 | `momentum/brain.py` | The bandit: Thompson sampling, fading, fatigue, context |
 | `momentum/agent.py` | The loop: when to nudge, send, record outcomes |
 | `momentum/bot.py` | Telegram bot (plain HTTP long polling) |
-| `momentum/integrations.py` | Arcee, Superlinked, Cognee, Amplitude, each with a local fallback |
+| `momentum/integrations.py` | Claude nudge writer, AssemblyAI voice, Amplitude, excuse classifier; each with a local fallback |
 | `momentum/store.py` | SQLite or SingleStore tables |
 | `momentum/simulate.py` | Synthetic users with habituation, strategy comparison |
 | `momentum/server.py` | `POST /trigger` for event-driven runs |

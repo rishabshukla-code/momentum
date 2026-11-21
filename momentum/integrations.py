@@ -28,9 +28,82 @@ log = logging.getLogger("momentum")
 
 
 # ---------------------------------------------------------------- LLM writer
+_claude = None
+
+CLAUDE_SYSTEM = (
+    "You are Momentum, a warm, familiar presence that helps one person start their work, like "
+    "someone at home who knows them well. You write a single nudge message: at most 18 words, "
+    "plain text, starting with the emoji you are given. Follow the requested nudge style exactly; "
+    "it is the whole point of the message.\n"
+    "Context you are given is for choosing your tone, not for repeating back: never mention the "
+    "time of day, and never restate or guess about their earlier excuse or how they feel "
+    "(if they were tired, keep the ask small and gentle instead of saying so). Mention the "
+    "deadline only if one is given, and never suggest it can be ignored. Only use facts you are "
+    "given: never invent people, teams or details. No hashtags, quotes, lists or sign-offs. "
+    "Reply with the nudge only."
+)
+
+
+def _claude_client():
+    global _claude
+    if _claude is None:
+        import anthropic
+        _claude = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY, timeout=20.0, max_retries=1)
+    return _claude
+
+
+def write_with_claude(arm, facts: list[str]) -> str:
+    """One short nudge from Claude. Returns '' on refusal or error (caller falls back to a template)."""
+    import anthropic
+
+    t = NUDGE_TYPES[arm]
+    prompt = (f"Nudge style: {t['label']}: {t['style']}.\nStart with this emoji: {t['emoji']}\n"
+              + "\n".join(facts))
+    try:
+        resp = _claude_client().beta.messages.create(
+            model=config.CLAUDE_MODEL,
+            max_tokens=2000,
+            system=CLAUDE_SYSTEM,
+            output_config={"effort": "low"},  # a one-line nudge needs little thinking
+            betas=["server-side-fallback-2026-07-01"],
+            fallbacks="default",  # if a safety classifier declines, the API retries on a fallback model
+            messages=[{"role": "user", "content": prompt}],
+        )
+    except anthropic.AuthenticationError:
+        log.warning("Claude: the API key was rejected")
+        return ""
+    except anthropic.RateLimitError:
+        log.warning("Claude: rate limited, using a template")
+        return ""
+    except anthropic.APIStatusError as e:
+        log.warning("Claude API error %s: %s", e.status_code, e.message)
+        return ""
+    except anthropic.APIConnectionError:
+        log.warning("Claude: network error, using a template")
+        return ""
+    if resp.stop_reason == "refusal":
+        return ""
+    text = "".join(b.text for b in resp.content if b.type == "text").strip().strip('"')
+    return text.splitlines()[0].strip() if text else ""
+
+
 def write_nudge(arm, task, deadline, context, streak, excuse=None, memories=None) -> tuple[str, str]:
-    """Return (text, source) where source is 'llm' or 'template'."""
-    if not (config.LLM_BASE_URL and config.LLM_API_KEY and config.LLM_MODEL):
+    """Return (text, source) where source is 'claude', 'llm' (Arcee) or 'template'."""
+    use_claude = config.NUDGE_WRITER != "template" and bool(config.ANTHROPIC_API_KEY)
+    use_arcee = (config.NUDGE_WRITER != "template"
+                 and bool(config.LLM_BASE_URL and config.LLM_API_KEY and config.LLM_MODEL))
+    if use_claude:
+        facts = [f"Task: {task}", f"Deadline: {deadline or 'none given'}", f"Time of day: {context}"]
+        if streak >= 2:
+            facts.append(f"They started on time {streak} times in a row recently.")
+        if excuse:
+            facts.append(f"Last time they said no because they were {excuse}.")
+        text = write_with_claude(arm, facts)
+        if text:
+            emoji = NUDGE_TYPES[arm]["emoji"]
+            return (text if text.startswith(emoji) else f"{emoji} {text}"), "claude"
+        return fallback_text(arm, task, deadline, streak), "template"
+    if not use_arcee:
         return fallback_text(arm, task, deadline, streak), "template"
     t = NUDGE_TYPES[arm]
     facts = [f"Task: {task}", f"Deadline: {deadline or 'none given'}", f"Time of day: {context}"]
