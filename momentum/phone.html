@@ -4,101 +4,263 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Momentum Phone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#0f1115; --fg:#f4f1ea; --muted:#9a968d; --green:#22c55e; --red:#ef4444; --warm:#f59e0b; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  html,body { height:100%; background:var(--bg); color:var(--fg);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
-  .screen { display:none; height:100%; flex-direction:column; align-items:center;
-    justify-content:space-between; padding:72px 24px 56px; text-align:center; }
-  .screen.on { display:flex; }
-  .avatar { width:112px; height:112px; border-radius:50%; background:#2a2620; display:grid;
-    place-items:center; font-size:56px; margin:0 auto 20px; }
-  .ringing .avatar { animation:pulse 1.2s ease-in-out infinite; }
-  @keyframes pulse { 0%,100% { box-shadow:0 0 0 0 rgba(245,158,11,.5); } 50% { box-shadow:0 0 0 22px rgba(245,158,11,0); } }
-  h1 { font-size:32px; font-weight:600; }
-  .sub { color:var(--muted); margin-top:8px; font-size:17px; }
-  .row { display:flex; gap:72px; justify-content:center; }
-  .btn { width:76px; height:76px; border-radius:50%; border:0; font-size:32px; color:#fff; cursor:pointer; }
-  .label { color:var(--muted); font-size:14px; margin-top:10px; }
-  .accept { background:var(--green); } .decline { background:var(--red); }
-  .big { background:var(--warm); color:#1a1408; border:0; border-radius:16px; padding:18px 28px;
-    font-size:18px; font-weight:600; cursor:pointer; }
-  .caption { max-width:420px; font-size:20px; line-height:1.45; min-height:120px; white-space:pre-line; }
-  .small { background:#23262d; color:var(--fg); border:0; border-radius:12px; padding:14px 18px;
-    font-size:16px; cursor:pointer; }
-  .why { color:var(--muted); font-size:13px; max-width:420px; margin-top:14px; }
-  .mic { width:14px; height:14px; border-radius:50%; background:var(--red); display:inline-block;
-    margin-right:8px; animation:blink 1s infinite; vertical-align:middle; }
-  @keyframes blink { 50% { opacity:.25; } }
-  .vm { background:#1b1e24; border-radius:16px; padding:18px; max-width:420px; text-align:left; }
+  :root {
+    --bg: #04060b; --panel: rgba(12, 22, 38, .62); --line: rgba(110, 231, 255, .22);
+    --fg: #e6f6ff; --muted: #7d93a8; --cyan: #22d3ee; --teal: #2dd4bf; --amber: #fbbf24;
+    --magenta: #f472b6; --green: #34d399; --red: #fb7185;
+    --accent: var(--cyan);
+    --head: "Orbitron", "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  body.mode-ring { --accent: var(--amber); }
+  body.mode-talk { --accent: var(--teal); }
+  body.mode-listen { --accent: var(--magenta); }
+  body.mode-missed { --accent: var(--red); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--fg); font-family: var(--mono); overflow: hidden; }
+
+  /* ---------- background: perspective grid, scanlines, vignette ---------- */
+  .space { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+  .space::before { content: ""; position: absolute; left: -50%; right: -50%; bottom: -10%; height: 60%;
+    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 56px 56px; transform: perspective(380px) rotateX(62deg); transform-origin: bottom;
+    animation: grid 6s linear infinite; mask-image: linear-gradient(to top, #000 10%, transparent 90%); opacity: .55; }
+  @keyframes grid { to { background-position: 0 56px; } }
+  .space::after { content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(to bottom, rgba(255,255,255,.025) 0 1px, transparent 1px 3px),
+                radial-gradient(ellipse at 50% 40%, transparent 35%, rgba(0,0,0,.85) 100%); }
+  .glow { position: fixed; width: 70vmax; height: 70vmax; left: 50%; top: 38%; transform: translate(-50%, -50%);
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 22%, transparent), transparent 62%);
+    pointer-events: none; transition: background .6s; filter: blur(10px); }
+
+  /* ---------- HUD frame ---------- */
+  .hud { position: relative; height: 100%; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column;
+    padding: max(14px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); }
+  .bracket { position: absolute; width: 26px; height: 26px; border: 2px solid var(--accent); opacity: .7; transition: border-color .6s; }
+  .bracket.tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+  .bracket.tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+  .bracket.bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
+  .bracket.br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 10px;
+    font-size: 11px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+  .brand { font-family: var(--head); font-weight: 700; color: var(--fg); letter-spacing: .22em; }
+  .brand b { color: var(--accent); transition: color .6s; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border: 1px solid var(--accent);
+    border-radius: 999px; color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); transition: all .6s; }
+  .chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: blink 1.4s infinite; }
+  @keyframes blink { 50% { opacity: .25; } }
+
+  /* ---------- the core ---------- */
+  .stage { position: relative; flex: 0 0 auto; height: min(46vh, 340px); display: grid; place-items: center; margin-top: 4px; }
+  #viz { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .core { position: relative; width: 168px; height: 168px; display: grid; place-items: center; }
+  .ring { position: absolute; border-radius: 50%; border: 1px solid var(--accent); transition: border-color .6s; }
+  .r1 { inset: -18px; border-style: dashed; opacity: .45; animation: spin 18s linear infinite; }
+  .r2 { inset: 0; border-width: 2px; border-color: transparent; border-top-color: var(--accent); border-bottom-color: var(--accent);
+    animation: spin 5s linear infinite reverse; }
+  .r3 { inset: 18px; opacity: .6; border-left-color: transparent; border-right-color: transparent; animation: spin 9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .nucleus { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; font-size: 40px;
+    background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--accent) 55%, #fff 0%), color-mix(in srgb, var(--accent) 18%, #000) 70%);
+    box-shadow: 0 0 30px var(--accent), inset 0 0 22px rgba(255,255,255,.25); transition: box-shadow .6s, background .6s;
+    animation: breathe 3.2s ease-in-out infinite; }
+  @keyframes breathe { 50% { transform: scale(1.05); box-shadow: 0 0 46px var(--accent), inset 0 0 22px rgba(255,255,255,.3); } }
+  body.mode-ring .nucleus { animation: ringpulse .9s ease-in-out infinite; }
+  body.mode-ring .r2 { animation-duration: 1.4s; }
+  @keyframes ringpulse { 50% { transform: scale(1.12); box-shadow: 0 0 70px var(--accent); } }
+
+  /* ---------- screens ---------- */
+  .screen { display: none; flex: 1; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; gap: 14px; min-height: 0; }
+  .screen.on { display: flex; animation: fadein .35s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(6px); } }
+  .title { font-family: var(--head); font-weight: 900; font-size: clamp(24px, 7vw, 34px); letter-spacing: .12em; text-transform: uppercase;
+    text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 70%, transparent); }
+  .kicker { font-size: 11px; letter-spacing: .32em; color: var(--accent); text-transform: uppercase; transition: color .6s; }
+  .sub { color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .glitch { position: relative; display: inline-block; }
+  body.mode-ring .glitch { animation: glitch 2.2s infinite steps(1); }
+  @keyframes glitch { 0%, 92%, 100% { transform: none; text-shadow: 0 0 18px var(--accent); }
+    93% { transform: translate(-2px, 1px); text-shadow: 2px 0 var(--magenta), -2px 0 var(--cyan); }
+    95% { transform: translate(2px, -1px); text-shadow: -2px 0 var(--magenta), 2px 0 var(--cyan); } }
+
+  .panel { width: 100%; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; text-align: left;
+    backdrop-filter: blur(8px); position: relative; }
+  .panel::before { content: attr(data-label); position: absolute; top: -9px; left: 14px; padding: 0 6px; background: var(--bg);
+    font-size: 10px; letter-spacing: .26em; color: var(--accent); text-transform: uppercase; transition: color .6s; }
+  .caption { font-size: 17px; line-height: 1.55; white-space: pre-line; min-height: 82px; color: var(--fg); }
+  .caption .cursor { display: inline-block; width: 9px; height: 1.1em; background: var(--accent); vertical-align: -3px; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+  .readouts { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 12px; margin-top: 12px; }
+  .readouts dt { color: var(--muted); letter-spacing: .14em; text-transform: uppercase; }
+  .readouts dd { color: var(--fg); }
+
+  .row { display: flex; gap: 64px; justify-content: center; }
+  .btn { width: 78px; height: 78px; border-radius: 50%; border: 2px solid; background: rgba(0,0,0,.35); font-size: 30px; cursor: pointer;
+    display: grid; place-items: center; transition: transform .15s, box-shadow .2s; }
+  .btn:active { transform: scale(.94); }
+  .accept { color: var(--green); border-color: var(--green); box-shadow: 0 0 22px rgba(52,211,153,.45), inset 0 0 14px rgba(52,211,153,.25); animation: nudge 1.2s ease-in-out infinite; }
+  .decline { color: var(--red); border-color: var(--red); box-shadow: 0 0 22px rgba(251,113,133,.4), inset 0 0 14px rgba(251,113,133,.2); }
+  @keyframes nudge { 50% { transform: translateY(-5px); } }
+  .label { color: var(--muted); font-size: 10px; letter-spacing: .26em; margin-top: 10px; text-transform: uppercase; }
+
+  .big { font-family: var(--head); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; font-size: 14px;
+    color: var(--bg); background: var(--accent); border: 0; border-radius: 12px; padding: 17px 26px; cursor: pointer;
+    box-shadow: 0 0 28px color-mix(in srgb, var(--accent) 60%, transparent); }
+  .small { font-family: var(--mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: color .6s, border-color .6s; }
+  .listening { color: var(--accent); font-size: 12px; letter-spacing: .26em; text-transform: uppercase; }
+  .listening i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); margin-right: 8px; box-shadow: 0 0 10px var(--accent); animation: blink 1s infinite; }
+  .timer { font-family: var(--head); font-size: 13px; letter-spacing: .3em; color: var(--accent); }
+  .answer { display: flex; flex-direction: column; align-items: center; gap: 12px; min-height: 40px; }
+  /* short windows (laptops, landscape): smaller core so the End button stays on screen */
+  @media (max-height: 760px) {
+    .stage { height: 30vh; min-height: 180px; }
+    .core { transform: scale(.72); }
+    .caption { font-size: 15px; min-height: 56px; }
+    .screen { gap: 10px; }
+    .btn { width: 64px; height: 64px; font-size: 24px; }
+  }
 </style>
 </head>
-<body>
+<body class="mode-idle">
+<div class="space"></div>
+<div class="glow"></div>
 
-<section id="s-start" class="screen on">
-  <div><div class="avatar">☕</div><h1>Momentum Phone</h1>
-    <p class="sub">A simulated phone call from your Momentum agent.</p></div>
-  <button class="big" id="enable">Turn on Momentum Phone</button>
-  <p class="sub">Keep this page open. Momentum will call when it's time.</p>
-</section>
+<div class="hud">
+  <span class="bracket tl"></span><span class="bracket tr"></span><span class="bracket bl"></span><span class="bracket br"></span>
+  <header>
+    <span class="brand">MOMENTUM <b>◈</b> LINK</span>
+    <span class="chip"><i></i><span id="status">OFFLINE</span></span>
+    <span id="clock">--:--</span>
+  </header>
 
-<section id="s-idle" class="screen">
-  <div><div class="avatar">☕</div><h1>Momentum</h1><p class="sub" id="idle-sub">Waiting for the right moment…</p></div>
-  <div></div>
-  <p class="sub">Ready. Your phone will ring here.</p>
-</section>
-
-<section id="s-ring" class="screen ringing">
-  <div><p class="sub">incoming call…</p><div class="avatar" style="margin-top:16px">☕</div>
-    <h1>Momentum</h1><p class="sub">mobile</p></div>
-  <div class="row">
-    <div><button class="btn decline" id="decline">✕</button><p class="label">Decline</p></div>
-    <div><button class="btn accept" id="accept">✆</button><p class="label">Accept</p></div>
+  <div class="stage">
+    <canvas id="viz"></canvas>
+    <div class="core"><span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span><div class="nucleus">☕</div></div>
   </div>
-</section>
 
-<section id="s-call" class="screen">
-  <div><p class="sub" id="timer">00:00</p><div class="avatar" style="margin-top:16px">☕</div><h1>Momentum</h1></div>
-  <div><p class="caption" id="caption"></p><p class="why" id="why"></p></div>
-  <div id="answer-area"></div>
-  <div><button class="btn decline" id="hangup">✕</button><p class="label">End</p></div>
-</section>
+  <section id="s-start" class="screen on">
+    <div><p class="kicker">nudge link · standby</p><h1 class="title glitch">Momentum</h1>
+      <p class="sub" style="margin-top:8px">A simulated call from your personal agent.</p></div>
+    <button class="big" id="enable">Initialize link</button>
+    <p class="sub">Keep this page open. Momentum calls when it's time.</p>
+  </section>
 
-<section id="s-missed" class="screen">
-  <div><div class="avatar">☕</div><h1>Missed call</h1><p class="sub">Momentum</p></div>
-  <div class="vm"><p class="sub" style="margin:0 0 8px">🔊 Voicemail</p><p id="vm-text"></p></div>
-  <button class="small" id="vm-play">▶ Play voicemail</button>
-</section>
+  <section id="s-idle" class="screen">
+    <div><p class="kicker">link established</p><h1 class="title">Standing by</h1>
+      <p class="sub" id="idle-sub" style="margin-top:8px">Waiting for the right moment…</p></div>
+    <div class="panel" data-label="system">
+      <dl class="readouts"><dt>channel</dt><dd>Momentum Phone</dd><dt>voice</dt><dd>AssemblyAI · natural</dd><dt>writer</dt><dd>Claude</dd></dl>
+    </div>
+  </section>
+
+  <section id="s-ring" class="screen">
+    <div><p class="kicker">⟡ incoming transmission ⟡</p><h1 class="title glitch">Momentum</h1>
+      <p class="sub" id="ring-nudge" style="margin-top:8px">is calling…</p></div>
+    <div class="row">
+      <div><button class="btn decline" id="decline" aria-label="Decline">✕</button><p class="label">Decline</p></div>
+      <div><button class="btn accept" id="accept" aria-label="Accept">✆</button><p class="label">Accept</p></div>
+    </div>
+  </section>
+
+  <section id="s-call" class="screen">
+    <p class="timer" id="timer">00:00</p>
+    <div class="panel" data-label="transmission">
+      <p class="caption" id="caption"></p>
+      <dl class="readouts"><dt>nudge</dt><dd id="nudge-type">—</dd><dt>why</dt><dd id="why">—</dd></dl>
+    </div>
+    <div class="answer" id="answer-area"></div>
+    <div><button class="btn decline" id="hangup" aria-label="End call">✕</button><p class="label">End</p></div>
+  </section>
+
+  <section id="s-missed" class="screen">
+    <div><p class="kicker">signal lost</p><h1 class="title">Missed call</h1></div>
+    <div class="panel" data-label="voicemail recorded"><p class="caption" id="vm-text" style="min-height:0"></p></div>
+    <button class="small" id="vm-play">▶ Play voicemail</button>
+  </section>
+</div>
 
 <script>
 const K = new URLSearchParams(location.search).get("k") || "";
 const api = (p, opt) => fetch(p + (p.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(K), opt).then(r => r.json());
 const $ = id => document.getElementById(id);
-const show = id => { document.querySelectorAll(".screen").forEach(s => s.classList.remove("on")); $(id).classList.add("on"); };
+const MODES = { "s-start": "idle", "s-idle": "idle", "s-ring": "ring", "s-call": "talk", "s-missed": "missed" };
+const STATUS = { idle: "STANDBY", ring: "INCOMING", talk: "LIVE", listen: "LISTENING", missed: "SIGNAL LOST" };
+function setMode(m) { document.body.className = "mode-" + m; $("status").textContent = STATUS[m] || m.toUpperCase(); }
+const show = id => { document.querySelectorAll(".screen").forEach(s => s.classList.remove("on")); $(id).classList.add("on"); setMode(MODES[id]); };
+setInterval(() => { const d = new Date(); $("clock").textContent = d.toTimeString().slice(0, 5); }, 1000);
 
-let ctx, ringTimer, ringStop, current = null, callStart = 0, clock, recorder, chunks = [];
+let ctx, analyser, micAnalyser, ringTimer, ringStop, current = null, callStart = 0, clock, recorder, chunks = [];
+let speakingFallback = false;
 const RING_SECONDS = 20;
 
-// --- ringtone: classic two-tone ring, 2s on / 4s off, made with WebAudio (no files)
+// ---------- live visualizer: circular waveform around the core ----------
+const cv = $("viz"), g = cv.getContext("2d");
+function fit() { const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1; cv.width = r.width * d; cv.height = r.height * d; g.setTransform(d, 0, 0, d, 0, 0); }
+addEventListener("resize", fit); fit();
+const buf = new Uint8Array(128);
+function level(an) { if (!an) return null; an.getByteFrequencyData(buf); return buf; }
+function draw(t) {
+  const w = cv.clientWidth, h = cv.clientHeight, cx = w / 2, cy = h / 2;
+  g.clearRect(0, 0, w, h);
+  const accent = getComputedStyle(document.body).getPropertyValue("--accent").trim() || "#22d3ee";
+  const mode = document.body.className.replace("mode-", "");
+  let data = mode === "listen" ? level(micAnalyser) : level(analyser);
+  const coreR = document.querySelector(".core").getBoundingClientRect().width / 2;
+  const bars = 72, base = coreR + 20;
+  g.lineWidth = 2; g.strokeStyle = accent; g.shadowColor = accent; g.shadowBlur = 12;
+  for (let i = 0; i < bars; i++) {
+    const a = (i / bars) * Math.PI * 2 - Math.PI / 2;
+    let v = data ? data[(i * 2) % 96] / 255 : 0;
+    if (!data || v < 0.02) {  // idle shimmer, or the browser fallback voice (no analyser data)
+      const amp = mode === "ring" ? 0.35 : speakingFallback ? 0.4 : 0.08;
+      v = amp * (0.5 + 0.5 * Math.sin(t / 220 + i * 0.6) * Math.sin(t / 530 + i * 0.23));
+    }
+    const len = 6 + v * coreR * 0.55;
+    g.globalAlpha = 0.35 + v * 0.65;
+    g.beginPath();
+    g.moveTo(cx + Math.cos(a) * base, cy + Math.sin(a) * base);
+    g.lineTo(cx + Math.cos(a) * (base + len), cy + Math.sin(a) * (base + len));
+    g.stroke();
+  }
+  // orbiting dot
+  g.globalAlpha = 0.9; g.fillStyle = accent;
+  const o = t / 900, orbit = base + coreR * 0.6;
+  g.beginPath(); g.arc(cx + Math.cos(o) * orbit, cy + Math.sin(o) * orbit, 2.5, 0, Math.PI * 2); g.fill();
+  g.globalAlpha = 1; g.shadowBlur = 0;
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+// ---------- ringtone: two-tone ring through the analyser (WebAudio, no files) ----------
 function ringOnce() {
   if (!ctx) return;
-  const g = ctx.createGain(); g.gain.value = 0.15; g.connect(ctx.destination);
-  [440, 480].forEach(f => { const o = ctx.createOscillator(); o.frequency.value = f; o.connect(g);
-    o.start(); o.stop(ctx.currentTime + 2); });
+  const gn = ctx.createGain(); gn.gain.value = 0.15; gn.connect(analyser);
+  [440, 480].forEach(f => { const o = ctx.createOscillator(); o.frequency.value = f; o.connect(gn); o.start(); o.stop(ctx.currentTime + 2); });
   if (navigator.vibrate) navigator.vibrate([800, 300, 800]);
 }
-function startRinging() { ringOnce(); ringTimer = setInterval(ringOnce, 4000);
-  ringStop = setTimeout(missed, RING_SECONDS * 1000); }
+function startRinging() { ringOnce(); ringTimer = setInterval(ringOnce, 4000); ringStop = setTimeout(missed, RING_SECONDS * 1000); }
 function stopRinging() { clearInterval(ringTimer); clearTimeout(ringStop); if (navigator.vibrate) navigator.vibrate(0); }
 
-// Natural voice: AssemblyAI TTS from the server, played through the unlocked AudioContext.
+// ---------- typed captions ----------
+let typing = 0;
+function typeText(el, text) {
+  const my = ++typing; el.innerHTML = ""; let i = 0;
+  const step = () => { if (my !== typing) return;
+    el.textContent = text.slice(0, i); const c = document.createElement("span"); c.className = "cursor"; el.appendChild(c);
+    if (i++ < text.length) setTimeout(step, 16); };
+  step();
+}
+
+// ---------- natural voice: AssemblyAI TTS, played through the analyser ----------
 const ttsCache = {};
 function fetchVoice(text) {
   if (!ttsCache[text]) {
     ttsCache[text] = fetch("/phone/api/tts?k=" + encodeURIComponent(K), post({ text }))
       .then(r => r.status === 200 ? r.arrayBuffer() : null)
-      .then(buf => buf ? ctx.decodeAudioData(buf) : null)
+      .then(b => b ? ctx.decodeAudioData(b) : null)
       .catch(() => null);
   }
   return ttsCache[text];
@@ -108,13 +270,13 @@ async function say(text) {
   const audio = ctx ? await fetchVoice(text) : null;
   if (audio) {
     return new Promise(res => {
-      const src = ctx.createBufferSource(); src.buffer = audio; src.connect(ctx.destination);
+      const src = ctx.createBufferSource(); src.buffer = audio; src.connect(analyser);
       src.onended = () => { playing = null; res(); }; playing = src; src.start();
     });
   }
   return browserSay(text);  // fallback: the browser's built-in voice
 }
-function stopSpeaking() { try { playing && playing.stop(); } catch (e) {} speechSynthesis.cancel(); }
+function stopSpeaking() { try { playing && playing.stop(); } catch (e) {} speechSynthesis.cancel(); speakingFallback = false; }
 
 function browserSay(text) {
   return new Promise(res => {
@@ -124,15 +286,15 @@ function browserSay(text) {
     const v = speechSynthesis.getVoices().find(v => /en(-|_)US/i.test(v.lang) && /female|samantha|zira|google us/i.test(v.name))
            || speechSynthesis.getVoices().find(v => /^en/i.test(v.lang));
     if (v) u.voice = v;
-    // safety net: some browsers never fire onend, so move on after a sensible time
-    const done = () => { clearTimeout(t); res(); };
+    const done = () => { clearTimeout(t); speakingFallback = false; res(); };  // some browsers never fire onend
     const t = setTimeout(done, 1500 + text.split(/\s+/).length * 450);
-    u.onend = done; u.onerror = done; speechSynthesis.speak(u);
+    u.onend = done; u.onerror = done; speakingFallback = text.trim().length > 0; speechSynthesis.speak(u);
   });
 }
 
 $("enable").onclick = async () => {
   ctx = new (window.AudioContext || window.webkitAudioContext)(); await ctx.resume();
+  analyser = ctx.createAnalyser(); analyser.fftSize = 256; analyser.smoothingTimeConstant = 0.7; analyser.connect(ctx.destination);
   browserSay(" "); // unlock the fallback voice on mobile
   try { (await navigator.mediaDevices.getUserMedia({ audio: true })).getTracks().forEach(t => t.stop()); } catch (e) {}
   show("s-idle"); poll();
@@ -142,7 +304,11 @@ async function poll() {
   if (!current) {
     try {
       const r = await api("/phone/api/next");
-      if (r.call) { current = r.call; fetchVoice(current.greeting); show("s-ring"); startRinging(); }
+      if (r.call) {
+        current = r.call; fetchVoice(current.greeting);
+        $("ring-nudge").textContent = "is calling · " + (current.nudge || "nudge");
+        show("s-ring"); startRinging();
+      }
     } catch (e) { $("idle-sub").textContent = "Reconnecting…"; }
   }
   setTimeout(poll, 3000);
@@ -155,7 +321,7 @@ $("decline").onclick = async () => {
 
 async function missed() {
   stopRinging(); const r = await api("/phone/api/end", post({ id: current.id, how: "missed" }));
-  $("vm-text").textContent = r.voicemail; show("s-missed"); current = null;
+  show("s-missed"); typeText($("vm-text"), r.voicemail); current = null;
 }
 $("vm-play").onclick = () => say($("vm-text").textContent);
 
@@ -164,7 +330,9 @@ $("accept").onclick = async () => {
   clock = setInterval(() => { const s = Math.floor((Date.now() - callStart) / 1000);
     $("timer").textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }, 500);
   const line = current.greeting;
-  $("caption").textContent = line; $("why").textContent = "Why this nudge: " + current.reason;
+  typeText($("caption"), line);
+  $("nudge-type").textContent = current.nudge || "—";
+  $("why").textContent = current.reason || "—";
   await say(line);
   listen();
 };
@@ -180,35 +348,37 @@ async function listen() {
   if (!current.voice || !stream || !window.MediaRecorder) {  // no speech-to-text: tap to answer
     area.innerHTML = tapButtons; wireTaps(); return;
   }
+  setMode("listen");
+  try { const ms = ctx.createMediaStreamSource(stream); micAnalyser = ctx.createAnalyser(); micAnalyser.fftSize = 256; ms.connect(micAnalyser); } catch (e) {}
   chunks = []; recorder = new MediaRecorder(stream);
   recorder.ondataavailable = e => chunks.push(e.data);
   recorder.onstop = async () => {
-    stream.getTracks().forEach(t => t.stop());
-    area.innerHTML = '<p class="sub">Thinking…</p>';
+    stream.getTracks().forEach(t => t.stop()); micAnalyser = null; setMode("talk");
+    area.innerHTML = '<p class="listening"><i></i>Processing…</p>';
     const blob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
     const r = await fetch("/phone/api/answer?id=" + current.id + "&k=" + encodeURIComponent(K),
       { method: "POST", headers: { "Content-Type": blob.type }, body: blob }).then(r => r.json());
     finish(r);
   };
   recorder.start();
-  area.innerHTML = `<p class="sub"><span class="mic"></span>Listening… speak now</p>
-    <div style="margin-top:14px"><button class="small" id="done">Done talking</button></div>
-    <div style="margin-top:10px">${tapButtons}</div>`;
+  area.innerHTML = `<p class="listening"><i></i>Listening · speak now</p>
+    <button class="small" id="done">Done talking</button>${tapButtons}`;
   $("done").onclick = () => recorder.state === "recording" && recorder.stop();
-  wireTaps(() => { if (recorder && recorder.state === "recording") { recorder.onstop = () => stream.getTracks().forEach(t => t.stop()); recorder.stop(); } });
+  wireTaps(() => { if (recorder && recorder.state === "recording") { recorder.onstop = () => { stream.getTracks().forEach(t => t.stop()); micAnalyser = null; setMode("talk"); }; recorder.stop(); } });
   setTimeout(() => recorder.state === "recording" && recorder.stop(), 7000);
 }
 
 function wireTaps(before) {
-  const send = async said => { before && before(); $("answer-area").innerHTML = '<p class="sub">Thinking…</p>';
+  const send = async said => { before && before(); $("answer-area").innerHTML = '<p class="listening"><i></i>Processing…</p>';
     finish(await api("/phone/api/answer?id=" + current.id, post({ text: said }))); };
   $("t-yes").onclick = () => send("I started");
   $("t-no").onclick = () => send("not now");
 }
 
 async function finish(r) {
-  $("caption").textContent = (r.heard ? "You: “" + r.heard + "”\n\n" : "") + r.say;
-  $("answer-area").innerHTML = "";
+  setMode("talk");
+  typeText($("caption"), (r.heard ? "› You: “" + r.heard + "”\n\n" : "") + r.say);
+  $("answer-area").innerHTML = r.note ? `<p class="listening">${r.note}</p>` : "";
   await say(r.say);
   endCall("Call ended. " + (r.note || ""));
 }

@@ -38,8 +38,16 @@ def _check(k: str, request: Request | None = None) -> None:
 
 
 def _name(chat_id: str) -> str:
+    import re
     u = store.get_user(chat_id)
-    return (u and u["name"]) or "there"
+    name = re.sub(r"\s*\(.*?\)", "", (u and u["name"]) or "").strip()  # "Maya (demo, simulated)" -> "Maya"
+    return name or "there"
+
+
+def _nudge_label(arm: str) -> str:
+    from .nudges import NUDGE_TYPES
+    t = NUDGE_TYPES.get(arm)
+    return f"{t['emoji']} {t['label']}" if t else arm
 
 
 def _mirror(chat_id: str, text: str) -> None:
@@ -70,6 +78,7 @@ def next_call(request: Request, k: str = ""):
                 "id": str(r["id"]),
                 "greeting": f"Hey {_name(r['chat_id'])}, {hello} {spoken(r['text'])} Have you started?",
                 "reason": r["reason"],
+                "nudge": _nudge_label(r["arm"]),
                 "voice": bool(config.ASSEMBLYAI_API_KEY),
             }}
     return {"call": None}
